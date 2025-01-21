@@ -1,0 +1,6 @@
+/.env
+/config
+/dados
+/logs
+/plugins
+/venv
