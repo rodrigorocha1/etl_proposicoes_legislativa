@@ -71,9 +71,19 @@ with DAG(
         task_id='id_inserir_mensagem_de_erro_conexao_banco',
         mssql_conn_id='sql_server_airflow',
         sql="""
-        INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
-        VALUES
-        ('1', GETDATE(), 'ERRO na verificação da conexão do banco');
+            BEGIN TRY
+                INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
+                VALUES
+                ('1-1', GETDATE(), 'ERRO na verificação da conexão da API');
+            END TRY
+
+            BEGIN CATCH
+                UPDATE 
+                controle_log
+                SET DATA_ERRO = GETDATE()
+                WHERE TIPO_LOG = '1-1'
+
+            END CATCH;
 
         """,
 
@@ -85,9 +95,20 @@ with DAG(
         task_id='id_inserir_mensagem_de_erro_conexao_api',
         mssql_conn_id='sql_server_airflow',
         sql="""
-        INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
-        VALUES
-        ('1', GETDATE(), 'ERRO na verificação da conexão da API');
+            BEGIN TRY
+                INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
+                VALUES
+                ('1-1', GETDATE(), 'ERRO na verificação da conexão da API');
+            END TRY
+
+            BEGIN CATCH
+                UPDATE 
+                controle_log
+                SET DATA_ERRO = GETDATE()
+                WHERE TIPO_LOG = '1-1'
+
+            END CATCH;
+
 
         """,
 
@@ -101,7 +122,7 @@ with DAG(
         sql="""
         DELETE
         FROM controle_log
-        WHERE TIPO_LOG = '1' ;
+        WHERE TIPO_LOG IN ('1-1', '1-2') ;
 
         """,
 
