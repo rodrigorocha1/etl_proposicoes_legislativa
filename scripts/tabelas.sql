@@ -25,20 +25,26 @@ CREATE TABLE tramitacao(
 
 CREATE TABLE controle_log (
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
-    TIPO_LOG VARCHAR(20),
+    TIPO_LOG VARCHAR(20)  UNIQUE,
     DATA_ERRO DATETIME,
     MENSAGEM_LOG VARCHAR(80)
 );
 
 
+BEGIN TRY
+    INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
+    VALUES
+    ('1-1', GETDATE(), 'ERRO na verificação da conexão da API');
+END TRY
+
+BEGIN CATCH
+    UPDATE 
+    controle_log
+    SET DATA_ERRO = GETDATE()
+    WHERE TIPO_LOG = '1-1'
+
+END CATCH
 
 
-INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
-VALUES 
-('1', GETDATE(), 'ERRO na verificação da conexão do banco');
 
-
-SELECT *
-FROM controle_log;
-
-SELECT CONVERT(varchar, GETDATE(), 120) AS formatted_date;
+SELECT * FROM [dbo].[controle_log]
