@@ -2,10 +2,11 @@ import requests
 # from airflow.models import Variable
 from datetime import datetime, timedelta
 from typing import List
+from src.servico.i_servico_api import IServicoAPI
 # https://dadosabertos.almg.gov.br
 
 
-class APILegislacao:
+class APILegislacao(IServicoAPI):
     def __init__(self):
         # self.__URL_BASE = Variable.get('api_dados_abertos_mg')
         self.__URL_BASE = 'https://dadosabertos.almg.gov.br'
