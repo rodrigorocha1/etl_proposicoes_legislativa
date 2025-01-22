@@ -23,8 +23,22 @@ CREATE TABLE tramitacao(
  
 );
 
--- Drop a table called 'proposicao' in schema 'dbo'
--- Drop the table if it already exists
-IF OBJECT_ID('[dbo].[proposicao]', 'U') IS NOT NULL
-DROP TABLE [dbo].[proposicao]
-GO
+CREATE TABLE controle_log (
+    ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
+    TIPO_LOG VARCHAR(20),
+    DATA_ERRO DATETIME,
+    MENSAGEM_LOG VARCHAR(80)
+);
+
+
+
+
+INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
+VALUES 
+('1', GETDATE(), 'ERRO na verificação da conexão do banco');
+
+
+SELECT *
+FROM controle_log;
+
+SELECT CONVERT(varchar, GETDATE(), 120) AS formatted_date;
