@@ -57,7 +57,8 @@ with DAG(
     )
 
     sucesso = EmptyOperator(
-        task_id='sucesso_dois'
+        task_id='sucesso_dois',
+        trigger_rule='one_success'
     )
 
     falha_dois = EmptyOperator(
