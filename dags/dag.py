@@ -40,18 +40,10 @@ with DAG(
 
     )
 
-    deletar_log_banco = EmptyOperator(
-        task_id='deletar_log_banco'
-    )
-
-    deletar_log_api = EmptyOperator(
-        task_id='deletar_log_api'
-    )
-
     checar_conexao_api = HttpSensor(
         task_id='checar_conexao_api_dados_abertos_mg',
         http_conn_id='api_dados_abertos_mg',
-        endpoint='/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini=20241201&fim=20241231',
+        endpoint='/w/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini=20241201&fim=20241231',
         headers={"Content-Type": "application/json"},
         poke_interval=1,
         timeout=5,
@@ -59,24 +51,47 @@ with DAG(
         trigger_rule='one_success'
     )
 
-    falha_um = EmptyOperator(
-        task_id='falha_um',
-        trigger_rule='one_failed'
-    )
+    # falha_um = EmptyOperator(
+    #     task_id='falha_um',
+    #     trigger_rule='one_failed'
+    # )
 
     sucesso = EmptyOperator(
         task_id='sucesso_dois',
         trigger_rule='one_success'
     )
 
-    falha_dois = EmptyOperator(
-        task_id='falha_dois',
+    # falha_dois = EmptyOperator(
+    #     task_id='falha_dois',
+    #     trigger_rule='one_failed'
+    # )
+
+    inserir_mensagem_de_erro_conexao_banco = MsSqlOperator(
+        task_id='id_inserir_mensagem_de_erro_conexao_banco',
+        mssql_conn_id='sql_server_airflow',
+        sql="""
+        INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
+        VALUES
+        ('1', GETDATE(), 'ERRO na verificação da conexão do banco');
+
+        """,
+
         trigger_rule='one_failed'
+
     )
 
-    verificar_erro_execucao_dag = EmptyOperator(  # DELETAR ERRO DAG COM BASE NO TIPO
-        task_id='verificar_erro_dag',
+    inserir_mensagem_de_erro_conexao_api = MsSqlOperator(
+        task_id='id_inserir_mensagem_de_erro_conexao_api',
+        mssql_conn_id='sql_server_airflow',
+        sql="""
+        INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
+        VALUES
+        ('1', GETDATE(), 'ERRO na verificação da conexão da API');
+
+        """,
+
         trigger_rule='one_failed'
+
     )
 
     fim_dag = EmptyOperator(
@@ -85,6 +100,8 @@ with DAG(
     )
 
     inicio_dag >> checar_conexao_banco
-    checar_conexao_banco >> [checar_conexao_api, falha_um]
-    checar_conexao_api >> [sucesso, falha_dois] >> verificar_erro_execucao_dag
-    falha_um >> verificar_erro_execucao_dag >> fim_dag
+    checar_conexao_banco >> [checar_conexao_api,
+                             inserir_mensagem_de_erro_conexao_banco]
+    checar_conexao_api >> [
+        sucesso, inserir_mensagem_de_erro_conexao_api] >> fim_dag
+    inserir_mensagem_de_erro_conexao_banco >> fim_dag
