@@ -4,7 +4,7 @@ start
 :Checar Conexão API;
 if (Conexão API Feita?) then (Sucesso)
     :Checar Conexão Banco;
-    if (Conexão banco) then (Sucesso)
+    if (Conexão banco Feita?) then (Sucesso)
         : Recuperar dados;
         : Gravar dados Banco;
     else (Falha)
