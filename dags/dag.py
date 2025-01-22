@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.providers.microsoft.mssql.operators.mssql import MsSqlOperator
+from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
 from airflow.providers.http.sensors.http import HttpSensor
 from airflow.operators.empty import EmptyOperator
 from datetime import datetime
