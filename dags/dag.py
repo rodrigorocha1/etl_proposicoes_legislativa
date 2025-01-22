@@ -40,6 +40,14 @@ with DAG(
 
     )
 
+    deletar_log_banco = EmptyOperator(
+        task_id='deletar_log_banco'
+    )
+
+    deletar_log_api = EmptyOperator(
+        task_id='deletar_log_api'
+    )
+
     checar_conexao_api = HttpSensor(
         task_id='checar_conexao_api_dados_abertos_mg',
         http_conn_id='api_dados_abertos_mg',
@@ -66,6 +74,11 @@ with DAG(
         trigger_rule='one_failed'
     )
 
+    verificar_erro_execucao_dag = EmptyOperator(  # DELETAR ERRO DAG COM BASE NO TIPO
+        task_id='verificar_erro_dag',
+        trigger_rule='one_failed'
+    )
+
     fim_dag = EmptyOperator(
         task_id='fim_dag',
         trigger_rule='all_done'
@@ -73,6 +86,5 @@ with DAG(
 
     inicio_dag >> checar_conexao_banco
     checar_conexao_banco >> [checar_conexao_api, falha_um]
-
-    checar_conexao_api >> [sucesso, falha_dois] >> fim_dag
-    falha_um >> fim_dag
+    checar_conexao_api >> [sucesso, falha_dois] >> verificar_erro_execucao_dag
+    falha_um >> verificar_erro_execucao_dag >> fim_dag
