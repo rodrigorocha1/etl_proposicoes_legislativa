@@ -25,7 +25,8 @@ with DAG(
 ) as dag:
 
     inicio_dag = EmptyOperator(
-        task_id='inicio_dag'
+        task_id='inicio_dag',
+        trigger_rule='dummy'
 
     )
 
@@ -43,7 +44,7 @@ with DAG(
     checar_conexao_api = HttpSensor(
         task_id='checar_conexao_api_dados_abertos_mg',
         http_conn_id='api_dados_abertos_mg',
-        endpoint='/w/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini=20241201&fim=20241231',
+        endpoint='/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini=20241201&fim=20241231',
         headers={"Content-Type": "application/json"},
         poke_interval=1,
         timeout=5,
@@ -94,14 +95,30 @@ with DAG(
 
     )
 
+    delete_log_tipo_1 = MsSqlOperator(
+        task_id='id_delete_log_tipo_1',
+        mssql_conn_id='sql_server_airflow',
+        sql="""
+        DELETE
+        FROM controle_log
+        WHERE TIPO_LOG = '1' ;
+
+        """,
+
+        trigger_rule='none_failed'
+
+    )
+
     fim_dag = EmptyOperator(
         task_id='fim_dag',
-        trigger_rule='all_done'
+        trigger_rule='dummy'
     )
 
     inicio_dag >> checar_conexao_banco
     checar_conexao_banco >> [checar_conexao_api,
                              inserir_mensagem_de_erro_conexao_banco]
     checar_conexao_api >> [
-        sucesso, inserir_mensagem_de_erro_conexao_api] >> fim_dag
-    inserir_mensagem_de_erro_conexao_banco >> fim_dag
+        sucesso, inserir_mensagem_de_erro_conexao_api] >> delete_log_tipo_1 >> fim_dag
+
+    [sucesso, inserir_mensagem_de_erro_conexao_api] >> delete_log_tipo_1 >> fim_dag
+    inserir_mensagem_de_erro_conexao_banco >> delete_log_tipo_1 >> fim_dag
