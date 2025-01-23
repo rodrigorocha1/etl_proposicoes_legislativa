@@ -28,7 +28,7 @@ class ETL:
             }
             colunas = ", ".join(dado.keys())
             placeholders = ", ".join(
-                [f"%({coluna})s" for coluna in dado.keys()]
+                [f"@{coluna})" for coluna in dado.keys()]
             )
             tabela = "proposicao"
             sql_insersao = f"""
@@ -36,4 +36,4 @@ class ETL:
                 VALUES ({placeholders})
             """
             self.__operacoes_banco.realizar_operacao_banco(
-                consulta=sql_insersao)
+                consulta=sql_insersao, parametros=dado)

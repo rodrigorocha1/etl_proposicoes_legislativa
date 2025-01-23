@@ -1,0 +1,2077 @@
+from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
+from airflow.exceptions import AirflowException
+
+def verificar_e_inserir_dados_sql_server():
+    # Configurar o ID da conexão criada no Airflow
+    mssql_conn_id = 'minha_conexao_sql_server'
+
+    # Dados para verificar e inserir
+    tabela = "minha_tabela"
+    chave_unica = "coluna_unica"  # A coluna que deve ser única
+    valores = [
+        {"coluna_unica": "valor1", "coluna2": "valor2"},
+        {"coluna_unica": "valor3", "coluna2": "valor4"}
+    ]
+
+    try:
+        # Criar o hook para o SQL Server
+        mssql_hook = MsSqlHook(mssql_conn_id=mssql_conn_id)
+        
+        for registro in valores:
+            valor_chave = registro[chave_unica]
+
+            # Verificar se o valor já existe
+            query_verificacao = f"SELECT COUNT(*) FROM {tabela} WHERE {chave_unica} = %s"
+            resultado = mssql_hook.get_first(query_verificacao, parameters=(valor_chave,))
+            
+            if resultado[0] > 0:
+                print(f"O valor '{valor_chave}' já existe na tabela '{tabela}'. Pulando inserção.")
+                continue
+
+            # Inserir o registro se não existir
+            colunas = ", ".join(registro.keys())
+            placeholders = ", ".join([f"%({coluna})s" for coluna in registro.keys()])
+            query_insercao = f"INSERT INTO {tabela} ({colunas}) VALUES ({placeholders})"
+            mssql_hook.run(sql=query_insercao, parameters=registro)
+            print(f"Registro com '{valor_chave}' inserido com sucesso!")
+
+    except AirflowException as e:
+        print(f"Erro no Airflow ao verificar/inserir dados: {e}")
+    
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {e}")
+
+# Chamar a função para verificar e inserir os dados
+verificar_e_inserir_dados_sql_server()
+
+
+{
+    "resultado": {
+        "banco": "MATE",
+        "consulta": "(@PUBL >= 20250101 E @PUBL <= 20250122)[DBMT]",
+        "noOcorrencias": 42,
+        "noDocumentos": 42,
+        "tamanhoPagina": 100,
+        "numPagina": 1,
+        "ordenacao": "-@dult",
+        "dataHora": {
+            "date": "2025-01-22"
+        },
+        "erro": false,
+        "listaItem": [
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "8338",
+                "ano": "2024",
+                "autor": "Deputada Alê Portela                       PL",
+                "assunto": "Requer seja encaminhado ao secretário de Estado de Saúde pedido de\ninformações sobre o número de pacientes diagnosticados com a mesotelioma\npleural no Estado; as cidades com maior índice da doença; os critérios\nestabelecidos para o seu diagnóstico; e o tipo de qualificação exigida\ndos profissionais de saúde que atendem aos diagnosticados com essa\ndoença.",
+                "indexacao": "/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Segurança do\nTrabalho/Saúde Ocupacional\n/Tema/Mineração/Recurso Mineral/Mineral Não Metálico\n/Tema/Saúde Pública/Doenças/Classificação das Doenças/Câncer/Câncer de\nPulmão",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000001",
+                "proposicao": "RQC 8338 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "16234",
+                "regime": "Votado nas comissões",
+                "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0818",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 9.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 9."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9878 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9878 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9878+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9878,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 16234,
+                        "nome": "Deputada Alê Portela",
+                        "partido": "PL"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "8337",
+                "ano": "2024",
+                "autor": "Deputada Alê Portela                       PL",
+                "assunto": "Requer seja realizada audiência de convidados para debater a situação dos\ntrabalhadores e das famílias expostos ao asbesto e ao amianto no Estado.",
+                "indexacao": "/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Segurança do\nTrabalho/Saúde Ocupacional\n/Tema/Mineração/Recurso Mineral/Mineral Não Metálico",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000002",
+                "proposicao": "RQC 8337 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "16234",
+                "regime": "Votado nas comissões",
+                "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0818",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 9.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 9."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 16234,
+                        "nome": "Deputada Alê Portela",
+                        "partido": "PL"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11963",
+                "ano": "2024",
+                "autor": "Deputado Noraldino Júnior                  PSB\nDeputado Betinho Pinto Coelho              PV",
+                "assunto": "Requerem seja realizada audiência pública para debater os possíveis\nprejuízos e danos ambientais à comunidade de Conceição do Mato Dentro em\ndecorrência do alteamento da barragem de rejeitos localizada no\nmunicípio.",
+                "indexacao": "/Tema/Meio Ambiente/Degradação Ambiental\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Conceição do Mato Dentro (Microrregião)/Conceição\ndo Mato Dentro\n/Tema/Mineração/Barragem de Rejeitos",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000003",
+                "proposicao": "RQC 11963 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "22521\n13425",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0848",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 10.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 10."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 22521,
+                        "nome": "Deputado Noraldino Júnior",
+                        "partido": "PSB"
+                    },
+                    {
+                        "id": 13425,
+                        "nome": "Deputado Betinho Pinto Coelho",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11962",
+                "ano": "2024",
+                "autor": "Deputada Ione Pinheiro                     UNIÃO",
+                "assunto": "Requer seja encaminhado ao diretor-geral do Instituto Mineiro de Gestão\ndas Águas - Igam - pedido de informações sobre a existência de captação\nde água subterrânea na Refinaria Gabriel Passos, da Petrobras, em Betim,\npor meio de poços subterrâneos e cisternas, bem como sobre as condições e\nas vazões outorgadas.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Betim\n/Tema/Energia/Energia Térmica/Combustível/Combustível Fóssil/Petróleo\n/Tema/Saneamento Básico/Abastecimento de Água/Reservatório de Água\n/Tema/Meio Ambiente/Recurso Natural/Recursos Hídricos/Água Subterrânea",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000004",
+                "proposicao": "RQC 11962 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "8095",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0847",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 10.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 10."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 8095,
+                        "nome": "Deputada Ione Pinheiro",
+                        "partido": "UNIÃO"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11961",
+                "ano": "2024",
+                "autor": "Deputada Ione Pinheiro                     UNIÃO",
+                "assunto": "Requer seja encaminhado aos prefeitos de Sarzedo, de Betim e de Ibirité\npedido de informações acerca da condição de saúde das famílias que\nresidem nos bairros localizados no entorno da Lagoa da Petrobras, uma vez\nque esse corpo d'água se encontra muito poluído por esgotos domésticos\nsem tratamento, provenientes do Município de Ibirité, bem como por\nefluentes gerados nas indústrias da região, em especial na Refinaria\nGabriel Passos.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Betim\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Sarzedo\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Ibirité\n/Tema/Saneamento Básico/Tratamento de Resíduo/Tratamento de Esgoto\n/Tema/Energia/Energia Térmica/Combustível/Combustível Fóssil/Petróleo\n/Tema/Meio Ambiente/Degradação Ambiental/Poluição da Água",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000005",
+                "proposicao": "RQC 11961 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "8095",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0847",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 10.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 10."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 8095,
+                        "nome": "Deputada Ione Pinheiro",
+                        "partido": "UNIÃO"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11960",
+                "ano": "2024",
+                "autor": "Deputada Ione Pinheiro                     UNIÃO",
+                "assunto": "Requer seja encaminhado ao secretário de Estado de Saúde pedido de\ninformações acerca da condição de saúde das famílias que residem nos\nbairros localizados no entorno da Lagoa da Petrobras, uma vez que esse\ncorpo d'água se encontra muito poluído por esgotos domésticos sem\ntratamento, provenientes do Município de Ibirité, bem como por efluentes\ngerados nas indústrias da região, em especial na Refinaria Gabriel\nPassos.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Ibirité\n/Tema/Saneamento Básico/Tratamento de Resíduo/Tratamento de Esgoto\n/Tema/Energia/Energia Térmica/Combustível/Combustível Fóssil/Petróleo\n/Tema/Meio Ambiente/Degradação Ambiental/Poluição da Água",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000006",
+                "proposicao": "RQC 11960 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "8095",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0847",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 10.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 10."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 8095,
+                        "nome": "Deputada Ione Pinheiro",
+                        "partido": "UNIÃO"
+                    }
+                ]
+            },
+            {
+                "dominio": "Tramitação",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11938",
+                "ano": "2024",
+                "autor": "Deputada Beatriz Cerqueira                 PT",
+                "assunto": "Requer seja realizada audiência pública para debater os impactos\nsocioambientais nos Municípios de Itaúna, Igarapé, Mateus Leme e São\nJoaquim de Bicas, atingidos pelo projeto de ferrovia para escoamento de\nminério de ferro do grupo Cedro Participações.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/São Joaquim de Bicas\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Mateus Leme\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Igarapé\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Centro-Oeste de Minas/Divinópolis (Microrregião)/Itaúna\n/Tema/Mineração/Recurso Mineral/Mineral Metálico\n/Tema/Transporte e Trânsito/Transporte/Meio de Transporte/Transporte\nFerroviário/Ferrovia",
+                "situacao": "Aguardando apreciação do requerimento em comissão",
+                "siglaSituacao": "AGARC",
+                "situacaoGeral": "Aguardando apreciação nas comissões",
+                "siglaSituacaoGeral": "MAPCO",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000010",
+                "proposicao": "RQC 11938 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26098",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0928",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão de Meio Ambiente e Desenvolvimento Sustentável",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 10."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "10982",
+                "ano": "2024",
+                "autor": "Deputado Lucas Lasmar                      REDE",
+                "assunto": "Requer seja realizada audiência pública para debater a situação do câncer\nde próstata em Minas Gerais.",
+                "indexacao": "/Tema/Saúde Pública/Doenças/Classificação das Doenças/Câncer/Câncer de\nPróstata",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000041",
+                "proposicao": "RQC 10982 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "28870",
+                "regime": "Votado nas comissões",
+                "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0819",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 9.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 9."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 28870,
+                        "nome": "Deputado Lucas Lasmar",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "10382",
+                "ano": "2024",
+                "autor": "Deputado Professor Cleiton                 PV",
+                "assunto": "Requer seja realizada audiência pública para debater sobre a possível\nimplantação do cordão de identificação dos pacientes com câncer em\ncuidados paliativos.",
+                "indexacao": "/Tema/Direitos Humanos/Direito à Identidade/Documento de Identificação\n/Tema/Saúde Pública/Doenças/Classificação das Doenças/Câncer",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000042",
+                "proposicao": "RQC 10382 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26119",
+                "regime": "Votado nas comissões",
+                "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                "linkLegislacao": {},
+                "atualizacao": "20250106",
+                "horario": "0818",
+                "dataUltimaAcao": "2024-12-18",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-18",
+                        "local": "Comissão Extraordinária de Prevenção e Enfrentamento ao Câncer",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 9.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 9."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26119,
+                        "nome": "Deputado Professor Cleiton",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11946",
+                "ano": "2024",
+                "autor": "Deputada Beatriz Cerqueira                 PT",
+                "assunto": "Requer seja encaminhado à Agência Nacional de Transportes Terrestres -\nANTT - pedido de providências para fiscalização do pagamento do valor\nmínimo do frete de transporte de carga rodoviária, conforme Resolução nº\n5.867, de 14/1/2020, aos caminhoneiros do Município de Congonhas, pelas\nempresas mineradoras Vale S.A., CSN Mineração, Empresa Ferro Mais e Grupo\nJMendes e Empresa Gerdau Aços Brasil - Mineração e Matérias Primas. ",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Conselheiro Lafaiete (Microrregião)/Congonhas\n/Tema/Mineração\n/Tema/Transporte e Trânsito/Transporte/Modalidade de Transporte/\nTransporte de Carga",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000007",
+                "proposicao": "RQC 11946 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26098",
+                "regime": "Votado nas comissões",
+                "evento": "Decorrente da audiência pública da Comissão do Trabalho, da Previdência e da Assistência Social, realizada em 09/12/2024 às 10:00. 23ª Reunião Extraordinária.",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250113",
+                "horario": "1114",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9851 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9851 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9851+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9851,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11945",
+                "ano": "2024",
+                "autor": "Deputada Beatriz Cerqueira                 PT",
+                "assunto": "Requer seja encaminhado ao Ministério Público do Trabalho em Minas Gerais\n- MPT-MG - pedido de providências para apurar denúncias, apresentadas à\ncomissão, sobre acidentes e condições precárias de trabalho dos\ncaminhoneiros que atuam no transporte de minério das empresas Vale S.A.,\nCSN Mineração, Empresa Ferro Mais do Grupo JMendes, Empresa Gerdau Aços\nBrasil - Mineração e Matérias-Primas, no Município de Congonhas; e seja\nencaminhado ao referido órgão as notas taquigráficas da 23ª Reunião\nExtraordinária da comissão, que teve por finalidade debater os impactos\nsociais, econômicos e tributários da rescisão dos contratos de frete dos\ncaminhoneiros de Congonhas pelas empresas mineradoras que atuam no\nreferido município.",
+                "indexacao": "/Tema/Administração Pública/Administração Estadual/Poder Legislativo\nEstadual/Atividade Legislativa/Processo Legislativo Estadual/Tramitação\nde Proposição Legislativa/Notas Taquigráficas\n/Tema/Transporte e Trânsito/Transporte/Modalidade de Transporte/\nTransporte de Carga\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Conselheiro Lafaiete (Microrregião)/Congonhas\n/Tema/Mineração\n/Tema/Trabalho, Emprego e Renda/Condição de Trabalho",
+                "observacao": "",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000008",
+                "proposicao": "RQC 11945 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26098",
+                "regime": "Votado nas comissões",
+                "evento": "Decorrente da audiência pública da Comissão do Trabalho, da Previdência e da Assistência Social, realizada em 09/12/2024 às 10:00. 23ª Reunião Extraordinária.",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250113",
+                "horario": "1114",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9850 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9850 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9850+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9850,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11944",
+                "ano": "2024",
+                "autor": "Deputada Beatriz Cerqueira                 PT",
+                "assunto": "Requer seja encaminhado à Superintendência Regional do Trabalho e Emprego\nem Minas Gerais – SRTE-MG – pedido de providências para instalar processo\nde mediação entre os caminhoneiros autônomos de Congonhas e as\nempresas mineradoras Vale S.A., CSN Mineração, Empresa Ferro+ e Gerdau\nS.A., que atuam nesse município, com a participação da Prefeitura\nMunicipal de Congonhas.",
+                "indexacao": "/Tema/Trabalho, Emprego e Renda/Categoria Profissional/Profissional\nEspecializado\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Conselheiro Lafaiete (Microrregião)/Congonhas\n/Tema/Mineração\n/Tema/Transporte e Trânsito/Transporte/Modalidade de Transporte/\nTransporte de Carga",
+                "observacao": "Deu origem à proposição de plenário RQN 9849 2024",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000009",
+                "proposicao": "RQC 11944 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26098",
+                "regime": "Votado nas comissões",
+                "evento": "Decorrente da audiência pública da Comissão do Trabalho, da Previdência e da Assistência Social, realizada em 09/12/2024 às 10:00. 23ª Reunião Extraordinária.",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250113",
+                "horario": "1114",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9849 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9849 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9849+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9849,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11903",
+                "ano": "2024",
+                "autor": "Deputada Bella Gonçalves                   PSOL",
+                "assunto": "Requer seja formulada manifestação de repúdio, a ser enviada às Comissões\nde Defesa dos Direitos da Pessoa Idosa, de Defesa dos Direitos das\nPessoas com Deficiência e de Previdência, Assistência Social, Infância,\nAdolescência e Família, à retirada de direitos proposta pelo Projeto de\nLei Federal nº 4.614/2024, que altera a regra para concessão do Benefício\nde Prestação Continuada – BPC – e prevê corte de recursos para o Programa\nBolsa Família, em decorrência do ajuste fiscal.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000011",
+                "proposicao": "RQC 11903 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "28860",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1128",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11902",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Beatriz Cerqueira                 PT\nDeputada Lohanna                           PV",
+                "assunto": "Requerem seja encaminhado à secretária de Estado de Desenvolvimento\nSocial, ao superintendente Regional do Trabalho e Emprego em Minas Gerais\ne à presidenta da Fundação João Pinheiro pedido de informações sobre os\npossíveis impactos da redução da jornada de trabalho, sem redução\nsalarial, para a qualidade de vida dos trabalhadores mineiros, com a\nextinção da escala 6x1.",
+                "indexacao": "/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Segurança do\nTrabalho/Saúde Ocupacional\n/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Jornada de Trabalho\n/Tema/Administração Pública/Administração Estadual/Poder Executivo\nEstadual",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000012",
+                "proposicao": "RQC 11902 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n26098\n28869",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1128",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28869,
+                        "nome": "Deputada Lohanna",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11901",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Beatriz Cerqueira                 PT\nDeputada Lohanna                           PV",
+                "assunto": "Requerem seja encaminhado à Superintendência Regional do Trabalho e\nEmprego em Minas Gerais - SRTE-MG - e ao Ministério Público do Trabalho\nem Minas Gerais - MPT-MG - em Belo Horizonte pedido de providências para\nfiscalizarem o cumprimento das normas trabalhistas relativas à jornada de\ntrabalho e ao pagamento de salários dos trabalhadores dos \"shopping\ncenters\" da capital do Estado.",
+                "indexacao": "/Tema/Trabalho, Emprego e Renda/Direito do Trabalhador/Remuneração\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Comércio\n/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Jornada de Trabalho",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000013",
+                "proposicao": "RQC 11901 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n26098\n28869",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1128",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28869,
+                        "nome": "Deputada Lohanna",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11900",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Beatriz Cerqueira                 PT\nDeputada Lohanna                           PV",
+                "assunto": "Requerem seja formulada manifestação de apoio ao Projeto de Lei Municipal\nnº 971/2024, da Câmara Municipal de Belo Horizonte, que dispõe sobre a\ngarantia do vínculo empregatício e a lotação dos representantes sindicais\neleitos pelos trabalhadores terceirizados contratados pelas empresas\nprestadoras de serviços terceirizados na administração pública municipal,\ne pelas caixas escolares das escolas municipais nos seus locais de\ntrabalho, por sua relevância para a melhoria da qualidade vida do\ntrabalhador.",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000014",
+                "proposicao": "RQC 11900 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n26098\n28869",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1127",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28869,
+                        "nome": "Deputada Lohanna",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11899",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Beatriz Cerqueira                 PT\nDeputada Lohanna                           PV",
+                "assunto": "Requerem seja encaminhado à Mesa da Assembleia pedido de providências\npara que a renovação dos contratos dos trabalhadores terceirizados desta\nCasa seja condicionada à redução da jornada de trabalho, concedendo a\neles ao menos dois dias de descanso semanais, sem redução de salário.",
+                "indexacao": "/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Jornada de Trabalho\n/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Modalidade de\nTrabalho/Serviço Terceirizado\n/Tema/Administração Pública/Administração Estadual/Poder Legislativo\nEstadual/Assembleia Legislativa do Estado de Minas Gerais (ALMG)",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000015",
+                "proposicao": "RQC 11899 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n26098\n28869",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1127",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28869,
+                        "nome": "Deputada Lohanna",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11898",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Lohanna                           PV\nDeputada Beatriz Cerqueira                 PT",
+                "assunto": "Requerem seja formulada manifestação de apoio à proposta de emenda à\nconstituição de diminuição da jornada de trabalho, com extinção da escala\n6x1, considerada regime abusivo, além de prejudicial à saúde, à\nconvivência familiar e à qualidade de vida do trabalhador brasileiro.",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000016",
+                "proposicao": "RQC 11898 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n28869\n26098",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1126",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 28869,
+                        "nome": "Deputada Lohanna",
+                        "partido": "PV"
+                    },
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11897",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Beatriz Cerqueira                 PT\nDeputada Lohanna                           PV",
+                "assunto": "Requerem seja encaminhado aos parlamentares do Congresso Nacional eleitos\npor Minas Gerais pedido de providências para aprovarem a proposta de\nemenda à Constituição que trata da diminuição da jornada de trabalho, com\nextinção da escala 6x1, considerando-se que o atual regime de trabalho\nviola os direitos à saúde, à convivência familiar e ao lazer do\ntrabalhador brasileiro.",
+                "indexacao": "/Tema/Administração Pública/Administração Estadual/Poder Legislativo\nEstadual/Atividade Legislativa/Processo Legislativo Estadual/Tramitação\nde Proposição Legislativa/Constituição Federal\n/Tema/Trabalho, Emprego e Renda/Condição de Trabalho/Jornada de Trabalho",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000017",
+                "proposicao": "RQC 11897 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n26098\n28869",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1126",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26098,
+                        "nome": "Deputada Beatriz Cerqueira",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28869,
+                        "nome": "Deputada Lohanna",
+                        "partido": "PV"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11896",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial – Cras – Santa Rosa, no Município de Belo Horizonte, para\naveriguar o funcionamento dessa unidade e o atendimento prestado nela,\nconforme demandado na 6ª Reunião Extraordinária da comissão, realizada em\n6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000018",
+                "proposicao": "RQC 11896 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1126",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11895",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Confisco - Cras Confisco -, no Município de Belo Horizonte, para\naveriguar o seu funcionamento e o atendimento prestado no local, conforme\ndemanda ocorrida na 6ª Reunião Extraordinária da Comissão, realizada em\n6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000019",
+                "proposicao": "RQC 11895 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1125",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11894",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência Especializado de\nAssistência Social - Creas - Pampulha, no Município de Belo Horizonte,\npara averiguar o funcionamento dessa unidade e o atendimento prestado\nnela, conforme demandado na 6ª Reunião Extraordinária da comissão,\nrealizada em 6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000020",
+                "proposicao": "RQC 11894 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1125",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11893",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Lagoa Venda Nova - Craslag-VN -, no Município de Belo Horizonte,\npara averiguar o funcionamento dessa unidade e o atendimento prestado\nnela, conforme demandado na 6ª Reunião Extraordinária da comissão,\nrealizada em 6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000021",
+                "proposicao": "RQC 11893 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1119",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11892",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Apolônia Venda Nova - Crasap-VN -, no Município de Belo Horizonte,\npara averiguar o funcionamento dessa unidade e o atendimento prestado\nnela, conforme demandado na 6ª Reunião Extraordinária da comissão.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000022",
+                "proposicao": "RQC 11892 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1119",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11891",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência Especializado de\nAssistência Social Oeste - Creas-O, no Município de Belo Horizonte, para\naveriguar o seu funcionamento e o atendimento prestado no local, conforme\ndemanda ocorrida na 6ª Reunião Extraordinária da Comissão, realizada em\n6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000023",
+                "proposicao": "RQC 11891 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1118",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11890",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Jardim - CRASJF-N -, no Município de Belo Horizonte, para\naveriguar o funcionamento dessa unidade e o atendimento prestado nela,\nconforme demandado na 6ª Reunião Extraordinária da comissão, realizada em\n6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000024",
+                "proposicao": "RQC 11890 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1117",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11889",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Zilah Spósito Norte – CRASZS-N –, no Município de Belo Horizonte,\npara averiguar o funcionamento dessa unidade e o atendimento prestado\nnela, conforme demandado na 6ª Reunião Extraordinária da comissão,\nrealizada em 6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000025",
+                "proposicao": "RQC 11889 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1116",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11888",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Califórnia Noroeste - Crasca-NO -, no Município de Belo Horizonte,\npara averiguar o funcionamento dessa unidade e o atendimento prestado\nnela, conforme demandado na 6ª Reunião Extraordinária da comissão,\nrealizada em 6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000026",
+                "proposicao": "RQC 11888 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1116",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11887",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência de Assistência\nSocial Vila Sumaré - Cras - Noroeste -, em Belo Horizonte, para averiguar\no seu funcionamento e o atendimento prestado no local, conforme demanda\nocorrida na 6ª Reunião Extraordinária da Comissão, realizada em 6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000027",
+                "proposicao": "RQC 11887 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1116",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11886",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja realizada visita ao Centro de Referência Especializado de\nAssistência Social Nordeste – Creas-NE –, no Município de Belo Horizonte,\npara averiguar o funcionamento dessa unidade e o atendimento prestado\nnela, conforme demandado na 6ª Reunião Extraordinária da comissão,\nrealizada em 6/5/2024.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Assistência Social",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000028",
+                "proposicao": "RQC 11886 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1115",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11883",
+                "ano": "2024",
+                "autor": "Deputado Celinho Sintrocel                 PCdoB",
+                "assunto": "Requer seja formulado voto de congratulações com o Conselho Nacional do\nDesenvolvimento Industrial – CNDI – pela aprovação de moção crítica ao\naumento, aprovado pelo Banco Central do Brasil em 11/12/2024, da taxa\nbásica de juros em mais de 1%.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000029",
+                "proposicao": "RQC 11883 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "18849",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1114",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9848 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9848 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9848+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9848,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 18849,
+                        "nome": "Deputado Celinho Sintrocel",
+                        "partido": "PCdoB"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11882",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT",
+                "assunto": "Requer seja realizada audiência pública para debater a proposta do Parque\nLinear do Belvedere que, em sua versão atualmente em debate, prevê a\nretirada dos trilhos e, assim, inviabiliza a implantação do transporte\nferroviário de passageiros entre o Belvedere, o Barreiro e o Inhotim.",
+                "indexacao": "/Tema/Transporte e Trânsito/Transporte/Modalidade de Transporte/\nTransporte de Passageiro\n/Tema/Transporte e Trânsito/Transporte/Meio de Transporte/Transporte\nFerroviário\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Meio Ambiente/Gestão Ambiental/Unidade de Conservação/Parque\nPúblico",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000030",
+                "proposicao": "RQC 11882 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1113",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11879",
+                "ano": "2024",
+                "autor": "Deputada Bella Gonçalves                   PSOL\nDeputado Betão                             PT",
+                "assunto": "Requerem seja encaminhado à Secretaria de Estado de Infraestrutura,\nMobilidade e Parcerias - Seinfra - pedido de providências para que cesse\no processo de concessão de rodovias do Vetor Norte da Região\nMetropolitana de Belo Horizonte - RMBH -, que penalizará sobremaneira o\ndia a dia dos trabalhadores que utilizam as Rodovias MG-010 e MG-424 com\na cobrança de pedágios.",
+                "indexacao": "/Tema/Transporte e Trânsito/Transporte/Meio de Transporte/Transporte\nRodoviário/Pedágio\n/Tema/Transporte e Trânsito/Transporte/Meio de Transporte/Transporte\nRodoviário/Rodovia\n/Tema/Administração Pública/Gestão Pública/Licitações e Contratos/\nContrato Administrativo/Concessão de Serviço Público\n/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região\nMetropolitana/Região Metropolitana de Belo Horizonte (RMBH)",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000031",
+                "proposicao": "RQC 11879 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "28860\n26145",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1113",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9847 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9847 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9847+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9847,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11878",
+                "ano": "2024",
+                "autor": "Deputado Betão                             PT\nDeputada Bella Gonçalves                   PSOL\nDeputada Ione Pinheiro                     UNIÃO",
+                "assunto": "Requerem seja encaminhado à Agência Nacional de Transportes Terrestres -\nANTT - pedido de providências para que agende reunião com o Movimento\npela volta do trem de passageiros da RMBH e entorno, a fim de debater as\npossibilidades de implementação de trens de passageiros nos municípios da\nRegião Metropolitana de Belo Horizonte e entorno, assegurando mecanismos\nde controle social.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região\nMetropolitana/Região Metropolitana de Belo Horizonte (RMBH)\n/Tema/Transporte e Trânsito/Transporte/Meio de Transporte/Transporte\nFerroviário\n/Tema/Transporte e Trânsito/Transporte/Modalidade de Transporte/\nTransporte de Passageiro",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000032",
+                "proposicao": "RQC 11878 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26145\n28860\n8095",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1113",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9846 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9846 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9846+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9846,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 8095,
+                        "nome": "Deputada Ione Pinheiro",
+                        "partido": "UNIÃO"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11877",
+                "ano": "2024",
+                "autor": "Deputada Bella Gonçalves                   PSOL\nDeputado Betão                             PT\nDeputada Ione Pinheiro                     UNIÃO",
+                "assunto": "Requerem seja realizada audiência pública, para a qual sejam convidadas a\nSecretaria de Estado de Infraestrutura, Mobilidade e Parcerias - Seinfra\n-, a Ferrovia Centro-Atlântica, a MRS, a Metrô BH e a Agência Nacional de\nTransportes Terrestres - ANTT -, para debater, de forma detalhada, os\nprojetos de construção da Linha 2 do metrô de Belo Horizonte,\nespecialmente para avaliação das limitações de eventual implantação de\nlinha singela entre as estações Ferrugem e Barreiro e seus impactos na\nvida dos trabalhadores e das trabalhadoras, futuros usuários da linha.",
+                "indexacao": "/Tema/Municípios e Desenvolvimento Regional/Política Urbana/Região de\nPlanejamento/Central/Belo Horizonte (Microrregião)/Belo Horizonte\n/Tema/Transporte e Trânsito/Transporte/Meio de Transporte/Transporte\nFerroviário/Metrô",
+                "observacao": "Autoria coletiva.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000033",
+                "proposicao": "RQC 11877 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "28860\n26145\n8095",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1112",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    },
+                    {
+                        "id": 26145,
+                        "nome": "Deputado Betão",
+                        "partido": "PT"
+                    },
+                    {
+                        "id": 8095,
+                        "nome": "Deputada Ione Pinheiro",
+                        "partido": "UNIÃO"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11870",
+                "ano": "2024",
+                "autor": "Deputada Bella Gonçalves                   PSOL",
+                "assunto": "Requer seja formulado voto de congratulações com Agatha Rotelli Lemos\npela relevante atuação na coordenação do Fórum Municipal de Trabalhadores\ndo Sistema Único de Assistência Social de Belo Horizonte - FMTSUAS-BH\n-, que completa 10 anos de refundação e atua em defesa da política de\nassistência social e da democratização do Suas.",
+                "observacao": "Deu origem à proposição de plenário RQN 9845 2024",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000034",
+                "proposicao": "RQC 11870 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "28860",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1112",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Trabalho da Previdência e da Assistência Social",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 5.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 5."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9845 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9845 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9845+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9845,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 28860,
+                        "nome": "Deputada Bella Gonçalves",
+                        "partido": "PSOL"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11858",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja encaminhado à Secretaria de Estado de Desenvolvimento\nEconômico - Sede - pedido de providências para a instituição de projeto\nde fomento para o setor de serralheria, em especial para as micro e\npequenas empresas, por meio de regime especial de tributação, apoio a\nobtenção de crédito oficial, entre outras medidas de incentivo.",
+                "indexacao": "/Tema/Indústria, Comércio e Serviços/Empresa Privada/Serviços/Serviço\nBancário\n/Tema/Finanças Públicas/Receitas Públicas/Tributos/Política Tributária/\nRegime Especial de Tributação\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Porte das Empresas/\nPequena Empresa\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Porte das Empresas/\nMicroempresa\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Indústria",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000035",
+                "proposicao": "RQC 11858 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Desenvolvimento Econômico",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1101",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Desenvolvimento Econômico",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 2.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 2."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11857",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja encaminhado ao Banco de Desenvolvimento de Minas Gerais S.A.\n- BDMG - pedido de providências para a instituição de linha de crédito\noficial para atendimento às micro e pequenas empresas do segmento\neconômico de serralheria.",
+                "indexacao": "/Tema/Indústria, Comércio e Serviços/Empresa Privada/Serviços/Serviço\nBancário\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Indústria\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Porte das Empresas/\nPequena Empresa\n/Tema/Indústria, Comércio e Serviços/Empresa Privada/Porte das Empresas/\nMicroempresa",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000036",
+                "proposicao": "RQC 11857 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Desenvolvimento Econômico",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1101",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Desenvolvimento Econômico",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 2.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 2."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11856",
+                "ano": "2024",
+                "autor": "Deputada Ana Paula Siqueira                REDE",
+                "assunto": "Requer seja encaminhado à Secretaria de Estado de Desenvolvimento\nEconômico - Sede - pedido de providências para que apoie a formação e\ncapacitação técnica em empreendedorismo de trabalhadores do setor de\nserralheria.",
+                "indexacao": "/Tema/Indústria, Comércio e Serviços/Empresa Privada/Indústria\n/Tema/Educação/Modalidades de Ensino/Educação Profissional\n/Tema/Indústria, Comércio e Serviços/Empreendedorismo",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000037",
+                "proposicao": "RQC 11856 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "19150",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Desenvolvimento Econômico",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1056",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Desenvolvimento Econômico",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 2.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 2."
+                    }
+                ],
+                "links": [],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 19150,
+                        "nome": "Deputada Ana Paula Siqueira",
+                        "partido": "REDE"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11734",
+                "ano": "2024",
+                "autor": "Deputado Coronel Henrique                  PL",
+                "assunto": "Requer a realização de consulta pública sobre a instituição do Dia\nEstadual do Judô e do Dia Estadual do Judô Veterano, para subsidiar o\nProjeto de Lei 3251 2021, de sua autoria, em cumprimento ao disposto\nna Lei 22858, de 2018, e no art 79, XVIII, do Regimento Interno.",
+                "indexacao": "/Tema/Esporte e Lazer/Esporte/Modalidade Esportiva/Esporte de Combate\n/Tema/Comunicação/Comunicação Institucional/Calendário\n/Tema/Administração Pública/Atividade Política/Participação Popular/\nConsulta Pública",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000038",
+                "proposicao": "RQC 11734 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26149",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Esporte Lazer e Juventude",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1106",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Esporte Lazer e Juventude",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 4.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 4."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9803 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9803 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9803+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9803,
+                        "ano": 2024
+                    },
+                    {
+                        "expressao": "(PL adj 3251 adj 2021[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "PL. 3251 2021",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28PL+adj+3251+adj+2021%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "PL",
+                        "numero": 3251,
+                        "ano": 2021
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26149,
+                        "nome": "Deputado Coronel Henrique",
+                        "partido": "PL"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11651",
+                "ano": "2024",
+                "autor": "Deputado Charles Santos                    REPUBLICANOS",
+                "assunto": "Requer seja formulada manifestação de aplauso aos atletas do Município de\nSete Lagoas que foram premiados no Campeonato Mineiro de Tiro Esportivo,\nem 13/10/2024.",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000039",
+                "proposicao": "RQC 11651 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26062",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Esporte Lazer e Juventude",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1106",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Esporte Lazer e Juventude",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 4.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 4."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9802 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9802 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9802+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9802,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26062,
+                        "nome": "Deputado Charles Santos",
+                        "partido": "REPUBLICANOS"
+                    }
+                ]
+            },
+            {
+                "dominio": "Remissivo",
+                "tipoProjeto": "REQUERIMENTO DE COMISSÃO",
+                "siglaTipoProjeto": "RQC",
+                "numero": "11645",
+                "ano": "2024",
+                "autor": "Deputado Professor Cleiton                 PV",
+                "assunto": "Requer seja encaminhado à Secretaria de Estado de Infraestrutura,\nMobilidade e Parcerias - Seinfra - pedido de providências para\ndisponibilização, sem custos, do Estádio Governador Magalhães Pinto, o\nMineirão, para o Cruzeiro, em cinco datas pertencentes ao Estado no\nacordo de cessão, a fim de que o clube recupere parte do prejuízo\nocasionado pelo fechamento dos portões para a torcida no jogo contra o\nPalmeiras, último jogo em casa pelo Campeonato Brasileiro, determinado\npela Comissão Brasileira de Futebol - CBF - em resposta ao pedido do\nvice-governador do Estado para que o jogo fosse realizado com torcida\núnica.",
+                "indexacao": "/Tema/Esporte e Lazer/Esporte/Evento Esportivo\n/Tema/Esporte e Lazer/Esporte/Modalidade Esportiva/Futebol\n/Tema/Esporte e Lazer/Área de Recreação e Esportes/Estádio",
+                "situacao": "Aprovado",
+                "siglaSituacao": "APRVD",
+                "situacaoGeral": "Proposições aprovadas",
+                "siglaSituacaoGeral": "MAPRV",
+                "dataPublicacao": "2025-01-03",
+                "numeroDoc": "000000040",
+                "proposicao": "RQC 11645 2024 - REQUERIMENTO DE COMISSÃO",
+                "matricula": "26119",
+                "regime": "Votado nas comissões",
+                "local": "Comissão de Esporte Lazer e Juventude",
+                "linkLegislacao": {},
+                "atualizacao": "20250103",
+                "horario": "1107",
+                "dataUltimaAcao": "2024-12-17",
+                "listaHistoricoTramitacoes": [
+                    {
+                        "passo": 1,
+                        "data": "2024-12-17",
+                        "local": "Comissão de Esporte Lazer e Juventude",
+                        "historico": "Proposição recebida na Comissão.\nPublicado no DL em 3 1 2025, pág 4.\nAprovado o requerimento.\nDecisão publicada no DL em 3 1 2025, pág 4."
+                    }
+                ],
+                "links": [
+                    {
+                        "expressao": "(RQN adj 9804 adj 2024[PROP])[dbmt]",
+                        "banco": "mate",
+                        "descricao": "RQN 9804 2024",
+                        "url": "/proposicoes/pesquisa/avancada?expr=%28RQN+adj+9804+adj+2024%5BPROP%5D%29%5Bdbmt%5D",
+                        "tipo": "RQN",
+                        "numero": 9804,
+                        "ano": 2024
+                    }
+                ],
+                "linksProposicoesAnexadas": [],
+                "acompanhamento": "N",
+                "autoresEstruturados": [
+                    {
+                        "id": 26119,
+                        "nome": "Deputado Professor Cleiton",
+                        "partido": "PV"
+                    }
+                ]
+            }
+        ]
+    }
+}

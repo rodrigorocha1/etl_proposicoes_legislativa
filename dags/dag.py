@@ -1,10 +1,13 @@
+from src.servico.api_legislacao import APILegislacao
+from src.servico.opercacoes_banco import OperacaoBanco
 from airflow import DAG
 from airflow.providers.microsoft.mssql.operators.mssql import MsSqlOperator
-from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
+from airflow.operators.python import PythonOperator
 from airflow.providers.http.sensors.http import HttpSensor
 from airflow.operators.empty import EmptyOperator
 from datetime import datetime
 from datetime import datetime, timedelta
+from src.etl import ETL
 
 default_args = {
     'owner': 'airflow',
@@ -51,6 +54,14 @@ with DAG(
         timeout=5,
         mode='poke',
         trigger_rule='one_success'
+    )
+
+    etl_registro_hora = PythonOperator(
+        task_id='etl_registro_hora',
+        python_callable=ETL(
+            api_legislacao=APILegislacao(),
+            operacoes_banco=OperacaoBanco()
+        ).realizar_etl_propicao
     )
 
     # falha_um = EmptyOperator(
@@ -140,7 +151,7 @@ with DAG(
     checar_conexao_banco >> [checar_conexao_api,
                              inserir_mensagem_de_erro_conexao_banco]
     checar_conexao_api >> [
-        sucesso, inserir_mensagem_de_erro_conexao_api] >> delete_log_tipo_1 >> fim_dag
+        etl_registro_hora, inserir_mensagem_de_erro_conexao_api] >> delete_log_tipo_1 >> fim_dag
 
-    [sucesso, inserir_mensagem_de_erro_conexao_api] >> delete_log_tipo_1 >> fim_dag
+    [etl_registro_hora, inserir_mensagem_de_erro_conexao_api] >> delete_log_tipo_1 >> fim_dag
     inserir_mensagem_de_erro_conexao_banco >> delete_log_tipo_1 >> fim_dag
