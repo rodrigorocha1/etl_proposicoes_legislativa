@@ -1,7 +1,7 @@
 import requests
 # from airflow.models import Variable
 from datetime import datetime, timedelta
-from typing import List
+from typing import Dict, Generator, List
 from src.servico.i_servico_api import IServicoAPI
 # https://dadosabertos.almg.gov.br
 
@@ -15,17 +15,21 @@ class APILegislacao(IServicoAPI):
         self.__data_inicial = (
             datetime.now() - timedelta(days=self.__intervalo_dias)).strftime('%Y%m%d')
 
-    def obter_proposicoes(self) -> List:
-        """Método para obter as proposicoes
+    def obter_proposicoes(self) -> Generator[Dict, None, None]:
+        """Método para Gerar de proposições
 
-        Returns:
-            List: _description_
+        Yields:
+            Generator[Dict, None, None]: Gerador de dicionarios
         """
-        url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini={self.__data_inicial}&fim={self.__data_inicial}'
-        req = requests.get(url=url)
-        req = req.json()
-        return req['resultado']['listaItem']
+        url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini={self.__data_inicial}&fim={self.__data_final}'
+        p = 1
+        print(url)
+        while True:
+            req = requests.get(url=url)
+            req = req.json()
 
-
-a = APILegislacao()
-print(type(a.obter_proposicoes()))
+            yield from req['resultado']['listaItem']
+            p += 1
+            url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
+            if req['resultado']['noOcorrencias'] == 0:
+                break
