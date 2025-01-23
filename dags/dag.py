@@ -28,6 +28,18 @@ with DAG(
 
 ) as dag:
 
+    def log_api_connection_error(context):
+        task_instance = context.get('task_instance', None)
+        task_id = context.get('task_id', None)
+        dag_id = context.get('dag', {}).get('dag_id', None)
+        execution_date = context.get('execution_date', None)
+        exception = context.get('exception', 'Erro desconhecido')
+        try_number = context.get('try_number', 1)
+        run_id = context.get('run_id', None)
+
+        # Criando a mensagem de erro
+        error_message = f"Task {task_id} do DAG {dag_id} falhou. Exceção: {exception}. Tentativa: {try_number}. Execução: {execution_date}. Run ID: {run_id}"
+        print(error_message)
     inicio_dag = EmptyOperator(
         task_id='inicio_dag',
         trigger_rule='dummy'
@@ -48,13 +60,13 @@ with DAG(
     checar_conexao_api = HttpSensor(
         task_id='checar_conexao_api_dados_abertos_mg',
         http_conn_id='api_dados_abertos_mg',
-        endpoint='/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini=20241201&fim=20241231',
+        endpoint='/w/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini=20241201&fim=20241231',
         headers={"Content-Type": "application/json"},
         poke_interval=1,
         timeout=5,
         mode='poke',
-        trigger_rule='one_success'
-    )
+        trigger_rule='one_success',
+        on_failure_callback=log_api_connection_error)
 
     etl_registro_hora = PythonOperator(
         task_id='etl_registro_hora',
