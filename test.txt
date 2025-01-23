@@ -1,3 +1,6 @@
+https://chatgpt.com/c/6791a181-9e1c-800e-8b12-7117c7171357 -> Passagem de parâmentros sql server
+
+
 from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
 from airflow.exceptions import AirflowException
 

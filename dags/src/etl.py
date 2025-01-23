@@ -28,7 +28,7 @@ class ETL:
             }
             colunas = ", ".join(dado.keys())
             placeholders = ", ".join(
-                [f"@{coluna})" for coluna in dado.keys()]
+                [f"{coluna}" for coluna in dado.keys()]
             )
             tabela = "proposicao"
             sql_insersao = f"""
