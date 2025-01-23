@@ -25,11 +25,20 @@ class APILegislacao(IServicoAPI):
         p = 1
         print(url)
         while True:
-            req = requests.get(url=url)
-            req = req.json()
+            try:
+                req = requests.get(url=url)
+                req.raise_for_status()
+                dados = req.json()
+                if dados['resultado']['noOcorrencias'] == 0:
+                    break
 
-            yield from req['resultado']['listaItem']
-            p += 1
-            url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
-            if req['resultado']['noOcorrencias'] == 0:
+                yield from dados['resultado']['listaItem']
+                p += 1
+                url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
+
+            except requests.RequestException as e:
+                print(f"Erro ao acessar a API: {e}")
+                break
+            except KeyError as e:
+                print(f"Erro ao processar a resposta da API: {e}")
                 break
