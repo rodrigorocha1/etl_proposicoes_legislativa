@@ -35,5 +35,5 @@ class ETL:
                 INSERT INTO {tabela} ({colunas})
                 VALUES ({placeholders})
             """
-            self.__operacoes_banco.realizar_operacoes_banco(
+            self.__operacoes_banco.realizar_operacao_banco(
                 consulta=sql_insersao)
