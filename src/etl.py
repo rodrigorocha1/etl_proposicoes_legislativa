@@ -9,4 +9,6 @@ class ETL:
         self.__operacoes_banco = operacoes_banco
 
     def realizar_etl_propicao(self):
-        proposicoes = self.__api_legislacao.obter_proposicoes()
+        for proposicao in self.__api_legislacao.obter_proposicoes():
+            print(proposicao)
+            print()
