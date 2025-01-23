@@ -29,17 +29,12 @@ with DAG(
 ) as dag:
 
     def log_api_connection_error(context):
-        task_instance = context.get('task_instance', None)
-        task_id = context.get('task_id', None)
-        dag_id = context.get('dag', {}).get('dag_id', None)
-        execution_date = context.get('execution_date', None)
-        exception = context.get('exception', 'Erro desconhecido')
-        try_number = context.get('try_number', 1)
-        run_id = context.get('run_id', None)
 
-        # Criando a mensagem de erro
-        error_message = f"Task {task_id} do DAG {dag_id} falhou. Exceção: {exception}. Tentativa: {try_number}. Execução: {execution_date}. Run ID: {run_id}"
-        print(error_message)
+        error_message = context.get('exception', 'Erro desconhecido')
+
+        print('dentro_do_erro')
+        print(f"Erro: {error_message} ")
+
     inicio_dag = EmptyOperator(
         task_id='inicio_dag',
         trigger_rule='dummy'
@@ -50,7 +45,7 @@ with DAG(
         task_id='checar_conexao_banco',
         mssql_conn_id='sql_server_airflow',
         sql="""
-        SELECT GETDATE();
+        SELECT 1;
 
         """,
         do_xcom_push=True,
@@ -65,6 +60,7 @@ with DAG(
         poke_interval=1,
         timeout=5,
         mode='poke',
+
         trigger_rule='one_success',
         on_failure_callback=log_api_connection_error)
 
