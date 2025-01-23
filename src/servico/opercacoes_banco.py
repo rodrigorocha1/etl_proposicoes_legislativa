@@ -1,4 +1,5 @@
 from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
+from src.servico.opercacoes_banco import MsSqlHook
 
 
 class OperacaoBanco:
