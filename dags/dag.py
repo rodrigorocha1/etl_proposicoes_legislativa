@@ -35,16 +35,6 @@ with DAG(
 
     )
 
-    registrar_inicio = MsSqlOperator(
-        task_id='registrar_inicio',
-        mssql_conn_id='sql_server_airflow',
-        sql="""
-        
-        INSERT INTO log_dag (CICLO, TIPO_LOG, MENSAGEM_LOG)
-        VALUES ('INFO', 'ÍNICIO EXECUÇÃO DAG')
-    """
-    )
-
     checar_conexao_banco = MsSqlOperator(
         task_id='checar_conexao_banco',
         mssql_conn_id='sql_server_airflow',
@@ -183,25 +173,15 @@ with DAG(
 
     # )
 
-    registrar_fim = MsSqlOperator(
-        task_id='registrar_fim',
-        mssql_conn_id='sql_server_airflow',
-        sql="""
-                INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG)
-                VALUES ('INFO', 'FIM EXECUÇÃO DAG')
-            """,
-        trigger_rule='all_done'
-    )
-
     fim_dag = EmptyOperator(
         task_id='fim_dag',
         trigger_rule='all_done'
     )
 
-    inicio_dag >> registrar_inicio >> checar_conexao_banco >> [
+    inicio_dag >> checar_conexao_banco >> [
         registrar_proxima_dag, verificar_status]
-    registrar_proxima_dag >> checar_conexao_api >> registrar_fim >> fim_dag
-    verificar_status >> registrar_fim >> fim_dag
+    registrar_proxima_dag >> checar_conexao_api >> fim_dag
+    verificar_status >> fim_dag
 
     # inicio_dag >> checar_conexao_banco
     # checar_conexao_banco >> [checar_conexao_api,
