@@ -26,6 +26,7 @@ CREATE TABLE tramitacao(
 CREATE TABLE controle_log (
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
     TIPO_LOG VARCHAR(20)  UNIQUE,
+    
     DATA_ERRO DATETIME,
     MENSAGEM_LOG VARCHAR(80)
 );
@@ -48,3 +49,35 @@ END CATCH
 
 
 SELECT * FROM [dbo].[controle_log]
+
+
+CREATE TABLE log_dag(
+    ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
+    CICLO INTEGER,
+    TIPO_LOG VARCHAR(20),
+    MENSAGEM_LOG VARCHAR(150),
+    DATA_REGISTRO DATETIME DEFAULT GETDATE()
+
+
+);
+
+SELECT*
+FROM log_dag;
+
+DELETE
+FROM log_dag;
+
+TRUNCATE TABLE log_dag
+
+DROP TABLE  log_dag;
+
+INSERT INTO log_dag (CICLO, TIPO_LOG, MENSAGEM_LOG)
+VALUES(1, 'INFO', 'a'),
+       (2, 'INFO','a')
+
+DECLARE @valor_atual INT;
+
+SELECT @valor_atual = coalesce(max(CICLO), 0)
+from log_dag
+
+PRINT @valor_atual
