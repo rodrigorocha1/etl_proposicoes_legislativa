@@ -8,5 +8,7 @@ def inserir_registro_log(task_id: str, parametros: Dict, sql: str, **kwargs,):
     task_instance = kwargs['ti']
 
     result = task_instance.xcom_pull(task_ids=task_id)
-    print(kwargs, task_instance, result)
-    mssql_hook.run(sql=sql, parameters=parametros)
+    print('=' * 9)
+    print(kwargs)
+    print(task_instance)
+    print(result)

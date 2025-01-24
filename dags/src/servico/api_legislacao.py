@@ -3,6 +3,7 @@ import requests
 from datetime import datetime, timedelta
 from typing import Dict, Generator, List
 from src.servico.i_servico_api import IServicoAPI
+from time import sleep
 # https://dadosabertos.almg.gov.br
 
 
@@ -26,6 +27,7 @@ class APILegislacao(IServicoAPI):
         print(url)
         while True:
             try:
+                sleep(3)
                 req = requests.get(url=url)
                 req.raise_for_status()
                 dados = req.json()

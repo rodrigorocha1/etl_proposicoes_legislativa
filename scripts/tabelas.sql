@@ -1,7 +1,7 @@
 CREATE TABLE proposicao (
     ID INTEGER IDENTITY(1,1) PRIMARY KEY ,
     AUTOR VARCHAR(100),
-    DATA_PRESENTACAO TIMESTAMP,
+    DATA_PRESENTACAO DATETIME,
     EMENTA NVARCHAR(MAX),
     REGIME VARCHAR(50),
     SITUACCAO VARCHAR(80),
@@ -12,6 +12,12 @@ CREATE TABLE proposicao (
     ESTADO VARCHAR(80)
 );
 
+
+
+SELECT * FROM [dbo].[proposicao];
+
+DELETE 
+FROM proposicao
 
 CREATE TABLE tramitacao(
     ID INTEGER IDENTITY(1,1) PRIMARY KEY,
@@ -53,9 +59,9 @@ SELECT * FROM [dbo].[controle_log]
 
 CREATE TABLE log_dag(
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
-    CICLO INTEGER,
     TIPO_LOG VARCHAR(20),
     MENSAGEM_LOG VARCHAR(150),
+    JSON_XML VARCHAR(MAX),
     DATA_REGISTRO DATETIME DEFAULT GETDATE()
 
 
@@ -81,3 +87,7 @@ SELECT @valor_atual = coalesce(max(CICLO), 0)
 from log_dag
 
 PRINT @valor_atual
+
+
+INSERT INTO proposicao (AUTOR, DATA_PRESENTACAO, EMENTA, REGIME, SITUACCAO, TIPO_PROPOSICAO, NUMERO, ANO, CIDADE, ESTADO)
+               VALUES (%(Comissão Trabalho, da Previdência e da Assistência Social)s, %(2024-12-05)s, %(Requer seja formulado voto de congratulações com o Ministério do Trabalhoe Emprego pelos 94 anos de existência, celebrados em 26 de novembro de2024, e por sua dedicação contínua na defesa dos trabalhadores, no apoioaos sindicatos, na mediação das relações laborais com o setor privado esua resistência diante das inúmeras reformas administrativas que visaramenfraquecer as relações de trabalho.)s, %(Votado nas comissões)s, %(Aprovado)s, %(RQN)s, %(9174)s, %(2024)s, %(Belo Horizonte)s, %(Minas Gerais)s)

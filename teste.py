@@ -1,8 +1,26 @@
-from src.etl import ETL
-from src.servico.opercacoes_banco import OperacaoBanco
-from src.servico.api_legislacao import APILegislacao
+dado = {
+    'AUTOR': 'a',
+    'DATA_PRESENTACAO': 'a',
+    'EMENTA': 'assunto',
+    'REGIME': 'proposicao',
+    'SITUACCAO': 'proposicao',
+    'TIPO_PROPOSICAO': 'proposicao',
+    'NUMERO': 'proposicao',
+    'ANO': 'proposicao',
+    'CIDADE': 'Belo Horizonte',
+    'ESTADO': 'Minas Gerais'
+}
 
 
-etl = ETL(api_legislacao=APILegislacao(), operacoes_banco=OperacaoBanco())
+colunas = ", ".join(dado.keys())
+print(colunas)
+placeholders = ", ".join(
+    [f"%({coluna})s" for coluna in dado.values()]
+)
+tabela = "proposicao"
+sql_insersao = f"""
+                INSERT INTO {tabela} ({colunas})
+               VALUES ({placeholders})
+ """
 
-etl.realizar_etl_propicao()
+print(sql_insersao)
