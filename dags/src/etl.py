@@ -2,6 +2,7 @@ from src.servico.api_legislacao import APILegislacao
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 from src.servico.i_servico_api import IServicoAPI
 import re
+import json
 
 
 class ETL:
@@ -32,25 +33,29 @@ class ETL:
 
                 tabela = "proposicao"
                 sql_insersao = f"""
-                    INSERT INTO {tabela} ({colunas})
-                    VALUES ({placeholders})
-                """
+                        INSERT INTO {tabela} ({colunas})
+                        VALUES ({placeholders})
+                    """
                 self.__operacoes_banco.realizar_operacao_banco(
                     consulta=sql_insersao, parametros=dado)
-            except Exception as msg:
+            except KeyError as msg:
+                print('=' * 1000)
+                print(f'Não encontrou a chave: {msg}')
+                print(msg.args)
                 print(msg)
-                dados_erro = {
-                    'TIPO_LOG': 'ERROR',
-                    'MENSAGEM_ERRO': str(msg),
-                    'JSON_XML': proposicao
+                # proposicao = json.dumps(proposicao)
+                # dados_erro = {
+                #     'TIPO_LOG': 'ERROR',
+                #     'MENSAGEM_LOG': str(msg),
+                #     'JSON_XML': proposicao
 
-                }
+                # }
 
-                sql_erro = f"""
-                    INSERT INTO log_dag (TIPO_LOG, MENSAGEM_ERRO, JSON_XML)
-                    VALUES (%(TIPO_LOG)s, %(MENSAGEM_ERRO)s, %(JSON_XML)s )
-                """
-                self.__operacoes_banco.realizar_operacao_banco(
-                    consulta=sql_erro,
-                    parametros=dados_erro
-                )
+                # sql_erro = f"""
+                #     INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG, JSON_XML)
+                #     VALUES (%(TIPO_LOG)s, %(MENSAGEM_LOG)s, %(JSON_XML)s )
+                # """
+                # self.__operacoes_banco.realizar_operacao_banco(
+                #     consulta=sql_erro,
+                #     parametros=dados_erro
+                # )
