@@ -1,1 +1,20 @@
 https://chatgpt.com/c/6791a9e8-1aa4-800e-bb25-15fbb813c5d1
+
+verificar_status = PythonOperator(
+        task_id='verificar_status',
+        python_callable=inserir_registro_log,
+        op_args=[
+            'checar_conexao_banco',
+            {
+                'TIPO_LOG': 'ERROR',
+                'MENSAGEM_LOG': 'ERRO AO CONECTAR NO BANCO'
+            },
+            """
+                INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG)
+                VALUES (%(TIPO_LOG)s, %(MENSAGEM_LOG)s)
+            """
+        ],
+
+        trigger_rule='one_failed',
+
+    )

@@ -39,10 +39,10 @@ with DAG(
         task_id='checar_conexao_banco',
         mssql_conn_id='sql_server_airflow',
         sql="""
-        SELECT getdate();
+        SELECT getdae();
 
         """,
-        do_xcom_push=True,
+
 
     )
     verificar_status = PythonOperator(
