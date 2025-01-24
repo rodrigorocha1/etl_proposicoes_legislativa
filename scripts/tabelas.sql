@@ -89,5 +89,10 @@ from log_dag
 PRINT @valor_atual
 
 
-INSERT INTO proposicao (AUTOR, DATA_PRESENTACAO, EMENTA, REGIME, SITUACCAO, TIPO_PROPOSICAO, NUMERO, ANO, CIDADE, ESTADO)
-               VALUES (%(Comissão Trabalho, da Previdência e da Assistência Social)s, %(2024-12-05)s, %(Requer seja formulado voto de congratulações com o Ministério do Trabalhoe Emprego pelos 94 anos de existência, celebrados em 26 de novembro de2024, e por sua dedicação contínua na defesa dos trabalhadores, no apoioaos sindicatos, na mediação das relações laborais com o setor privado esua resistência diante das inúmeras reformas administrativas que visaramenfraquecer as relações de trabalho.)s, %(Votado nas comissões)s, %(Aprovado)s, %(RQN)s, %(9174)s, %(2024)s, %(Belo Horizonte)s, %(Minas Gerais)s)
+CREATE TABLE dag_error (
+    ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
+    NUMERO VARCHAR(40) UNIQUE,
+    JSON_XML VARCHAR(MAX),
+    DATA_REGISTRO DATETIME DEFAULT GETDATE(),
+    DATA_ATUALIZACAO DATETIME
+)

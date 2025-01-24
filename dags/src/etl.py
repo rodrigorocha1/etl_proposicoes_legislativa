@@ -13,8 +13,26 @@ class ETL:
     def realizar_etl_propicao(self):
         for proposicao in self.__api_legislacao.obter_proposicoes():
             try:
-                assunto = re.sub(r'[^\w\s.,;]', '',
-                                 proposicao['assunto']).strip().replace('\n', '')
+
+                dados_info = {
+                    'TIPO_LOG': 'INFO',
+                    'MENSAGEM_LOG': 'OBTENÇÃO RESULTADO',
+                    'JSON_XML': json.dumps(proposicao)
+                }
+
+                sql_info = f"""
+                    INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG, JSON_XML)
+                    VALUES (%(TIPO_LOG)s, %(MENSAGEM_LOG)s, %(JSON_XML)s )
+                """
+                self.__operacoes_banco.realizar_operacao_banco(
+                    consulta=sql_info,
+                    parametros=dados_info
+                )
+                try:
+                    assunto = re.sub(r'[^\w\s.,;]', '',
+                                     proposicao['assunto']).strip().replace('\n', '')
+                except:
+                    assunto = None
                 dado = {
                     'AUTOR': proposicao['autor'],
                     'DATA_PRESENTACAO': proposicao['dataPublicacao'],
@@ -39,23 +57,20 @@ class ETL:
                 self.__operacoes_banco.realizar_operacao_banco(
                     consulta=sql_insersao, parametros=dado)
             except KeyError as msg:
-                print('=' * 1000)
-                print(f'Não encontrou a chave: {msg}')
-                print(msg.args)
-                print(msg)
-                # proposicao = json.dumps(proposicao)
-                # dados_erro = {
-                #     'TIPO_LOG': 'ERROR',
-                #     'MENSAGEM_LOG': str(msg),
-                #     'JSON_XML': proposicao
 
-                # }
+                proposicao = json.dumps(proposicao)
+                dados_erro = {
+                    'TIPO_LOG': 'ERROR',
+                    'MENSAGEM_LOG': f'Não encontrou a chave: {msg}',
+                    'JSON_XML': proposicao
 
-                # sql_erro = f"""
-                #     INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG, JSON_XML)
-                #     VALUES (%(TIPO_LOG)s, %(MENSAGEM_LOG)s, %(JSON_XML)s )
-                # """
-                # self.__operacoes_banco.realizar_operacao_banco(
-                #     consulta=sql_erro,
-                #     parametros=dados_erro
-                # )
+                }
+
+                sql_erro = f"""
+                    INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG, JSON_XML)
+                    VALUES (%(TIPO_LOG)s, %(MENSAGEM_LOG)s, %(JSON_XML)s )
+                """
+                self.__operacoes_banco.realizar_operacao_banco(
+                    consulta=sql_erro,
+                    parametros=dados_erro
+                )
