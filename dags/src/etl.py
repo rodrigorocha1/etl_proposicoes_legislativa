@@ -74,3 +74,21 @@ class ETL:
                     consulta=sql_erro,
                     parametros=dados_erro
                 )
+            except Exception as msg:
+
+                proposicao = json.dumps(proposicao)
+                dados_erro = {
+                    'TIPO_LOG': 'CRITICAL',
+                    'MENSAGEM_LOG': f'ERRO FATAL: {msg}',
+                    'JSON_XML': proposicao
+
+                }
+
+                sql_erro = f"""
+                    INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG, JSON_XML)
+                    VALUES (%(TIPO_LOG)s, %(MENSAGEM_LOG)s, %(JSON_XML)s )
+                """
+                self.__operacoes_banco.realizar_operacao_banco(
+                    consulta=sql_erro,
+                    parametros=dados_erro
+                )
