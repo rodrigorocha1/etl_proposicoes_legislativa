@@ -1,5 +1,5 @@
 from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
-from src.servico.opercacoes_banco import MsSqlHook
+
 from typing import Any, Dict
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 
