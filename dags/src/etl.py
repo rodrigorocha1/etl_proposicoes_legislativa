@@ -31,10 +31,11 @@ class ETL:
                 try:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
+                    assunto = proposicao['numero']
                 except:
-                    assunto = None
+                    assunto = " ".join(assunto.split())
                 dado = {
-                    'AUTOR': proposicao['autor'],
+                    'AUTOR': " ".join(proposicao['autor'].split()),
                     'DATA_PRESENTACAO': proposicao['dataPublicacao'],
                     'EMENTA': assunto,
                     'REGIME': proposicao['regime'],
