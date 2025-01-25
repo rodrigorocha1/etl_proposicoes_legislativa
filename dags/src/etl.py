@@ -42,6 +42,10 @@ class ETL:
                 data_registro = datetime.now()
                 data_registro = brasilia_tz.localize(data_registro)
 
+                print('*' * 300)
+                print(f'data registro {data_registro}')
+                print('*' * 300)
+
                 dado = {
                     'AUTOR': " ".join(proposicao['autor'].split()).encode('latin1').decode('utf-8').strip(),
                     'DATA_PRESENTACAO': proposicao['dataPublicacao'],
