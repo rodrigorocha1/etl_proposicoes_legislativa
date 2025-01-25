@@ -38,13 +38,13 @@ class ETL:
                     assunto = " ".join(assunto.split())
 
                 dado = {
-                    'AUTOR': " ".join(proposicao['autor'].split()).encode('latin1').decode('utf-8'),
+                    'AUTOR': " ".join(proposicao['autor'].split()).encode('latin1').decode('utf-8').strip(),
                     'DATA_PRESENTACAO': proposicao['dataPublicacao'],
-                    'EMENTA': assunto,
-                    'REGIME': proposicao['regime'].encode('latin1').decode('utf-8'),
-                    'SITUACCAO': proposicao['situacao'].encode('latin1').decode('utf-8'),
-                    'TIPO_PROPOSICAO': proposicao['siglaTipoProjeto'].encode('latin1').decode('utf-8'),
-                    'NUMERO': proposicao['numero'],
+                    'EMENTA': assunto.strip(),
+                    'REGIME': proposicao['regime'].encode('latin1').decode('utf-8').strip(),
+                    'SITUACCAO': proposicao['situacao'].encode('latin1').decode('utf-8').strip(),
+                    'TIPO_PROPOSICAO': proposicao['siglaTipoProjeto'].encode('latin1').decode('utf-8').strip(),
+                    'NUMERO': proposicao['numero'].strip(),
                     'ANO': proposicao['ano'],
                     'CIDADE': 'Belo Horizonte',
                     'ESTADO': 'Minas Gerais'
