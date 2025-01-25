@@ -32,6 +32,7 @@ class ETL:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
                     assunto = proposicao['assunto']
+                    assunto = " ".join(assunto.splitlines())
                     assunto = assunto.encode('latin1').decode('utf-8')
 
                 except:
