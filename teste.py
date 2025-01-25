@@ -1,26 +1,7 @@
-dado = {
-    'AUTOR': 'a',
-    'DATA_PRESENTACAO': 'a',
-    'EMENTA': 'assunto',
-    'REGIME': 'proposicao',
-    'SITUACCAO': 'proposicao',
-    'TIPO_PROPOSICAO': 'proposicao',
-    'NUMERO': 'proposicao',
-    'ANO': 'proposicao',
-    'CIDADE': 'Belo Horizonte',
-    'ESTADO': 'Minas Gerais'
-}
+import requests
 
+url = 'https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?formato=json&num=3147'
 
-colunas = ", ".join(dado.keys())
-print(colunas)
-placeholders = ", ".join(
-    [f"%({coluna})s" for coluna in dado.values()]
-)
-tabela = "proposicao"
-sql_insersao = f"""
-                INSERT INTO {tabela} ({colunas})
-               VALUES ({placeholders})
- """
-
-print(sql_insersao)
+req = requests.get(url=url)
+req.encoding = 'utf-8'
+print(req.json())

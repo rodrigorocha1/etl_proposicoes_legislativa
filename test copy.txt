@@ -1,4 +1,5 @@
 https://chatgpt.com/c/6791a9e8-1aa4-800e-bb25-15fbb813c5d1
+https://chatgpt.com/c/67939bf9-7ef0-800e-a5a0-931fa7e47727
 
 verificar_status = PythonOperator(
         task_id='verificar_status',

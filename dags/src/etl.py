@@ -31,9 +31,12 @@ class ETL:
                 try:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
-                    assunto = proposicao['numero']
+                    assunto = proposicao['assunto']
+
                 except:
                     assunto = " ".join(assunto.split())
+                assunto = bytes(assunto, "utf-8").decode("unicode_escape")
+
                 dado = {
                     'AUTOR': " ".join(proposicao['autor'].split()),
                     'DATA_PRESENTACAO': proposicao['dataPublicacao'],
@@ -84,6 +87,8 @@ class ETL:
                     'JSON_XML': proposicao
 
                 }
+                print('*' * 20)
+                print(dados_erro)
 
                 sql_erro = f"""
                     INSERT INTO log_dag (TIPO_LOG, MENSAGEM_LOG, JSON_XML)

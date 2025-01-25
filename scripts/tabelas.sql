@@ -16,8 +16,13 @@ CREATE TABLE proposicao (
 
 SELECT * FROM [dbo].[proposicao];
 
+TRUNCATE table proposicao
+
+
+DROP TABLE proposicao;
+
 DELETE 
-FROM proposicao
+FROM proposicao;
 
 CREATE TABLE tramitacao(
     ID INTEGER IDENTITY(1,1) PRIMARY KEY,
@@ -29,70 +34,33 @@ CREATE TABLE tramitacao(
  
 );
 
-CREATE TABLE controle_log (
-    ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
-    TIPO_LOG VARCHAR(20)  UNIQUE,
-    
-    DATA_ERRO DATETIME,
-    MENSAGEM_LOG VARCHAR(80)
-);
-
-
-BEGIN TRY
-    INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
-    VALUES
-    ('1-1', GETDATE(), 'ERRO na verificação da conexão da API');
-END TRY
-
-BEGIN CATCH
-    UPDATE 
-    controle_log
-    SET DATA_ERRO = GETDATE()
-    WHERE TIPO_LOG = '1-1'
-
-END CATCH
+===== LOGS =======================
 
 
 
-SELECT * FROM [dbo].[controle_log]
 
-
+-- Info de log ERRO, SUCESS, INFO
 CREATE TABLE log_dag(
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
     TIPO_LOG VARCHAR(20),
-    MENSAGEM_LOG VARCHAR(150),
+    MENSAGEM_LOG VARCHAR(150) DEFAULT NULL,
     JSON_XML VARCHAR(MAX),
     DATA_REGISTRO DATETIME DEFAULT GETDATE()
 
 
 );
 
-SELECT*
-FROM log_dag;
-
-DELETE
-FROM log_dag;
-
-TRUNCATE TABLE log_dag
-
-DROP TABLE  log_dag;
-
-INSERT INTO log_dag (CICLO, TIPO_LOG, MENSAGEM_LOG)
-VALUES(1, 'INFO', 'a'),
-       (2, 'INFO','a')
-
-DECLARE @valor_atual INT;
-
-SELECT @valor_atual = coalesce(max(CICLO), 0)
-from log_dag
-
-PRINT @valor_atual
-
+-- Registo de erro
 
 CREATE TABLE dag_error (
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
     NUMERO VARCHAR(40) UNIQUE,
     JSON_XML VARCHAR(MAX),
+    MENSAGEM_ERRO VARCHAR(80),
     DATA_REGISTRO DATETIME DEFAULT GETDATE(),
     DATA_ATUALIZACAO DATETIME
 )
+
+
+
+DROP TABLE LOG_DAG;
