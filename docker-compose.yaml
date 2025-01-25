@@ -90,6 +90,7 @@ services:
         exec /entrypoint airflow version
     environment:
       <<: *airflow-common-env
+      TZ: "America/Sao_Paulo"  # Adicionando configuração de fuso horário
       _AIRFLOW_DB_MIGRATE: 'true'
       _AIRFLOW_WWW_USER_CREATE: 'true'
       _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
@@ -107,6 +108,7 @@ services:
     environment:
       <<: *airflow-common-env
       CONNECTION_CHECK_MAX_COUNT: "0"
+      TZ: "America/Sao_Paulo"  # Adicionando configuração de fuso horário
     command:
       - bash
       - -c
