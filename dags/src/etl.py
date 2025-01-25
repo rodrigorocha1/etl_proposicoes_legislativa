@@ -40,11 +40,8 @@ class ETL:
                     assunto = " ".join(assunto.split())
                 brasilia_tz = pytz.timezone('America/Sao_Paulo')
                 data_registro = datetime.now()
-                data_registro = brasilia_tz.localize(data_registro)
-
-                print('*' * 300)
-                print(f'data registro {data_registro}')
-                print('*' * 300)
+                data_registro = data_registro.astimezone(
+                    brasilia_tz).strftime('%Y-%m-%d %H:%M:%S')
 
                 dado = {
                     'AUTOR': " ".join(proposicao['autor'].split()).encode('latin1').decode('utf-8').strip(),

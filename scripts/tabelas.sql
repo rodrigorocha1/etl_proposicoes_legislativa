@@ -23,7 +23,7 @@ where NUMERO = '3163';
 TRUNCATE table proposicao
 
 
-DROP TABLE proposicao;
+DROP TABLE proposicao CASCADE;
 
 DELETE 
 FROM proposicao;
@@ -74,3 +74,4 @@ FROM  LOG_DAG
 order by DATA_REGISTRO desc;
 
 DELETE FROM log_dag;
+DROP TABLE log_dag;

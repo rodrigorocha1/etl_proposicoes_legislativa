@@ -1,11 +1,6 @@
-import pytz
-from datetime import datetime
+texto_com_erro = 'Deputada Ione Pinheiro UNI\xc3\x83O Deputada Beatriz Cerqueira PT Deputado Betinho Pinto Coelho PV Deputado'
 
-# Definindo o fuso horário de Brasília
-brasilia_tz = pytz.timezone('America/Sao_Paulo')
+# Corrigir a codificação
+texto_corrigido = texto_com_erro.encode('latin1').decode('utf-8')
 
-# Ajustando o start_date para o horário de Brasília
-start_date_brasilia = datetime.now()
-start_date_brasilia = brasilia_tz.localize(start_date_brasilia)
-
-print(start_date_brasilia.strftime('%Y-%m-%d %H:%M:%S'))
+print(texto_corrigido)
