@@ -9,12 +9,16 @@ CREATE TABLE proposicao (
     NUMERO VARCHAR(40) UNIQUE,
     ANO INTEGER,
     CIDADE VARCHAR(60),
-    ESTADO VARCHAR(80)
+    ESTADO VARCHAR(80),
+    DATA_INSERSAO_REGISTRO DATETIME DEFAULT GETDATE(),
+    DATA_ATUALIZACAO_REGISTRO DATETIME
 );
 
 
 
-SELECT * FROM [dbo].[proposicao];
+SELECT * 
+FROM [dbo].[proposicao]
+where NUMERO = '3163';
 
 TRUNCATE table proposicao
 
@@ -33,6 +37,8 @@ CREATE TABLE tramitacao(
     FOREIGN KEY (ID_PROPOSICAO) REFERENCES proposicao(NUMERO)
  
 );
+
+DROP TABLE tramitacao;
 
 ===== LOGS =======================
 
@@ -63,6 +69,8 @@ CREATE TABLE dag_error (
 
 
 
-SELECT * FROM  LOG_DAG;
+SELECT * 
+FROM  LOG_DAG
+order by DATA_REGISTRO desc;
 
 DELETE FROM log_dag;
