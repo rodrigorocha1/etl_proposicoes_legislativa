@@ -1,4 +1,4 @@
-from src.servico.api_legislacao import APILegislacao
+from datetime import datetime
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 from src.servico.i_servico_api import IServicoAPI
 import re
@@ -47,7 +47,8 @@ class ETL:
                     'NUMERO': proposicao['numero'].strip(),
                     'ANO': proposicao['ano'],
                     'CIDADE': 'Belo Horizonte',
-                    'ESTADO': 'Minas Gerais'
+                    'ESTADO': 'Minas Gerais',
+                    'DATA_ATUALIZACAO_REGISTRO': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
                 colunas = ", ".join(dado.keys())
                 placeholders = ", ".join(

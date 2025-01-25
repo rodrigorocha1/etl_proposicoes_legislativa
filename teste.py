@@ -1,7 +1,5 @@
-import requests
+from datetime import datetime
 
-url = 'https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?formato=json&num=3147'
+data = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-req = requests.get(url=url)
-req.encoding = 'utf-8'
-print(req.json())
+print(data)
