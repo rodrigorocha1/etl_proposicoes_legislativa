@@ -17,7 +17,7 @@ CREATE TABLE proposicao (
 
 
 SELECT * 
-FROM [dbo].[proposicao]
+FROM proposicao
 where NUMERO = '3163';
 
 TRUNCATE table proposicao

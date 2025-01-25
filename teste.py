@@ -1,5 +1,11 @@
+import pytz
 from datetime import datetime
 
-data = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+# Definindo o fuso horário de Brasília
+brasilia_tz = pytz.timezone('America/Sao_Paulo')
 
-print(data)
+# Ajustando o start_date para o horário de Brasília
+start_date_brasilia = datetime.now()
+start_date_brasilia = brasilia_tz.localize(start_date_brasilia)
+
+print(start_date_brasilia.strftime('%Y-%m-%d %H:%M:%S'))

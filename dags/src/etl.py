@@ -3,6 +3,7 @@ from src.servico.i_opecacoes_banco import IOperacoesBanco
 from src.servico.i_servico_api import IServicoAPI
 import re
 import json
+import pytz
 
 
 class ETL:
@@ -37,6 +38,9 @@ class ETL:
 
                 except:
                     assunto = " ".join(assunto.split())
+                brasilia_tz = pytz.timezone('America/Sao_Paulo')
+                data_registro = datetime.now()
+                data_registro = brasilia_tz.localize(data_registro)
 
                 dado = {
                     'AUTOR': " ".join(proposicao['autor'].split()).encode('latin1').decode('utf-8').strip(),
@@ -49,7 +53,7 @@ class ETL:
                     'ANO': proposicao['ano'],
                     'CIDADE': 'Belo Horizonte',
                     'ESTADO': 'Minas Gerais',
-                    'DATA_ATUALIZACAO_REGISTRO': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    'DATA_ATUALIZACAO_REGISTRO': data_registro
                 }
                 colunas = ", ".join(dado.keys())
                 placeholders = ", ".join(
