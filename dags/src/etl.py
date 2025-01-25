@@ -32,10 +32,10 @@ class ETL:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
                     assunto = proposicao['assunto']
+                    assunto = assunto.encode('latin1').decode('utf-8')
 
                 except:
                     assunto = " ".join(assunto.split())
-                assunto = bytes(assunto, "utf-8").decode("unicode_escape")
 
                 dado = {
                     'AUTOR': " ".join(proposicao['autor'].split()),

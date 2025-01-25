@@ -30,7 +30,7 @@ class APILegislacao(IServicoAPI):
                 sleep(3)
                 req = requests.get(url=url, )
                 req.raise_for_status()
-                req.encoding = 'utf-8'
+                req.encoding = 'latin-1'
                 dados = req.json()
                 if dados['resultado']['noOcorrencias'] == 0:
                     break
