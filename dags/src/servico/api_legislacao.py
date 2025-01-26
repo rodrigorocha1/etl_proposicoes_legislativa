@@ -23,7 +23,7 @@ class APILegislacao(IServicoAPI):
             Generator[Dict, None, None]: Gerador de dicionarios
         """
 
-        url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini={self.__data_inicial}&fim={self.__data_final}'
+        url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ano=2024&ord=3&p=1&ini={self.__data_inicial}&fim={self.__data_final}'
         p = 1
         print(url)
         while True:
@@ -38,7 +38,7 @@ class APILegislacao(IServicoAPI):
 
                 yield from dados['resultado']['listaItem']
                 p += 1
-                url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
+                url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&ano=2024&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
 
             except requests.RequestException as e:
                 print(f"Erro ao acessar a API: {e}")
