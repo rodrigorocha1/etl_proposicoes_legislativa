@@ -1,10 +1,5 @@
-from datetime import datetime
-import json
 from airflow.providers.microsoft.mssql.hooks.mssql import MsSqlHook
-from airflow.exceptions import AirflowException
-import pytz
-from sqlalchemy.exc import OperationalError, ProgrammingError, IntegrityError
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 
 
@@ -19,4 +14,9 @@ class OperacaoBanco(IOperacoesBanco):
         Args:
             consulta (str): _description_
         """
+
         self.__mssql_hook.run(sql=consulta, parameters=parametros)
+
+    def consultar_banco_id(self, sql: str) -> Optional[str]:
+        resultado = self.__mssql_hook.get_first(sql=sql)
+        return str(resultado[0]) if resultado is not None else resultado

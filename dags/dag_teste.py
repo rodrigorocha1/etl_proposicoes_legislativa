@@ -41,14 +41,13 @@ with DAG(
 
     def consultar_banco():
         mssql_hook = MsSqlHook(mssql_conn_id='sql_server_airflow')
-
-        with mssql_hook.get_conn() as conn:
-            with conn.cursor() as cursor:
-                consulta = """
-                    SELECT GETDATE()
-                """
-                cursor.execute(consulta)
-                print(cursor)
+        sql = """
+            SELECT ID
+            FROM proposicao
+            WHERE NUMERO = '11017';
+        """
+        resultado = mssql_hook.get_first(sql=sql)
+        print(resultado[0] if resultado is not None else resultado)
 
     inicio_dag = EmptyOperator(
         task_id='inicio_dag',

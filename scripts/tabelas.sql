@@ -35,13 +35,18 @@ FROM proposicao;
 
 CREATE TABLE tramitacao(
     ID INTEGER IDENTITY(1,1) PRIMARY KEY,
-    DATA_CRIACAO TIMESTAMP,
     DESCRICAO VARCHAR(MAX),
     LOCAL_PROPOSICAO VARCHAR(60),
     ID_PROPOSICAO VARCHAR(40),
+    DATA_CRIACAO_TRAMITACAO DATETIME ,
+    DATA_CRIACAO_REGISTRO DATETIME ,
+    DATA_ATUALIZACAO_REGISTRO DATETIME ,
     FOREIGN KEY (ID_PROPOSICAO) REFERENCES proposicao(NUMERO)
  
 );
+
+SELECT *
+FROM tramitacao
 
 DROP TABLE tramitacao;
 
@@ -116,3 +121,12 @@ SELECT
     is_unique AS IndiceUnico
 FROM sys.indexes
 WHERE object_id = OBJECT_ID('Clientes');
+
+
+
+BEGIN
+    DECLARE @numero_teste INTEGER
+    set @numero_teste = 1
+
+    PRINT @numero_teste
+END
