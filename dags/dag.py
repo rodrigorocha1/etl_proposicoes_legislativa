@@ -92,18 +92,24 @@ with DAG(
         ).realizar_etl_tramitacao
     )
 
+    etl_reprocesso_proposicao = PythonOperator(
+        task_id='etl_reprocesso_proposicao',
+        python_callable=ETL(
+            api_legislacao=APILegislacao(),
+            operacoes_banco=OperacaoBanco()
+        ).realizar_reprocesso_proposicao,
+
+    )
+
     etl_decisao_tarefa = BranchPythonOperator(
         task_id='etl_decisao_tarefa',
         python_callable=verificar_registros_log_error,
-        op_args=('tarefa_a', 'tarefa_b')
+        op_args=('etl_reprocesso_proposicao', 'sem_dados_reprocessar')
+
     )
 
     sem_dados_reprocessar = EmptyOperator(
         task_id='sem_dados_reprocessameto'
-    )
-
-    com_dados_reprocessamento = EmptyOperator(
-        task_id='com_dados_reprocessameto'
     )
 
     falha_um = EmptyOperator(
@@ -122,7 +128,7 @@ with DAG(
 
     etl_registro_proposicao >> etl_registro_tramitacao
     etl_registro_tramitacao >> etl_decisao_tarefa >> [
-        com_dados_reprocessamento, sem_dados_reprocessar]
-    [com_dados_reprocessamento, sem_dados_reprocessar] >> fim_dag
+        etl_reprocesso_proposicao, sem_dados_reprocessar]
+    [etl_reprocesso_proposicao, sem_dados_reprocessar] >> fim_dag
     falha_um >> fim_dag
     verificar_status >> fim_dag

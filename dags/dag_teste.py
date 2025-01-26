@@ -67,7 +67,7 @@ with DAG(
 
     )
     teste_a = PythonOperator(
-        task_id='etl_decisao_tarefa',
+        task_id='teste_a',
         python_callable=consultar_banco,
 
     )

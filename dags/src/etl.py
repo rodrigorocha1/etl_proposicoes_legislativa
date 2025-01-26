@@ -247,6 +247,17 @@ class ETL:
                         url_api=url
                     )
 
+    def realizar_reprocesso_proposicao(self):
+        sql = """
+            SELECT  NUMERO
+            FROM [dag_error]
+        """
+
+        resultado = self.__operacoes_banco.consultar_banco_id(
+            sql=sql, parametros=None)
+
+        dados = self.__api_legislacao.obter_proposicoes()
+
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
         data_registro = datetime.now()

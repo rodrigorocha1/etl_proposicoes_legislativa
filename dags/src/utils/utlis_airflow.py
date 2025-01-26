@@ -34,7 +34,5 @@ def verificar_registros_log_error(tarefa_a: str, tarefa_b: str):
     resultado = ob.consultar_banco_id(sql=sql, parametros=None)
 
     if resultado is not None:
-        print(f'Resultado dentro do none: {resultado}')
         return tarefa_a
-    print(f'Resultado fora do none: {resultado}')
     return tarefa_b
