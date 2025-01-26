@@ -14,17 +14,25 @@ CREATE TABLE proposicao (
     DATA_ATUALIZACAO_REGISTRO DATETIME
 );
 
+DELETE 
+FROM tramitacao
+where ID_PROPOSICAO = '11063'
 
-SELECT COUNT(*)
 
-FROM  proposicao
+DELETE
+FROM proposicao
+WHERE NUMERO = '11063'
 
+SELECT *
+FROM tramitacao
+where ID_PROPOSICAO = '11063'
 
 SELECT * 
 FROM proposicao
-WHERE NUMERO = '11017'
+WHERE NUMERO = '11063'
 order by DATA_INSERSAO_REGISTRO desc;
-
+SELECT *
+FROM tramitacao
 
 SELECT ID as ID
                     FROM proposicao
@@ -63,6 +71,10 @@ DROP TABLE log_dag;
 SELECT *
 FROM log_dag
 
+
+ALTER TABLE log_dag
+DROP COLUMN TIPO_ERROR
+
 -- Info de log ERRO, SUCESS, INFO
 CREATE TABLE log_dag(
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
@@ -82,6 +94,10 @@ CREATE TABLE log_dag(
 DELETE
 FROM dag_error;
 
+
+ALTER TABLE dag_error
+DROP COLUMN TIPO_ERROR
+
 CREATE TABLE dag_error (
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
     TIPO_ERROR INTEGER,
@@ -98,6 +114,8 @@ DROP TABLE dag_error;
 
 SELECT *
 FROM dag_error
+
+DELETE FROM DAG_ERROR
 
 order by DATA_REGISTRO DESC;
 

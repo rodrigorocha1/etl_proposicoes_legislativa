@@ -13,6 +13,48 @@ class ETL:
         self.__api_legislacao = api_legislacao
         self.__operacoes_banco = operacoes_banco
 
+    def __realizar_tratamento_etl_proposicao(self, proposicao: Dict):
+        try:
+            assunto = re.sub(r'[^\w\s.,;]', '',
+                             proposicao['assunto']).strip().replace('\n', '')
+            assunto = proposicao['assunto']
+            assunto = " ".join(assunto.splitlines())
+            assunto = assunto.encode('latin1').decode('utf-8')
+
+        except:
+            assunto = " ".join(assunto.split())
+        data_registro = self.__obter_data_registro()
+        numero = proposicao['numero'].strip()
+        autor = " ".join(proposicao['autor'].encode(
+                'latin1').decode('utf-8').strip().split())
+        data_presentacao = proposicao['dataPublicacao']
+
+        regime = proposicao['regime'].encode(
+            'latin1').decode('utf-8').strip()
+
+        situacao = proposicao['situacao'].encode(
+            'latin1').decode('utf-8').strip()
+
+        tipo_proposicao = proposicao['siglaTipoProjeto'].encode(
+            'latin1').decode('utf-8').strip()
+
+        ano = proposicao['ano']
+
+        dados = {
+            'AUTOR': autor,
+            'DATA_PRESENTACAO': data_presentacao,
+            'EMENTA': assunto.strip(),
+            'REGIME': regime,
+            'SITUACCAO': situacao,
+            'TIPO_PROPOSICAO': tipo_proposicao,
+            'NUMERO': numero,
+            'ANO': ano,
+            'CIDADE': 'Belo Horizonte',
+            'ESTADO': 'Minas Gerais',
+            'DATA_ATUALIZACAO_REGISTRO': data_registro
+        }
+        return dados
+
     def realizar_etl_propicao(self):
         for proposicao, url in self.__api_legislacao.obter_proposicoes():
             try:
@@ -28,50 +70,12 @@ class ETL:
                     FROM proposicao
                     WHERE NUMERO = %(NUMERO)s;
                 """
-                numero = proposicao['numero'].strip()
-                parametros_sql_consulta = {'NUMERO': numero}
 
-                try:
-                    assunto = re.sub(r'[^\w\s.,;]', '',
-                                     proposicao['assunto']).strip().replace('\n', '')
-                    assunto = proposicao['assunto']
-                    assunto = " ".join(assunto.splitlines())
-                    assunto = assunto.encode('latin1').decode('utf-8')
-
-                except:
-                    assunto = " ".join(assunto.split())
-
-                data_registro = self.__obter_data_registro()
-
-                autor = " ".join(proposicao['autor'].encode(
-                        'latin1').decode('utf-8').strip().split())
-                data_presentacao = proposicao['dataPublicacao']
-
-                regime = proposicao['regime'].encode(
-                    'latin1').decode('utf-8').strip()
-
-                situacao = proposicao['situacao'].encode(
-                    'latin1').decode('utf-8').strip()
-
-                tipo_proposicao = proposicao['siglaTipoProjeto'].encode(
-                    'latin1').decode('utf-8').strip()
-
-                ano = proposicao['ano']
-
-                dados = {
-                    'AUTOR': autor,
-                    'DATA_PRESENTACAO': data_presentacao,
-                    'EMENTA': assunto.strip(),
-                    'REGIME': regime,
-                    'SITUACCAO': situacao,
-                    'TIPO_PROPOSICAO': tipo_proposicao,
-                    'NUMERO': numero,
-                    'ANO': ano,
-                    'CIDADE': 'Belo Horizonte',
-                    'ESTADO': 'Minas Gerais',
-                    'DATA_ATUALIZACAO_REGISTRO': data_registro
-                }
-
+                parametros_sql_consulta = {
+                    'NUMERO': proposicao['numero'].strip()}
+                dados = self.__realizar_tratamento_etl_proposicao(
+                    proposicao=proposicao
+                )
                 colunas = ", ".join(dados.keys())
                 # Correção aqui
                 tabela = "proposicao"
@@ -92,7 +96,7 @@ class ETL:
                     sql_banco = f"""
                         UPDATE {tabela}
                         SET {campos}
-                        WHERE NUMERO = {numero}
+                        WHERE NUMERO = {proposicao['numero'].strip()}
                     """
 
                 self.__operacoes_banco.realizar_operacao_banco(
@@ -102,15 +106,15 @@ class ETL:
                 mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
                 self.__registrar_erro(
                     json_xml=proposicao,
-                    numero=numero,
-                    data_registro=data_registro,
+                    numero=proposicao['numero'].strip(),
+                    data_registro=self.__obter_data_registro(),
                     mensagem_erro=mensagem_erro,
                     url_api=url
                 )
 
             except IntegrityError as msg:
 
-                mensagem_erro = f'Já existe a chave, {numero}'
+                mensagem_erro = f'Já existe a chave, {proposicao['numero'].strip()}'
                 self.__registrar_log(
                     json_xml=proposicao,
                     mensagem_log=mensagem_erro,
@@ -123,8 +127,8 @@ class ETL:
                 mensagem_erro = f'Erro ao executar operação: {msg}'
                 self.__registrar_erro(
                     json_xml=proposicao,
-                    numero=numero,
-                    data_registro=data_registro,
+                    numero=proposicao['numero'].strip(),
+                    data_registro=self.__obter_data_registro(),
                     mensagem_erro=mensagem_erro,
                     url_api=url)
 
@@ -133,24 +137,44 @@ class ETL:
                 mensagem_erro = f'Erro fatal: {msg}'
                 self.__registrar_erro(
                     json_xml=proposicao,
-                    numero=numero,
-                    data_registro=data_registro,
+                    numero=proposicao['numero'].strip(),
+                    data_registro=self.__obter_data_registro(),
                     mensagem_erro=mensagem_erro,
                     url_api=url
                 )
+
+    def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict):
+        data = tramitacao['data'].encode(
+            'latin1').decode('utf-8').strip()
+        historico = tramitacao['historico'].encode(
+            'latin1').decode('utf-8').strip()
+
+        local = tramitacao['local'].encode(
+            'latin1').decode('utf-8').strip()
+        sql = """
+                        SELECT ID
+                        FROM tramitacao
+                        WHERE ID_PROPOSICAO = %(ID_PROPOSICAO)s;
+                    """
+        numero = dados['numero'].strip()
+        parametros_sql_consulta = {
+            'ID_PROPOSICAO': numero}
+        data_registro = self.__obter_data_registro()
+
+        dados_tramitacao = {
+            'DESCRICAO': ' '.join(historico.splitlines()),
+            'LOCAL_PROPOSICAO': local,
+            'ID_PROPOSICAO': numero,
+            'DATA_CRIACAO_TRAMITACAO': data,
+            'DATA_ATUALIZACAO_REGISTRO': data_registro
+        }
+        return dados_tramitacao, sql, parametros_sql_consulta
 
     def realizar_etl_tramitacao(self):
         for dados, url in self.__api_legislacao.obter_proposicoes():
             for tramitacao in dados['listaHistoricoTramitacoes']:
                 try:
 
-                    data = tramitacao['data'].encode(
-                        'latin1').decode('utf-8').strip()
-                    historico = tramitacao['historico'].encode(
-                        'latin1').decode('utf-8').strip()
-
-                    local = tramitacao['local'].encode(
-                        'latin1').decode('utf-8').strip()
                     sql = """
                         SELECT ID
                         FROM tramitacao
@@ -160,18 +184,9 @@ class ETL:
                     parametros_sql_consulta = {
                         'ID_PROPOSICAO': numero}
                     data_registro = self.__obter_data_registro()
-
-                    dados_tramitacao = {
-                        'DESCRICAO': ' '.join(historico.splitlines()),
-                        'LOCAL_PROPOSICAO': local,
-                        'ID_PROPOSICAO': numero,
-                        'DATA_CRIACAO_TRAMITACAO': data,
-                        'DATA_ATUALIZACAO_REGISTRO': data_registro
-                    }
+                    dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao()
                     colunas = ", ".join(dados_tramitacao.keys())
-
                     tabela = "tramitacao"
-
                     if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is not None:
                         placeholders = ", ".join(
                             [f"%({coluna})s" for coluna in dados_tramitacao.keys()])

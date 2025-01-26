@@ -2,7 +2,7 @@ from src.servico.api_legislacao import APILegislacao
 from src.servico.opercacoes_banco import OperacaoBanco
 from airflow import DAG
 from airflow.providers.microsoft.mssql.operators.mssql import MsSqlOperator
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.providers.http.sensors.http import HttpSensor
 from airflow.operators.empty import EmptyOperator
 from datetime import datetime
@@ -83,6 +83,7 @@ with DAG(
             operacoes_banco=OperacaoBanco()
         ).realizar_etl_propicao
     )
+
     etl_registro_tramitacao = PythonOperator(
         task_id='etl_registro_tramitacao',
         python_callable=ETL(
@@ -91,58 +92,24 @@ with DAG(
         ).realizar_etl_tramitacao
     )
 
-    # sucesso = EmptyOperator(
-    #     task_id='sucesso',
+    etl_decisao_tarefa = BranchPythonOperator(
+        task_id='etl_decisao_tarefa',
+        python_callable=verificar_registros_log_error,
+        op_args=('tarefa_a', 'tarefa_b')
+    )
 
-    # )
+    sem_dados_reprocessar = EmptyOperator(
+        task_id='sem_dados_reprocessameto'
+    )
+
+    com_dados_reprocessamento = EmptyOperator(
+        task_id='com_dados_reprocessameto'
+    )
 
     falha_um = EmptyOperator(
         task_id='falha_um',
         trigger_rule='one_failed'
     )
-
-    # falha_dois = EmptyOperator(
-    #     task_id='falha_dois',
-    #     trigger_rule='one_failed'
-    # )
-
-    # inserir_mensagem_de_erro_conexao_api = MsSqlOperator(
-    #     task_id='id_inserir_mensagem_de_erro_conexao_api',
-    #     mssql_conn_id='sql_server_airflow',
-    #     sql="""
-    #         BEGIN TRY
-    #             INSERT INTO controle_log (TIPO_LOG, DATA_ERRO, MENSAGEM_LOG)
-    #             VALUES
-    #             ('1-1', GETDATE(), 'ERRO na verificação da conexão da API');
-    #         END TRY
-
-    #         BEGIN CATCH
-    #             UPDATE
-    #             controle_log
-    #             SET DATA_ERRO = GETDATE()
-    #             WHERE TIPO_LOG = '1-1'
-
-    #         END CATCH;
-
-    #     """,
-
-    #     trigger_rule='one_failed'
-
-    # )
-
-    # delete_log_tipo_1 = MsSqlOperator(
-    #     task_id='id_delete_log_tipo_1',
-    #     mssql_conn_id='sql_server_airflow',
-    #     sql="""
-    #     DELETE
-    #     FROM controle_log
-    #     WHERE TIPO_LOG IN ('1-1', '1-2') ;
-
-    #     """,
-
-    #     trigger_rule='none_failed'
-
-    # )
 
     fim_dag = EmptyOperator(
         task_id='fim_dag',
@@ -152,6 +119,10 @@ with DAG(
     inicio_dag >> checar_conexao_banco >> [
         checar_conexao_api, verificar_status]
     checar_conexao_api >> [etl_registro_proposicao, falha_um]
-    etl_registro_proposicao >> etl_registro_tramitacao >> fim_dag
+
+    etl_registro_proposicao >> etl_registro_tramitacao
+    etl_registro_tramitacao >> etl_decisao_tarefa >> [
+        com_dados_reprocessamento, sem_dados_reprocessar]
+    [com_dados_reprocessamento, sem_dados_reprocessar] >> fim_dag
     falha_um >> fim_dag
     verificar_status >> fim_dag
