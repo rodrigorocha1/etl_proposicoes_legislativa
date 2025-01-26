@@ -12,7 +12,7 @@ class APILegislacao(IServicoAPI):
         # self.__URL_BASE = Variable.get('api_dados_abertos_mg')
         self.__URL_BASE = 'https://dadosabertos.almg.gov.br'
         self.__data_final = datetime.now().strftime('%Y%m%d')
-        self.__intervalo_dias = 60
+        self.__intervalo_dias = 3
         self.__data_inicial = (
             datetime.now() - timedelta(days=self.__intervalo_dias)).strftime('%Y%m%d')
 
@@ -35,10 +35,11 @@ class APILegislacao(IServicoAPI):
                     'ano': '2024',
                     'ord': '3',
                     'p': p,
-                    'ini': {self.__data_inicial},
-                    'fim': {self.__data_final}
+                    'ini': self.__data_inicial,
+                    'fim': self.__data_final
                 })
                 req.raise_for_status()
+                print(req.url)
                 req.encoding = 'latin-1'
                 dados = req.json()
                 if dados['resultado']['noOcorrencias'] == 0:
@@ -46,7 +47,6 @@ class APILegislacao(IServicoAPI):
 
                 yield from dados['resultado']['listaItem']
                 p += 1
-                url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada'
 
             except requests.RequestException as e:
                 print(f"Erro ao acessar a API: {e}")

@@ -88,17 +88,15 @@ class ETL:
             except IntegrityError as msg:
 
                 mensagem_erro = f'Já existe a chave, {numero}'
-                self.__registrar_erro(
+                self.__registrar_log(
                     json_xml=proposicao,
-                    numero=numero,
-                    data_registro=data_registro,
-                    mensagem_erro=mensagem_erro
+                    mensagem_log=mensagem_erro
                 )
 
             except DatabaseError as msg:
 
                 # mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
-                mensagem_erro = 'a'
+                mensagem_erro = 'Erro ao executar operação'
                 self.__registrar_erro(
                     json_xml=proposicao,
                     numero=numero,
@@ -134,10 +132,10 @@ class ETL:
             parametros=dados_erro
         )
 
-    def __registrar_log(self, json_xml: Dict):
+    def __registrar_log(self, json_xml: Dict, mensagem_log: str):
         dados_info = {
             'TIPO_LOG': 'INFO',
-            'MENSAGEM_LOG': 'OBTENÇÃO RESULTADO',
+            'MENSAGEM_LOG': mensagem_log,
             'JSON_XML': json.dumps(json_xml)
         }
 
