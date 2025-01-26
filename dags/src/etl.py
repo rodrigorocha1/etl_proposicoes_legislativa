@@ -148,6 +148,7 @@ class ETL:
                         'latin1').decode('utf-8').strip()
                     historico = tramitacao['historico'].encode(
                         'latin1').decode('utf-8').strip()
+
                     local = tramitacao['local'].encode(
                         'latin1').decode('utf-8').strip()
                     sql = """
@@ -161,7 +162,7 @@ class ETL:
                     data_registro = self.__obter_data_registro()
 
                     dados_tramitacao = {
-                        'DESCRICAO': historico,
+                        'DESCRICAO': ' '.join(historico.splitlines()),
                         'LOCAL_PROPOSICAO': local,
                         'ID_PROPOSICAO': numero,
                         'DATA_CRIACAO_TRAMITACAO': data,
@@ -231,7 +232,7 @@ class ETL:
                         url_api=url
                     )
 
-    def __obter_data_registro(self):
+    def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
         data_registro = datetime.now()
         data_registro = data_registro.astimezone(
