@@ -3,7 +3,7 @@ from src.servico.api_legislacao import APILegislacao
 from src.servico.opercacoes_banco import OperacaoBanco
 from airflow import DAG
 from airflow.providers.microsoft.mssql.operators.mssql import MsSqlOperator
-from airflow.operators.python import BranchPythonOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.providers.http.sensors.http import HttpSensor
 from airflow.operators.empty import EmptyOperator
 from datetime import datetime
@@ -64,6 +64,11 @@ with DAG(
     tarefa_b = EmptyOperator(
         task_id='tarefa_b',
 
+
+    )
+    teste_a = PythonOperator(
+        task_id='etl_decisao_tarefa',
+        python_callable=consultar_banco,
 
     )
 
