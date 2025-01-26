@@ -17,7 +17,7 @@ class ETL:
         for proposicao in self.__api_legislacao.obter_proposicoes():
             try:
 
-                self.__registrar_log()
+                self.__registrar_log(json_xml=proposicao)
                 try:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
@@ -27,6 +27,7 @@ class ETL:
 
                 except:
                     assunto = " ".join(assunto.split())
+
                 brasilia_tz = pytz.timezone('America/Sao_Paulo')
                 data_registro = datetime.now()
                 data_registro = data_registro.astimezone(
@@ -35,6 +36,7 @@ class ETL:
                 autor = " ".join(proposicao['autor'].encode(
                     'latin1').decode('utf-8').strip().split())
                 data_presentacao = proposicao['dataPublicacao']
+
                 regime = proposicao['regime'].encode(
                     'latin1').decode('utf-8').strip()
 
@@ -45,6 +47,7 @@ class ETL:
                     'latin1').decode('utf-8').strip()
 
                 numero = proposicao['numero'].strip()
+
                 ano = proposicao['ano']
 
                 dado = {
@@ -76,25 +79,42 @@ class ETL:
 
                 mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
                 self.__registrar_erro(
-                    json_xml=proposicao, numero=numero, data_registro=data_registro, mensagem_erro=mensagem_erro)
+                    json_xml=proposicao,
+                    numero=numero,
+                    data_registro=data_registro,
+                    mensagem_erro=mensagem_erro
+                )
 
             except IntegrityError as msg:
 
                 mensagem_erro = f'Já existe a chave, {numero}'
                 self.__registrar_erro(
-                    json_xml=proposicao, numero=numero, data_registro=data_registro, mensagem_erro=mensagem_erro)
+                    json_xml=proposicao,
+                    numero=numero,
+                    data_registro=data_registro,
+                    mensagem_erro=mensagem_erro
+                )
 
             except DatabaseError as msg:
 
                 # mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
                 mensagem_erro = 'a'
                 self.__registrar_erro(
-                    json_xml=proposicao, numero=numero, data_registro=data_registro, mensagem_erro=mensagem_erro)
+                    json_xml=proposicao,
+                    numero=numero,
+                    data_registro=data_registro,
+                    mensagem_erro=mensagem_erro
+                )
 
             except Exception as msg:
+
                 mensagem_erro = 'Erro fatal'
                 self.__registrar_erro(
-                    json_xml=proposicao, numero=numero, data_registro=data_registro, mensagem_erro=mensagem_erro)
+                    json_xml=proposicao,
+                    numero=numero,
+                    data_registro=data_registro,
+                    mensagem_erro=mensagem_erro
+                )
 
     def __registrar_erro(self, json_xml: str, numero: str, data_registro, mensagem_erro: str):
         json_xml = json.dumps(json_xml)
