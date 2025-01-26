@@ -20,7 +20,7 @@ class ETL:
                 self.__registrar_log(
                     json_xml=proposicao,
                     url_api=url,
-                    mensagem_log='REALIZANDO CONSULTA'
+                    mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO'
                 )
                 try:
                     assunto = re.sub(r'[^\w\s.,;]', '',
@@ -120,6 +120,16 @@ class ETL:
                     mensagem_erro=mensagem_erro,
                     url_api=url
                 )
+
+    def realizar_etl_tramitacao(self):
+        for dados, url in self.__api_legislacao.obter_proposicoes():
+            for tramitacao in dados['listaHistoricoTramitacoes']:
+                data = tramitacao['data'].encode(
+                    'latin1').decode('utf-8').strip()
+                historico = tramitacao['historico'].encode(
+                    'latin1').decode('utf-8').strip()
+                local = tramitacao['local'].encode(
+                    'latin1').decode('utf-8').strip()
 
     def __registrar_erro(self, json_xml: str, numero: str, data_registro, mensagem_erro: str, url_api: str):
         json_xml = json.dumps(json_xml)

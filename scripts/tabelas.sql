@@ -103,7 +103,9 @@ END;
 
 SELECT * 
 FROM  LOG_DAG
+where MENSAGEM_LOG like '%11050'
 order by DATA_REGISTRO desc;
+
 
 DELETE FROM log_dag;
 DROP TABLE log_dag;

@@ -39,6 +39,17 @@ with DAG(
         data_registro = data_registro.astimezone(brasilia_tz)
         print(data_registro.strftime('%Y-%m-%d %H:%M:%S.%f%z'))
 
+    def consultar_banco():
+        mssql_hook = MsSqlHook(mssql_conn_id='sql_server_airflow')
+
+        with mssql_hook.get_conn() as conn:
+            with conn.cursor() as cursor:
+                consulta = """
+                    SELECT GETDATE()
+                """
+                cursor.execute(consulta)
+                print(cursor)
+
     inicio_dag = EmptyOperator(
         task_id='inicio_dag',
         trigger_rule='dummy'
@@ -48,3 +59,9 @@ with DAG(
     teste_hora = PythonOperator(
         task_id='etl_registro_hora',
         python_callable=exibir_hora)
+
+    teste_consulta = PythonOperator(
+        task_id='etl_consulta',
+        python_callable=consultar_banco)
+
+    inicio_dag >> teste_hora >> teste_consulta
