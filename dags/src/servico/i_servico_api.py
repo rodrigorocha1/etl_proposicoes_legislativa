@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple, Dict, Generator
+from typing import Optional, Tuple, Dict, Generator
 
 
 class IServicoAPI(ABC):
