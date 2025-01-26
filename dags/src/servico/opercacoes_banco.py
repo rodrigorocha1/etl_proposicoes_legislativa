@@ -17,6 +17,6 @@ class OperacaoBanco(IOperacoesBanco):
 
         self.__mssql_hook.run(sql=consulta, parameters=parametros)
 
-    def consultar_banco_id(self, sql: str) -> Optional[str]:
-        resultado = self.__mssql_hook.get_first(sql=sql)
+    def consultar_banco_id(self, sql: str, parametros: Dict[str, Any]) -> Optional[str]:
+        resultado = self.__mssql_hook.get_first(sql=sql, parameters=parametros)
         return str(resultado[0]) if resultado is not None else resultado

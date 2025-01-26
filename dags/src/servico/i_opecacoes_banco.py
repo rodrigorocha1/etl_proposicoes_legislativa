@@ -13,5 +13,8 @@ o
         """
         pass
 
-    def consultar_banco_id(self, sql: str) -> Optional[str]:
+    def consultar_banco_id(self, sql: str,  parametros: Dict[str, Any]) -> Optional[str]:
+        pass
+
+    def atualizar_registro(self, sql: str,  parametros: Dict[str, Any]):
         pass

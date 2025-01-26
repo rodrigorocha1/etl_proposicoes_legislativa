@@ -22,6 +22,15 @@ class ETL:
                     url_api=url,
                     mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO'
                 )
+
+                sql = """
+                    SELECT ID
+                    FROM proposicao
+                    WHERE NUMERO = %(NUMERO)s;
+                """
+                numero = proposicao['numero'].strip()
+                parametros_sql_consulta = {'NUMERO': numero}
+
                 try:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
@@ -38,7 +47,7 @@ class ETL:
                     brasilia_tz).strftime('%Y-%m-%d %H:%M:%S')
 
                 autor = " ".join(proposicao['autor'].encode(
-                    'latin1').decode('utf-8').strip().split())
+                        'latin1').decode('utf-8').strip().split())
                 data_presentacao = proposicao['dataPublicacao']
 
                 regime = proposicao['regime'].encode(
@@ -50,11 +59,9 @@ class ETL:
                 tipo_proposicao = proposicao['siglaTipoProjeto'].encode(
                     'latin1').decode('utf-8').strip()
 
-                numero = proposicao['numero'].strip()
-
                 ano = proposicao['ano']
 
-                dado = {
+                dados = {
                     'AUTOR': autor,
                     'DATA_PRESENTACAO': data_presentacao,
                     'EMENTA': assunto.strip(),
@@ -67,18 +74,33 @@ class ETL:
                     'ESTADO': 'Minas Gerais',
                     'DATA_ATUALIZACAO_REGISTRO': data_registro
                 }
-                colunas = ", ".join(dado.keys())
-                placeholders = ", ".join(
-                    [f"%({coluna})s" for coluna in dado.keys()])  # Correção aqui
 
+                colunas = ", ".join(dados.keys())
+                # Correção aqui
                 tabela = "proposicao"
-                sql_insersao = f"""
+
+                if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None:
+                    placeholders = ", ".join(
+                        [f"%({coluna})s" for coluna in dados.keys()])
+                    sql_banco = f"""
                         INSERT INTO {tabela} ({colunas})
                         VALUES ({placeholders})
                     """
 
+                else:
+
+                    campos = ', '.join(
+                        [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
+
+                    sql_banco = f"""
+                        UPDATE {tabela}
+                        SET {campos}
+                        WHERE NUMERO = {numero}
+                    """
+                    pass
+
                 self.__operacoes_banco.realizar_operacao_banco(
-                    consulta=sql_insersao, parametros=dado)
+                    consulta=sql_banco, parametros=dados)
             except KeyError as msg:
 
                 mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
