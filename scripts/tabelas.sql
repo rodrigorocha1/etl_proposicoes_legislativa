@@ -1,6 +1,6 @@
 CREATE TABLE proposicao (
     ID INTEGER IDENTITY(1,1) PRIMARY KEY ,
-    AUTOR VARCHAR(100),
+    AUTOR NVARCHAR(100),
     DATA_PRESENTACAO DATETIME,
     EMENTA NVARCHAR(MAX),
     REGIME VARCHAR(50),
@@ -15,10 +15,15 @@ CREATE TABLE proposicao (
 );
 
 
+SELECT COUNT(*)
+
+FROM  proposicao
+
 
 SELECT * 
 FROM proposicao
-where NUMERO = '3163';
+where NUMERO = '9702'
+order by DATA_INSERSAO_REGISTRO desc;
 
 TRUNCATE table proposicao
 
@@ -67,6 +72,29 @@ CREATE TABLE dag_error (
     DATA_ATUALIZACAO DATETIME
 )
 
+SELECT *
+FROM dag_error;
+
+INSERT INTO dag_error (NUMERO, JSON_XML, MENSAGEM_ERRO, DATA_ATUALIZACAO)
+VALUES('1', 'TESTE', 'TESTE', GETDATE())
+
+BEGIN
+    DECLARE @NUMERO VARCHAR(10), @NUMERO_ERROR VARCHAR(10);
+
+    SET @NUMERO = '1';
+
+  
+    SELECT @NUMERO_ERROR = NUMERO
+    FROM dag_error
+    WHERE NUMERO = @NUMERO;
+
+    
+    IF @NUMERO_ERROR IS NULL
+        PRINT 1 + @NUMERO_ERROR;
+    else
+
+        PRINT '2 '+ @NUMERO_ERROR;
+END;
 
 
 SELECT * 
@@ -75,3 +103,7 @@ order by DATA_REGISTRO desc;
 
 DELETE FROM log_dag;
 DROP TABLE log_dag;
+
+
+SELECT *
+FROM pro
