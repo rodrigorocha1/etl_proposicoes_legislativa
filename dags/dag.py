@@ -76,12 +76,19 @@ with DAG(
         trigger_rule='one_success',
     )
 
-    etl_registro_hora = PythonOperator(
-        task_id='etl_registro_hora',
+    etl_registro_proposicao = PythonOperator(
+        task_id='etl_registro_proposicao',
         python_callable=ETL(
             api_legislacao=APILegislacao(),
             operacoes_banco=OperacaoBanco()
         ).realizar_etl_propicao
+    )
+    etl_registro_tramitacao = PythonOperator(
+        task_id='etl_registro_tramitacao',
+        python_callable=ETL(
+            api_legislacao=APILegislacao(),
+            operacoes_banco=OperacaoBanco()
+        ).realizar_etl_tramitacao
     )
 
     # sucesso = EmptyOperator(
@@ -144,7 +151,7 @@ with DAG(
 
     inicio_dag >> checar_conexao_banco >> [
         checar_conexao_api, verificar_status]
-    checar_conexao_api >> [etl_registro_hora, falha_um]
-    etl_registro_hora >> fim_dag
+    checar_conexao_api >> [etl_registro_proposicao, falha_um]
+    etl_registro_proposicao >> etl_registro_tramitacao >> fim_dag
     falha_um >> fim_dag
     verificar_status >> fim_dag

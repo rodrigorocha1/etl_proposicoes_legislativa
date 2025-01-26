@@ -41,10 +41,7 @@ class ETL:
                 except:
                     assunto = " ".join(assunto.split())
 
-                brasilia_tz = pytz.timezone('America/Sao_Paulo')
-                data_registro = datetime.now()
-                data_registro = data_registro.astimezone(
-                    brasilia_tz).strftime('%Y-%m-%d %H:%M:%S')
+                data_registro = self.__obter_data_registro()
 
                 autor = " ".join(proposicao['autor'].encode(
                         'latin1').decode('utf-8').strip().split())
@@ -97,7 +94,6 @@ class ETL:
                         SET {campos}
                         WHERE NUMERO = {numero}
                     """
-                    pass
 
                 self.__operacoes_banco.realizar_operacao_banco(
                     consulta=sql_banco, parametros=dados)
@@ -146,12 +142,100 @@ class ETL:
     def realizar_etl_tramitacao(self):
         for dados, url in self.__api_legislacao.obter_proposicoes():
             for tramitacao in dados['listaHistoricoTramitacoes']:
-                data = tramitacao['data'].encode(
-                    'latin1').decode('utf-8').strip()
-                historico = tramitacao['historico'].encode(
-                    'latin1').decode('utf-8').strip()
-                local = tramitacao['local'].encode(
-                    'latin1').decode('utf-8').strip()
+                try:
+
+                    data = tramitacao['data'].encode(
+                        'latin1').decode('utf-8').strip()
+                    historico = tramitacao['historico'].encode(
+                        'latin1').decode('utf-8').strip()
+                    local = tramitacao['local'].encode(
+                        'latin1').decode('utf-8').strip()
+                    sql = """
+                        SELECT ID
+                        FROM proposicao
+                        WHERE ID_NUMERO = %(ID_NUMERO)s;
+                    """
+                    numero = dados['numero'].strip()
+                    parametros_sql_consulta = {'ID_NUMERO': numero}
+                    data_registro = self.__obter_data_registro()
+
+                    dados_tramitacao = {
+                        'DESCRICAO': historico,
+                        'LOCAL_PROPOSICAO': local,
+                        'ID_PROPOSICAO': numero,
+                        'DATA_CRIACAO_TRAMITACAO': data,
+                        'DATA_ATUALIZACAO_REGISTRO': data_registro
+                    }
+                    colunas = ", ".join(dados.keys())
+
+                    tabela = "tramitacao"
+
+                    if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is not None:
+                        placeholders = ", ".join(
+                            [f"%({coluna})s" for coluna in dados.keys()])
+                        sql_banco = f"""
+                            INSERT INTO {tabela} ({colunas})
+                            VALUES ({placeholders})
+                        """
+                    else:
+                        campos = ', '.join(
+                            [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
+
+                        sql_banco = f"""
+                            UPDATE {tabela}
+                            SET {campos}
+                            WHERE NUMERO = {numero}
+                        """
+
+                    self.__operacoes_banco.realizar_operacao_banco(
+                        consulta=sql_banco, parametros=dados_tramitacao)
+                except KeyError as msg:
+
+                    mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
+                    self.__registrar_erro(
+                        json_xml=dados,
+                        numero=numero,
+                        data_registro=data_registro,
+                        mensagem_erro=mensagem_erro,
+                        url_api=url
+                    )
+
+                except IntegrityError as msg:
+
+                    mensagem_erro = f'Já existe a chave, {numero}'
+                    self.__registrar_log(
+                        json_xml=dados,
+                        mensagem_log=mensagem_erro,
+                        url_api=url
+                    )
+
+                except DatabaseError as msg:
+
+                    mensagem_erro = f'Erro ao executar operação: {msg}'
+                    self.__registrar_erro(
+                        json_xml=dados,
+                        numero=numero,
+                        data_registro=data_registro,
+                        mensagem_erro=mensagem_erro,
+                        url_api=url)
+
+                except Exception as msg:
+
+                    mensagem_erro = f'Erro fatal: {msg}'
+                    self.__registrar_erro(
+                        json_xml=dados,
+                        numero=numero,
+                        data_registro=data_registro,
+                        mensagem_erro=mensagem_erro,
+                        url_api=url
+                    )
+
+    def __obter_data_registro(self):
+        brasilia_tz = pytz.timezone('America/Sao_Paulo')
+        data_registro = datetime.now()
+        data_registro = data_registro.astimezone(
+            brasilia_tz).strftime('%Y-%m-%d %H:%M:%S')
+        return data_registro
 
     def __registrar_erro(self, json_xml: str, numero: str, data_registro, mensagem_erro: str, url_api: str):
         json_xml = json.dumps(json_xml)

@@ -22,8 +22,13 @@ FROM  proposicao
 
 SELECT * 
 FROM proposicao
-
+WHERE NUMERO = '11017'
 order by DATA_INSERSAO_REGISTRO desc;
+
+
+SELECT ID as ID
+                    FROM proposicao
+                    where numero = '1111'
 
 TRUNCATE table proposicao
 
@@ -39,7 +44,7 @@ CREATE TABLE tramitacao(
     LOCAL_PROPOSICAO VARCHAR(60),
     ID_PROPOSICAO VARCHAR(40),
     DATA_CRIACAO_TRAMITACAO DATETIME ,
-    DATA_CRIACAO_REGISTRO DATETIME ,
+    DATA_CRIACAO_REGISTRO DATETIME DEFAULT GETDATE() ,
     DATA_ATUALIZACAO_REGISTRO DATETIME ,
     FOREIGN KEY (ID_PROPOSICAO) REFERENCES proposicao(NUMERO)
  
@@ -69,6 +74,9 @@ CREATE TABLE log_dag(
 
 -- Registo de erro
 
+DELETE
+FROM dag_error;
+
 CREATE TABLE dag_error (
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
     NUMERO VARCHAR(40),
@@ -80,7 +88,8 @@ CREATE TABLE dag_error (
 )
 
 SELECT *
-FROM dag_error;
+FROM dag_error
+order by DATA_REGISTRO DESC;
 
 
 DROP TABLE dag_error;
@@ -108,7 +117,7 @@ END;
 
 SELECT * 
 FROM  LOG_DAG
-where MENSAGEM_LOG like '%11050'
+
 order by DATA_REGISTRO desc;
 
 
@@ -130,3 +139,13 @@ BEGIN
 
     PRINT @numero_teste
 END
+
+
+-- Update rows in table '[TableName]' in schema '[dbo]'
+UPDATE [proposicao]
+SET
+    [ColumnName1] = ColumnValue1,
+    [ColumnName2] = ColumnValue2
+    -- Add more columns and values here
+WHERE /* add search conditions here */
+GO

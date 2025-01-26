@@ -48,6 +48,8 @@ class APILegislacao(IServicoAPI):
                 for item in dados['resultado']['listaItem']:
                     yield item, req.url
                 p += 1
+                if p == 4:
+                    break
 
             except requests.RequestException as e:
                 print(f"Erro ao acessar a API: {e}")
