@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Dict
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 from src.servico.i_servico_api import IServicoAPI
-from pymssql.exceptions import IntegrityError, DatabaseError
+from pymssql.exceptions import IntegrityError, DatabaseError  # type: ignore
 import re
 import json
 import pytz
@@ -86,7 +86,8 @@ class ETL:
 
             except DatabaseError as msg:
 
-                mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
+                # mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
+                mensagem_erro = 'a'
                 self.__registrar_erro(
                     json_xml=proposicao, numero=numero, data_registro=data_registro, mensagem_erro=mensagem_erro)
 
@@ -95,7 +96,7 @@ class ETL:
                 self.__registrar_erro(
                     json_xml=proposicao, numero=numero, data_registro=data_registro, mensagem_erro=mensagem_erro)
 
-    def __registrar_erro(self, json_xml: Dict, numero: str, data_registro, mensagem_erro):
+    def __registrar_erro(self, json_xml: str, numero: str, data_registro, mensagem_erro: str):
         json_xml = json.dumps(json_xml)
         dados_erro = {
             'NUMERO': numero,
