@@ -23,34 +23,26 @@ class APILegislacao(IServicoAPI):
             Generator[Dict, None, None]: Gerador de dicionarios
         """
 
-        url = 'https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?formato=json&num=59'
-        req = requests.get(url=url, )
-        req.raise_for_status()
-        req.encoding = 'latin-1'
+        url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini={self.__data_inicial}&fim={self.__data_final}'
+        p = 1
+        print(url)
+        while True:
+            try:
+                sleep(3)
+                req = requests.get(url=url, )
+                req.raise_for_status()
+                req.encoding = 'latin-1'
+                dados = req.json()
+                if dados['resultado']['noOcorrencias'] == 0:
+                    break
 
-        req = req.json()['resultado']['listaItem']
-        return req
+                yield from dados['resultado']['listaItem']
+                p += 1
+                url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
 
-        # url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p=1&ini={self.__data_inicial}&fim={self.__data_final}'
-        # p = 1
-        # print(url)
-        # while True:
-        #     try:
-        #         sleep(3)
-        #         req = requests.get(url=url, )
-        #         req.raise_for_status()
-        #         req.encoding = 'latin-1'
-        #         dados = req.json()
-        #         if dados['resultado']['noOcorrencias'] == 0:
-        #             break
-
-        #         yield from dados['resultado']['listaItem']
-        #         p += 1
-        #         url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada?tp=1000&formato=json&ord=3&p={p}&ini={self.__data_inicial}&fim={self.__data_final}'
-
-        #     except requests.RequestException as e:
-        #         print(f"Erro ao acessar a API: {e}")
-        #         break
-        #     except KeyError as e:
-        #         print(f"Erro ao processar a resposta da API: {e}")
-        #         break
+            except requests.RequestException as e:
+                print(f"Erro ao acessar a API: {e}")
+                break
+            except KeyError as e:
+                print(f"Erro ao processar a resposta da API: {e}")
+                break
