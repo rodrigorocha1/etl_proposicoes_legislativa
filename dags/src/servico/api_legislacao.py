@@ -1,7 +1,7 @@
 import requests
 # from airflow.models import Variable
 from datetime import datetime, timedelta
-from typing import Dict, Generator, List
+from typing import Dict, Generator, List, Tuple
 from src.servico.i_servico_api import IServicoAPI
 from time import sleep
 # https://dadosabertos.almg.gov.br
@@ -16,11 +16,11 @@ class APILegislacao(IServicoAPI):
         self.__data_inicial = (
             datetime.now() - timedelta(days=self.__intervalo_dias)).strftime('%Y%m%d')
 
-    def obter_proposicoes(self) -> Generator[Dict, None, None]:
-        """Método para Gerar de proposições
+    def obter_proposicoes(self) -> Generator[Tuple[Dict, str], None, None]:
+        """_summary_
 
         Yields:
-            Generator[Dict, None, None]: Gerador de dicionarios
+            Generator[tuple[Dict, str], None, None]: _description_
         """
 
         url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada'
@@ -39,13 +39,14 @@ class APILegislacao(IServicoAPI):
                     'fim': self.__data_final
                 })
                 req.raise_for_status()
-                print(req.url)
+
                 req.encoding = 'latin-1'
                 dados = req.json()
                 if dados['resultado']['noOcorrencias'] == 0:
                     break
 
-                yield from dados['resultado']['listaItem']
+                for item in dados['resultado']['listaItem']:
+                    yield item, req.url
                 p += 1
 
             except requests.RequestException as e:
