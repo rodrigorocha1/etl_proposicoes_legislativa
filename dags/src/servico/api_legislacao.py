@@ -1,7 +1,7 @@
 import requests
 # from airflow.models import Variable
 from datetime import datetime, timedelta
-from typing import Dict, Generator, List, Tuple
+from typing import Dict, Generator, Optional, Tuple
 from src.servico.i_servico_api import IServicoAPI
 from time import sleep
 # https://dadosabertos.almg.gov.br
@@ -16,7 +16,7 @@ class APILegislacao(IServicoAPI):
         self.__data_inicial = (
             datetime.now() - timedelta(days=self.__intervalo_dias)).strftime('%Y%m%d')
 
-    def obter_proposicoes(self) -> Generator[Tuple[Dict, str], None, None]:
+    def obter_proposicoes(self, numero: Optional[str] = None) -> Generator[Tuple[Dict, str], None, None]:
         """_summary_
 
         Yields:
@@ -29,15 +29,26 @@ class APILegislacao(IServicoAPI):
         while True:
             try:
                 sleep(3)
-                req = requests.get(url=url, params={
-                    'tp': '1000',
-                    'formato': 'json',
-                    'ano': '2024',
-                    'ord': '3',
-                    'p': p,
-                    'ini': self.__data_inicial,
-                    'fim': self.__data_final
-                })
+                if numero is None:
+                    params = {
+                        'tp': '1000',
+                        'formato': 'json',
+                        'ano': '2024',
+                        'ord': '3',
+                        'p': p,
+                        'ini': self.__data_inicial,
+                        'fim': self.__data_final
+                    }
+                    flag = True
+
+                else:
+                    params = {
+                        'formato': 'json',
+                        'ano': '2024',
+                        'numero': numero
+                    }
+                    flag = False
+                req = requests.get(url=url, params=params)
                 req.raise_for_status()
 
                 req.encoding = 'latin-1'
@@ -47,6 +58,9 @@ class APILegislacao(IServicoAPI):
 
                 for item in dados['resultado']['listaItem']:
                     yield item, req.url
+
+                if not flag:
+                    break
                 p += 1
                 if p == 4:
                     break
