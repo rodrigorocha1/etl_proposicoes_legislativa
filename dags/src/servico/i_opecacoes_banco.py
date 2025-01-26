@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 
 class IOperacoesBanco(ABC):
@@ -11,4 +11,7 @@ o
         Args:
             consulta (str): _description_
         """
+        pass
+
+    def consultar_banco_id(self, sql: str) -> Optional[str]:
         pass
