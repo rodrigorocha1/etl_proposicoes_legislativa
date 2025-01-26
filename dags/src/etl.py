@@ -17,7 +17,11 @@ class ETL:
         for proposicao, url in self.__api_legislacao.obter_proposicoes():
             try:
 
-                self.__registrar_log(json_xml=proposicao)
+                self.__registrar_log(
+                    json_xml=proposicao,
+                    url_api=url,
+                    mensagem_log='REALIZANDO CONSULTA'
+                )
                 try:
                     assunto = re.sub(r'[^\w\s.,;]', '',
                                      proposicao['assunto']).strip().replace('\n', '')
@@ -98,7 +102,7 @@ class ETL:
             except DatabaseError as msg:
 
                 # mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
-                mensagem_erro = 'Erro ao executar operação'
+                mensagem_erro = f'Erro ao executar operação: {msg}'
                 self.__registrar_erro(
                     json_xml=proposicao,
                     numero=numero,
@@ -108,7 +112,7 @@ class ETL:
 
             except Exception as msg:
 
-                mensagem_erro = 'Erro fatal'
+                mensagem_erro = f'Erro fatal: {msg}'
                 self.__registrar_erro(
                     json_xml=proposicao,
                     numero=numero,
