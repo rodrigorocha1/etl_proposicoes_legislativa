@@ -152,11 +152,12 @@ class ETL:
                         'latin1').decode('utf-8').strip()
                     sql = """
                         SELECT ID
-                        FROM proposicao
-                        WHERE ID_NUMERO = %(ID_NUMERO)s;
+                        FROM tramitacao
+                        WHERE ID_PROPOSICAO = %(ID_PROPOSICAO)s;
                     """
                     numero = dados['numero'].strip()
-                    parametros_sql_consulta = {'ID_NUMERO': numero}
+                    parametros_sql_consulta = {
+                        'ID_PROPOSICAO': numero}
                     data_registro = self.__obter_data_registro()
 
                     dados_tramitacao = {
@@ -166,20 +167,20 @@ class ETL:
                         'DATA_CRIACAO_TRAMITACAO': data,
                         'DATA_ATUALIZACAO_REGISTRO': data_registro
                     }
-                    colunas = ", ".join(dados.keys())
+                    colunas = ", ".join(dados_tramitacao.keys())
 
                     tabela = "tramitacao"
 
                     if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is not None:
                         placeholders = ", ".join(
-                            [f"%({coluna})s" for coluna in dados.keys()])
+                            [f"%({coluna})s" for coluna in dados_tramitacao.keys()])
                         sql_banco = f"""
                             INSERT INTO {tabela} ({colunas})
                             VALUES ({placeholders})
                         """
                     else:
                         campos = ', '.join(
-                            [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
+                            [f'{coluna} = %({coluna})s' for coluna in dados_tramitacao.keys()])
 
                         sql_banco = f"""
                             UPDATE {tabela}
