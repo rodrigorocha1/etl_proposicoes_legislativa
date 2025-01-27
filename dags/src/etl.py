@@ -57,7 +57,9 @@ class ETL:
 
     def realizar_etl_propicao(self):
         for proposicao, url in self.__api_legislacao.obter_proposicoes():
+
             try:
+                print(proposicao, url)
 
                 self.__registrar_log(
                     json_xml=proposicao,
@@ -188,7 +190,7 @@ class ETL:
                         tramitacao=tramitacao, dados=dados)
                     colunas = ", ".join(dados_tramitacao.keys())
                     tabela = "tramitacao"
-                    if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is not None:
+                    if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None:
                         placeholders = ", ".join(
                             [f"%({coluna})s" for coluna in dados_tramitacao.keys()])
                         sql_banco = f"""
@@ -202,9 +204,9 @@ class ETL:
                         sql_banco = f"""
                             UPDATE {tabela}
                             SET {campos}
-                            WHERE NUMERO = {numero}
+                            WHERE ID_PROPOSICAO = {numero}
                         """
-
+                    print(sql_banco % dados_tramitacao)
                     self.__operacoes_banco.realizar_operacao_banco(
                         consulta=sql_banco, parametros=dados_tramitacao)
                 except KeyError as msg:

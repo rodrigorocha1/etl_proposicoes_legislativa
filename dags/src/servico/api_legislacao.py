@@ -12,7 +12,7 @@ class APILegislacao(IServicoAPI):
         # self.__URL_BASE = Variable.get('api_dados_abertos_mg')
         self.__URL_BASE = 'https://dadosabertos.almg.gov.br'
         self.__data_final = datetime.now().strftime('%Y%m%d')
-        self.__intervalo_dias = 3
+        self.__intervalo_dias = 10
         self.__data_inicial = (
             datetime.now() - timedelta(days=self.__intervalo_dias)).strftime('%Y%m%d')
 
@@ -49,10 +49,12 @@ class APILegislacao(IServicoAPI):
                     }
                     flag = False
                 req = requests.get(url=url, params=params)
+
                 req.raise_for_status()
 
                 req.encoding = 'latin-1'
                 dados = req.json()
+                print(dados, req.url)
                 if dados['resultado']['noOcorrencias'] == 0:
                     break
 
