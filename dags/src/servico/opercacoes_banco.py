@@ -20,3 +20,17 @@ class OperacaoBanco(IOperacoesBanco):
     def consultar_banco_id(self, sql: str, parametros: Dict[str, Any]) -> Optional[str]:
         resultado = self.__mssql_hook.get_first(sql=sql, parameters=parametros)
         return str(resultado[0]) if resultado is not None else resultado
+
+    def consultar_todos_registros(self, sql: str, parametros: Dict[str, Any]):
+        """Consulta e retorna todos os registros do banco
+
+        Args:
+            sql (str): Consulta SQL a ser executada
+            parametros (Dict[str, Any]): Parâmetros da consulta
+
+        Returns:
+            List[tuple]: Lista de tuplas com os resultados
+        """
+        resultados = self.__mssql_hook.get_records(
+            sql=sql, parameters=parametros)
+        return resultados

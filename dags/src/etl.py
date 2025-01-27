@@ -184,7 +184,8 @@ class ETL:
                     parametros_sql_consulta = {
                         'ID_PROPOSICAO': numero}
                     data_registro = self.__obter_data_registro()
-                    dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao()
+                    dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
+                        tramitacao=tramitacao, dados=dados)
                     colunas = ", ".join(dados_tramitacao.keys())
                     tabela = "tramitacao"
                     if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is not None:
@@ -253,10 +254,13 @@ class ETL:
             FROM [dag_error]
         """
 
-        resultado = self.__operacoes_banco.consultar_banco_id(
+        resultado = self.__operacoes_banco.consultar_todos_registros(
             sql=sql, parametros=None)
 
         dados = self.__api_legislacao.obter_proposicoes()
+        for dado in dados:
+            print(type(dado))
+            print(dado)
 
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
