@@ -206,7 +206,7 @@ class ETL:
                             SET {campos}
                             WHERE ID_PROPOSICAO = {numero}
                         """
-                    print(sql_banco % dados_tramitacao)
+
                     self.__operacoes_banco.realizar_operacao_banco(
                         consulta=sql_banco, parametros=dados_tramitacao)
                 except KeyError as msg:

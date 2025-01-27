@@ -29,7 +29,7 @@ where ID_PROPOSICAO = '11063'
 
 SELECT * 
 FROM proposicao
-WHERE NUMERO = '11063'
+
 order by DATA_INSERSAO_REGISTRO desc;
 SELECT *
 FROM tramitacao
@@ -44,7 +44,7 @@ TRUNCATE table proposicao
 DROP TABLE proposicao CASCADE;
 
 DELETE 
-FROM proposicao;
+FROM proposicao CASCADE;
 
 CREATE TABLE tramitacao(
     ID INTEGER IDENTITY(1,1) PRIMARY KEY,
@@ -58,8 +58,13 @@ CREATE TABLE tramitacao(
  
 );
 
-SELECT *
-FROM tramitacao
+UPDATE tramitacao
+SET DESCRICAO = 'Proposição recebida na Comissão. Publicado no DL em 23 1 2025, pág 1. Aprovado o requerimento. Decisão publicada no DL em 23 1 2025, pág 1.',
+ LOCAL_PROPOSICAO = 'Comissão de Segurança Pública',
+  ID_PROPOSICAO = '11063',
+   DATA_CRIACAO_TRAMITACAO = '2024-10-30', 
+   DATA_ATUALIZACAO_REGISTRO = '2025-01-26 22:30:43'
+WHERE NUMERO = 11063
 
 DROP TABLE tramitacao;
 
@@ -112,17 +117,17 @@ CREATE TABLE dag_error (
 
 DROP TABLE dag_error;
 
-SELECT *
+SELECT Numero
 FROM dag_error
 
-DELETE FROM DAG_ERROR
-
+SELECT *
+FROM dag_error
 order by DATA_REGISTRO DESC;
 
 
 DROP TABLE dag_error;
 INSERT INTO dag_error (NUMERO, JSON_XML, MENSAGEM_ERRO, DATA_ATUALIZACAO)
-VALUES('1', 'TESTE', 'TESTE', GETDATE())
+VALUES('11063', 'TESTE', 'TESTE', GETDATE())
 
 BEGIN
     DECLARE @NUMERO VARCHAR(10), @NUMERO_ERROR VARCHAR(10);
@@ -144,36 +149,14 @@ END;
 
 
 SELECT * 
-FROM  LOG_DAG
+FROM  DAG_ERRO
 
 order by DATA_REGISTRO desc;
 
-
-DELETE FROM log_dag;
-DROP TABLE log_dag;
-
-SELECT 
-    name AS NomeDoIndice, 
-    type_desc AS TipoDoIndice, 
-    is_unique AS IndiceUnico
-FROM sys.indexes
-WHERE object_id = OBJECT_ID('Clientes');
+INSERT INTO dag_error (NUMERO, URL_API, JSON_XML, JSON_ENVIO, MENSAGEM_ERRO, DATA_ATUALIZACAO)
+VALUES('11063', 'a', 'a', 'a', 'a', GETDATE())
 
 
-
-BEGIN
-    DECLARE @numero_teste INTEGER
-    set @numero_teste = 1
-
-    PRINT @numero_teste
-END
-
-
--- Update rows in table '[TableName]' in schema '[dbo]'
-UPDATE [proposicao]
-SET
-    [ColumnName1] = ColumnValue1,
-    [ColumnName2] = ColumnValue2
-    -- Add more columns and values here
-WHERE /* add search conditions here */
-GO
+-- Select rows from a Table or View '[dag_error]' in schema '[dbo]'
+DELETE FROM 
+DAG_ERROR
