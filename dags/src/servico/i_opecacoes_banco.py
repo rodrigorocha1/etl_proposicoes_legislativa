@@ -18,3 +18,6 @@ o
 
     def atualizar_registro(self, sql: str,  parametros: Dict[str, Any]):
         pass
+
+    def consultar_todos_registros(self, sql: str, parametros: Dict[str, Any]):
+        pass

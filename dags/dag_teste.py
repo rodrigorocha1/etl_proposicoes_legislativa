@@ -46,7 +46,7 @@ with DAG(
             FROM proposicao
             WHERE NUMERO = '11017';
         """
-        resultado = mssql_hook.get_first(sql=sql)
+        resultado = mssql_hook.gea(sql=sql)
         print(resultado[0] if resultado is not None else resultado)
 
     inicio_dag = EmptyOperator(

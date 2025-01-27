@@ -250,17 +250,19 @@ class ETL:
 
     def realizar_reprocesso_proposicao(self):
         sql = """
-            SELECT  NUMERO
+            SELECT DISTINCT NUMERO
             FROM [dag_error]
         """
 
-        resultado = self.__operacoes_banco.consultar_todos_registros(
+        resultados = self.__operacoes_banco.consultar_todos_registros(
             sql=sql, parametros=None)
+        for resultado in resultados:
+            print(resultado)
 
-        dados = self.__api_legislacao.obter_proposicoes()
-        for dado in dados:
-            print(type(dado))
-            print(dado)
+        # dados = self.__api_legislacao.obter_proposicoes()
+        # for dado in dados:
+        #     print(type(dado))
+        #     print(dado)
 
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')

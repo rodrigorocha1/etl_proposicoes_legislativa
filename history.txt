@@ -1,0 +1,1000 @@
+ 1005  telnet 172.17.0.2 1433
+ 1006  docker ps -a
+ 1007  telnet 172.17.0.2 1433
+ 1008  docker exec -it ec0a4a097721 /bin/bash
+ 1009  docker ps -a
+ 1010  docker inspect ec0a4a097721
+ 1011  docker run -e "ACCEPT_EULA=Y"   -e "MSSQL_SA_PASSWORD=yourStrong123Password"   -e "MSSQL_TCP_CERT=TrustServerCertificate"   -p 1433:1433   -d mcr.microsoft.com/mssql/server:2019
+ 1012  clear
+ 1013  docker ps -a
+ 1014  docker rm ec0a4a097721 --force
+ 1015  docker images 
+ 1016  docker rmi e483dcbe7ede
+ 1017  docker run -e "ACCEPT_EULA=Y"            -e "MSSQL_SA_PASSWORD=yourStrong123Password"            -e "MSSQL_TCP_CERT=TrustServerCertificate"            -e "TZ=America/Sao_Paulo"            -p 1433:1433            -d mcr.microsoft.com/mssql/server:2019-latest
+ 1018  docker ps -a
+ 1019  docker inspect d221ecac9f94
+ 1020  docker ps -a
+ 1021  clear
+ 1022  docker ps 0a
+ 1023  docker ps -a
+ 1024  docker stop d221ecac9f94
+ 1025  docker ps -a
+ 1026  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1027  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1028  docker ps -a
+ 1029  docker start e21a8a32ab7f
+ 1030  docker ps -a
+ 1031  history
+ 1032  clear
+ 1033  docker ps -a
+ 1034  docker exec -it e21a8a32ab7f date
+ 1035  docker rm e21a8a32ab7f --force
+ 1036  docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=123456" -e "TZ=America/Sao_Paulo"   -v /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime:ro   -p 1433:1433   --name sqlserver   -d mcr.microsoft.com/mssql/server:2019-latest
+ 1037  docker ps -a
+ 1038  docker inspect 159efb9daacc
+ 1039  docker ps -a
+ 1040  docker rm 159efb9daacc --force
+ 1041  docker images
+ 1042  docker rmi e483dcbe7ede
+ 1043  docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=123456" -e "TZ=America/Sao_Paulo"   -v /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime:ro   -p 1433:1433   --name sqlserver   -d mcr.microsoft.com/mssql/server:2019-latest
+ 1044  docker ps -a
+ 1045  docker inspect bf79841d31a6
+ 1046  docker ps -a
+ 1047  docker start bf79841d31a6
+ 1048  docker inspect bf79841d31a6
+ 1049  docker ps -a
+ 1050  docker rm bf79841d31a6
+ 1051  docker images
+ 1052  docker rmi e483dcbe7ede
+ 1053  docker pull mcr.microsoft.com/mssql/server:2022-latest
+ 1054  docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=123456" -e "TZ=America/Sao_Paulo"   -v /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime:ro   -v /etc/timezone:/etc/timezone:ro   -p 1433:1433 --name sql1 --hostname sql1   -d   mcr.microsoft.com/mssql/server:2022-latest
+ 1055  docker ps -a
+ 1056  docker inspect f612f77ebf2c
+ 1057  docker ps -a
+ 1058  docker rm f612f77ebf2c
+ 1059  docker images 
+ 1060  docker rmi 142124bf195c
+ 1061  docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=123456"    -e "TZ=America/Sao_Paulo"    -p 1433:1433 --name sql1 --hostname sql1    -d    mcr.microsoft.com/mssql/server:2022-latest
+ 1062  docker ps -a
+ 1063  docker run 2a185c549f9c
+ 1064  docker ps -a
+ 1065  docker rm 2a185c549f9c
+ 1066  docker images
+ 1067  docker rmi 
+ 1068  docker rmi 142124bf195c
+ 1069  docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=123456"    -e "TZ=America/Sao_Paulo"    -p 1433:1433 --name sql1 --hostname sql1    -d    mcr.microsoft.com/mssql/server:2022-latest
+ 1070  docker ps -a
+ 1071  docker inspect 7961097ab700
+ 1072  docker ps -a
+ 1073  docker exec -it sql1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA  -P "$(read -sp "Enter current SA password: "; echo "${REPLY}")"  -Q "ALTER LOGIN SA WITH PASSWORD=\"$(read -sp "Enter new SA password: "; echo "${REPLY}")\""
+ 1074  docker ps -a
+ 1075  docker run 7961097ab700
+ 1076  docker run sql1
+ 1077  docker run mcr.microsoft.com/mssql/server:2022-latest
+ 1078  docker ps -a
+ 1079  docker run f31f7954cca3
+ 1080  docker start f31f7954cca3
+ 1081  docker rm 7961097ab700 --force
+ 1082  docker ps -a
+ 1083  docker start f31f7954cca3
+ 1084  docker ps -a
+ 1085  docker rm f31f7954cca3
+ 1086  docker images
+ 1087  docker rmi 142124bf195c
+ 1088  docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=123456"    -e "TZ=America/Sao_Paulo"    -p 1433:1433 --name sql1 --hostname sql1    -d    mcr.microsoft.com/mssql/server:2022-latest
+ 1089  docker ps -a
+ 1090  docker inspect 1758dc26b5fa
+ 1091  docker exec -it sql1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA  -P "$(read -sp "Enter current SA password: "; echo "${REPLY}")"  -Q "ALTER LOGIN SA WITH PASSWORD=\"$(read -sp "Enter new SA password: "; echo "${REPLY}")\""
+ 1092  docker inspect 1758dc26b5fa
+ 1093  docker ps -a
+ 1094  docker rm 1758dc26b5fa
+ 1095  docker images
+ 1096  docker rmi 142124bf195c
+ 1097  ls
+ 1098  mkdir docker_compose
+ 1099  cd docker_compose/
+ 1100  code docker_compose.yaml
+ 1101  docker compose up -d
+ 1102  docker-compose up -d
+ 1103  ls
+ 1104  docker-compose up -d
+ 1105  clear
+ 1106  sudo systemctl status docker
+ 1107  docker-compose up -d
+ 1108  pip install --upgrade docker requests urllib3
+ 1109  docker-compose up -d
+ 1110  echo $DOCKER_HOST
+ 1111  docker-compose up -d
+ 1112  docker-compose --version
+ 1113  docker compose version
+ 1114  docker-compose version
+ 1115  sudo curl -SL https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+ 1116  docker compose up
+ 1117  docker compose up -d
+ 1118  docker ps -a
+ 1119  docker inspect 2182ac767a36
+ 1120  docker ps -a
+ 1121  docker inspect 2182ac767a36
+ 1122  docker ps -a
+ 1123  docker exec -it 2182ac767a36 /bin/bash
+ 1124  docker ps -a
+ 1125  docker compose down 
+ 1126  docker images 
+ 1127  docker rmi e483dcbe7ede
+ 1128  docker ps -a
+ 1129  docker compose up -d
+ 1130  docker ps -a
+ 1131  docker inspect a5c105efe72b
+ 1132  docker ps -a
+ 1133  docker compose down 
+ 1134  docker images 
+ 1135  docker rmi e483dcbe7ede
+ 1136  docker compose up -d
+ 1137  docker ps -a
+ 1138  docker inspect 7908710949e6
+ 1139  docker ps -a
+ 1140  docker inspect 7908710949e6
+ 1141  docker ps -a
+ 1142  docker logs sql-server-db
+ 1143  docker ps -a
+ 1144  telnet 172.23.0.2 1433
+ 1145  docker ps -a
+ 1146  docker compose down
+ 1147  docker compose up -d
+ 1148  docker ps -a
+ 1149  docker inspect fbf23f7a9b9d
+ 1150  docker ps -a
+ 1151  docker inspect fbf23f7a9b9d
+ 1152  docker ps -a
+ 1153  docker start fbf23f7a9b9d
+ 1154  docker inspect fbf23f7a9b9d
+ 1155  docker ps -a
+ 1156  docker rm fbf23f7a9b9d
+ 1157  docker images
+ 1158  docker rmi e483dcbe7ed
+ 1159  docker compose up -d
+ 1160  docker ps -a
+ 1161  docker inspect 3aba059f604e
+ 1162  docker ps -a
+ 1163  docker stats 
+ 1164  docker ps -a
+ 1165  docker rm 3aba059f604e
+ 1166  docker images
+ 1167  e483dcbe7ede
+ 1168  docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyComplexPassword123" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest 
+ 1169  docker ps -a
+ 1170  docker inspect d30001040ea5
+ 1171  docker ps -a
+ 1172  docker images 
+ 1173  docker ps -a
+ 1174  docker stats 
+ 1175  docker compose up -d
+ 1176  ls
+ 1177  docker compose up -d
+ 1178  docker ps -a
+ 1179  docker start 209a2506a208
+ 1180  docker ps -a
+ 1181  docker start d42bb2585047
+ 1182  docker stop d42bb2585047
+ 1183  docker ps -a
+ 1184  docker compose up -d
+ 1185  docker ps -a
+ 1186  docker rm e103c8392571
+ 1187  docker images
+ 1188  docker rm ca4486fe2816
+ 1189  docker rmi ca4486fe2816
+ 1190  docker compose up -d
+ 1191  docker ps -a
+ 1192  docker start abf5e959d359
+ 1193  docker logs abf5e959d359
+ 1194  docker ps -a
+ 1195  docker rmabf5e959d359
+ 1196  docker rm abf5e959d359
+ 1197  docker images 
+ 1198  docker rmi ca4486fe2816
+ 1199  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1200  docker-compose up -d
+ 1201  source venv/bin/activate
+ 1202  docker-compose up -d
+ 1203  docker-compose version
+ 1204  clear
+ 1205  docker-compose up -d
+ 1206  docker-compose up 
+ 1207  docker-compose up -d
+ 1208  docker --version
+ 1209  sudo apt-get update
+ 1210  sudo apt-get install docker-compose-plugin
+ 1211  sudo apt autoremove
+ 1212  docker compose up -d
+ 1213  docker pull apache/hadoop
+ 1214  docker compose up -d
+ 1215  docker ps -a
+ 1216  docker inspect cf54203b108d
+ 1217  docker ps -a
+ 1218  docker start cf54203b108d 474aff55a909
+ 1219  docker ps -a
+ 1220  docker rm cf54203b108d 474aff55a909
+ 1221  docker image ls
+ 1222  docker ps -a
+ 1223  docker image ls
+ 1224  docker rmi ca4486fe2816
+ 1225  docker pull apache/hadoop:3.4
+ 1226  docker ps -a
+ 1227  docker images
+ 1228  docker run -it -p 8020:8020 -p 9000:9000 ca4486fe2816
+ 1229  docker ps -a
+ 1230  docker rm 297b163a06c3
+ 1231  docker ps -a
+ 1232  docker images
+ 1233  docker run -it -p 8020:8020 -p 9000:9000 apache/hadoop
+ 1234  docker run -it -p 8020:8020 -p 9000:9000 apache/hadoop:3.4
+ 1235  docker ps -a
+ 1236  docker start 310444268da9
+ 1237  docker ps 0a
+ 1238  docker ps -a
+ 1239  docker start 310444268da9
+ 1240  docker start 310444268da9 -d
+ 1241  docker ps -a
+ 1242  docker rm 310444268da9
+ 1243  docker images
+ 1244  docker rmi ca4486fe2816
+ 1245  docker pull apache/hadoop:3.4
+ 1246  docker run -it -p 8020:8020 -p 9000:9000 apache/hadoop:3.4
+ 1247  docker ps -a
+ 1248  docker run -it -p 8020:8020 -p 9000:9000 apache/hadoop:3.4
+ 1249  docker ps -a
+ 1250  docker rm 8c270e29448b c20b1624141e
+ 1251  docker ps -a
+ 1252  docker start 78813546df2c
+ 1253  docker ps -a
+ 1254  docker logs 78813546df2c
+ 1255  docker logs  apache/hadoop:3.4
+ 1256  docker logs 78813546df2c
+ 1257  docker ps -a
+ 1258  docker start 78813546df2c
+ 1259  docker ps -a
+ 1260  docker rm 78813546df2c
+ 1261  docker images
+ 1262  docker rmi ca4486fe2816
+ 1263  docker-compose up -d
+ 1264  çs
+ 1265  ls
+ 1266  docker pull apache/hadoop
+ 1267  docker pull apache/hadoop:3.4.1
+ 1268  docker ps -a
+ 1269  docker images
+ 1270  docker rmi 28e52e5ab12a
+ 1271  docker run -it --name hadoop-container apache/hadoop:3.4.1
+ 1272  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025010801-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025010801-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1273  ls
+ 1274  cd Documentos/projetos/
+ 1275  ls
+ 1276  cd proposta_construcao_datalake_tempo/
+ 1277  source venv/bin/activate
+ 1278  code ../proposta_construcao_datalake_tempo/
+ 1279  docker images 
+ 1280  docker ps -a
+ 1281  docker run bac20d3a35cf -d
+ 1282  docker start  bac20d3a35cf -d
+ 1283  docker ps -a
+ 1284  docker rm bac20d3a35cf
+ 1285  docker images
+ 1286  docker rmi ca4486fe2816
+ 1287  clear
+ 1288  docker-compose up -d
+ 1289  docker rmi
+ 1290  docker images 
+ 1291  docker pull apache/hadoop
+ 1292  docker pull apache/hadoop:3.4.0
+ 1293  docker ps -a
+ 1294  docker run -it -p 8020:8020 -p 9000:9000 apache/hadoop:3.4.0
+ 1295  docker ps -a
+ 1296  docker start 6595eda9d519
+ 1297  docker rm 6595eda9d519
+ 1298  docker image
+ 1299  docker image ls
+ 1300  docker rmi b1612102780a
+ 1301  docker compose up -d
+ 1302  docker ps -a
+ 1303  docker start 74be07a79bfc 61048cf26590  19c53704f57a ddcee16863b3
+ 1304  docker ps -a
+ 1305  docker start 74be07a79bfc 61048cf26590  19c53704f57a ddcee16863b3
+ 1306  docker rm 74be07a79bfc 61048cf26590  19c53704f57a ddcee16863b3
+ 1307  docker images
+ 1308  docker rmi ca4486fe2816
+ 1309  docker pull rancher/hadoop-base
+ 1310  docker pull sequenceiq/hadoop-docker
+ 1311  docker pull harisekhon/hadoop
+ 1312  docker ps -a
+ 1313  docker images
+ 1314  docker build  -t sequenceiq/hadoop-docker:2.7.0 .
+ 1315  docker build  -t harisekhon/hadoop
+ 1316  docker run -d -p 8088:8088 -p 50070:50070 --name hadoop harisekhon/hadoop
+ 1317  docker ps -a
+ 1318  docker inspect cd38209733dc
+ 1319  docker images
+ 1320  docker ps -a
+ 1321  docker stop cd38209733dc
+ 1322  docker images
+ 1323  docker rm dc4928304b08 
+ 1324  docker rmi dc4928304b08 
+ 1325  docker ps -a
+ 1326  docker rmi cd38209733dc
+ 1327  docker rm cd38209733dc
+ 1328  docker ps -a
+ 1329  docker images 
+ 1330  docker rmi dc4928304b08
+ 1331  docker pull apache/hadoop:2.10.2
+ 1332  docker images
+ 1333  docker run -d -p 8088:8088 -p 50070:50070 --name hadoop apache/hadoop
+ 1334  docker run -d -p 8088:8088 -p 50070:50070 -p 9000:9000 --name hadoop --hostname hadoop-container apache/hadoop:2.10.2
+ 1335  docker ps -a
+ 1336  docker start e0a650d87779
+ 1337  docker rm e0a650d87779
+ 1338  docker images
+ 1339  docker rmi 45462b7050cf
+ 1340  docker pull sequenceiq/hadoop-docker
+ 1341  docker pull harisekhon/hadoop
+ 1342  docker run -d -p 8088:8088 -p 50070:50070 --name hadoop harisekhon/hadoop
+ 1343  docker ps -a
+ 1344  docker inspect 54f03f10ddec
+ 1345  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1346  ls
+ 1347  cd Documentos/projetos/
+ 1348  mkdir web_scraping_dados_professores
+ 1349  cd web_scraping_dados_professores/
+ 1350  python3.10 -m venv venv
+ 1351  code ../web_scraping_dados_professores/
+ 1352  source venv/bin/activate
+ 1353  pip install beautifulsoup4
+ 1354  pip install requests
+ 1355  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025010901-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025010901-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1356  cd /home/rodrigo/Documentos/projetos/web_scraping_dados_professores/testes/testes_usp.py
+ 1357  cd /home/rodrigo/Documentos/projetos/web_scraping_dados_professores
+ 1358  source venv/bin/activate
+ 1359  ls
+ 1360  python3.10 testes/testes_usp.py 
+ 1361  clear
+ 1362  python3.10 testes/testes_usp.py 
+ 1363  clear
+ 1364  python3.10 testes/testes_usp.py 
+ 1365  clear
+ 1366  python3.10 testes/testes_usp.py 
+ 1367  clear
+ 1368  python3.10 testes/testes_usp.py 
+ 1369  clear
+ 1370  python3.10 testes/testes_usp.py 
+ 1371  clear
+ 1372  python3.10 testes/testes_usp.py 
+ 1373  clear
+ 1374  python3.10 testes/testes_usp.py 
+ 1375  clear
+ 1376  ls
+ 1377  pip install mypy
+ 1378  pip freeze > requirements.txt
+ 1379  ls
+ 1380  mypy src/extracao/iextracao.py 
+ 1381  mypy src/extracao/extracao.py 
+ 1382  mypy --install-types
+ 1383  pip install types-beautifulsoup4
+ 1384  mypy --install-types
+ 1385  mypy src/extracao/extracao.py 
+ 1386  mypy src/extracao/scraping_ufabc.py 
+ 1387  clear
+ 1388  ls
+ 1389  python3.10 teste.
+ 1390  python3.10 teste.py 
+ 1391  clear
+ 1392  mypy src/extracao/scraping_usp.py 
+ 1393  mypy src/extracao/scraping_ufabc.py 
+ 1394  mypy src/extracao/scraping_usp.py 
+ 1395  mypy src/extracao/scraping_ufabc.py 
+ 1396  mypy src/extracao/scraping_usp.py 
+ 1397  python3.10 teste.py 
+ 1398  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1399  docker ps -a
+ 1400  docker start d221ecac9f94
+ 1401  docker ps -a
+ 1402  history
+ 1403  clear
+ 1404  docker ps =a
+ 1405  docker ps -a
+ 1406  docker exec -it 54f03f10ddec /bin/bash
+ 1407  docker exec -it d221ecac9f94 /bin/bash
+ 1408  docker stop d221ecac9f94
+ 1409  docker rm d221ecac9f94
+ 1410  history
+ 1411  docker images
+ 1412  docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=123456' -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server
+ 1413  -e "TZ=America/Sao_Paulo"
+ 1414  docker ps -a
+ 1415  docker stop f49ec4282f7e
+ 1416  docker rm f49ec4282f7e
+ 1417  docker run -e "ACCEPT_EULA=Y"   -e "MSSQL_SA_PASSWORD=yourStrong()Password"   -e "MSSQL_TCP_CERT=TrustServerCertificate"   -e "TZ=America/Sao_Paulo"   -p 1433:1433   -d mcr.microsoft.com/mssql/server:2019-latest
+ 1418  docker ps -a
+ 1419  history
+ 1420  clear
+ 1421  docker images
+ 1422  docker run -e "ACCEPT_EULA=Y"   -e "MSSQL_SA_PASSWORD=yourStrong()Password"   -e "MSSQL_TCP_CERT=TrustServerCertificate"   -p 1433:1433   -d mcr.microsoft.com/mssql/server:2019-latest
+ 1423  docker ps -a
+ 1424  docker stop bbdd70bf28a8
+ 1425  docker ps -a
+ 1426  docker rm bbdd70bf28a8
+ 1427  docker run -e "ACCEPT_EULA=Y"   -e "MSSQL_SA_PASSWORD=yourStrong()Password"   -e "MSSQL_TCP_CERT=TrustServerCertificate"   -p 1433:1433   -d mcr.microsoft.com/mssql/server:2019-latest
+ 1428  docker ps -a
+ 1429  docker inspect f49ec4282f7e
+ 1430  docker ps -a
+ 1431  docker exec -it cb1ee0b429e3 /bin/bash
+ 1432  docker exec -it --user root cb1ee0b429e3 /bin/bash
+ 1433  clear
+ 1434  docker ps -a
+ 1435  docker stop cb1ee0b429e3
+ 1436  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1437  ls
+ 1438  cd Documentos/
+ 1439  ls
+ 1440  cd curso_sql_server/
+ 1441  ls
+ 1442  docker cp SUCOS_VENDAS.BAK cb1ee0b429e3:/
+ 1443  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1444  docker ps -a
+ 1445  docker start cb1ee0b429e3
+ 1446  docker ps -a
+ 1447  ls
+ 1448  cd Documentos/curso_sql_server/
+ 1449  ls
+ 1450  clear
+ 1451  history
+ 1452  ls
+ 1453  docker cp DB_VENDAS_PEQUENO.BAK cb1ee0b429e3:/
+ 1454  docker cp DB_VENDAS_GRANDE.BAK.BAK cb1ee0b429e3:/
+ 1455  docker cp DB_VENDAS_GRANDE.BAK cb1ee0b429e3:/
+ 1456  docker exec -it --user root cb1ee0b429e3 /bin/bash
+ 1457  ls
+ 1458  rm -rf DB_*
+ 1459  ls
+ 1460  df -h
+ 1461  docker ps -a
+ 1462  docker stop cb1ee0b429e3
+ 1463  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1464  history 
+ 1465  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1466  ls
+ 1467  mkdir volumes
+ 1468  cd volumes
+ 1469  mkdir dbt
+ 1470  cd dbt
+ 1471  ls
+ 1472  docker pull ghcr.io/dbt-labs/dbt-redshift:1.9.latest
+ 1473  docker ps -a
+ 1474  docker images
+ 1475  docker run -it --name dbt-redshift-container ghcr.io/dbt-labs/dbt-redshift:1.9.latest
+ 1476  docker ps -a
+ 1477  docker start 5900f65aca6b
+ 1478  docker ps -a
+ 1479  docker start 5900f65aca6b
+ 1480  docker ps -a
+ 1481  docker logs 5900f65aca6b
+ 1482  docker ps -a
+ 1483  docker rm 5900f65aca6b
+ 1484  docker images
+ 1485  docker rmi 11ff6c0dd827
+ 1486  docker run -it --name dbt-redshift-container ghcr.io/dbt-labs/dbt-redshift:1.9.latest
+ 1487  docker ps -a
+ 1488  docker start e849a017d686
+ 1489  docker ps -a
+ 1490  docker logs e849a017d686
+ 1491  docker --logs e849a017d686
+ 1492  docker ps -a
+ 1493  docker start -ai e849a017d686
+ 1494  docker ps -a
+ 1495  docker exec -it e849a017d686 /bin/bash
+ 1496  docker rm e849a017d686
+ 1497  docker images
+ 1498  docker rmi 11ff6c0dd827
+ 1499  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1500  cd
+ 1501  clear
+ 1502  ls
+ 1503  cd Documentos/
+ 1504  mkdir udemy
+ 1505  mv udemy udemy_projetos
+ 1506  cd udemy_projetos/
+ 1507  python3.10 -m venv venv
+ 1508  source venv/bin/activate
+ 1509  code ../udemy_projetos/
+ 1510  pip install pandas
+ 1511  pip install plotly nbformat
+ 1512  neofetch 
+ 1513  df -h
+ 1514  docker ps -a
+ 1515  df -h
+ 1516  docker ps -a
+ 1517  docker --version
+ 1518  clear
+ 1519  docker ps -a
+ 1520  docker compose up
+ 1521  docker ps -a
+ 1522  clear
+ 1523  docker ps -a
+ 1524  docker images
+ 1525  docker-compose up -d
+ 1526  docker compose up -d
+ 1527  docker ps -a
+ 1528  docker inspect fe626a3e02ed
+ 1529  docker ps -a
+ 1530  docker compose down 
+ 1531  docker ps -a
+ 1532  docker images 
+ 1533  docker rmi 4075a3f8c3f8 5f9a655d4ba7 b1ca76d46b96 ca82a6620fe8
+ 1534  docker ps -a
+ 1535  clear
+ 1536  clear
+ 1537  ls
+ 1538  docker inspect a5797f16905d
+ 1539  docker ps -a
+ 1540  docker compose down 
+ 1541  docker ps -a
+ 1542  docker compose up -d
+ 1543  docker ps -a
+ 1544  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1545  ls
+ 1546  cd Documentos/projetos/
+ 1547  mkdir etl_proposicoes_legislativa
+ 1548  cd etl_proposicoes_legislativa/
+ 1549  code ../etl_proposicoes_legislativa/
+ 1550  /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/docker-compose.yaml
+ 1551  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1552  docker ps -a
+ 1553  docker compose up -d
+ 1554  docker ps -a
+ 1555  docker inspect fb8d1373dead
+ 1556  docker ps -a
+ 1557  docker compose down
+ 1558  docker ps -a
+ 1559  docker rm a8de959db07d b3902c89b1c3 2670e33dcd00 730a0469d775 7c97e8ce47b2 1fb080173e05 837884de6ac9 87946e620e8d beca45a56a3a 957ec016ddf3
+ 1560  docker ps -a
+ 1561  docker images
+ 1562  docker rmi 4075a3f8c3f8 b1ca76d46b96 99307ab28a49 000f23613c94 cb77a108637f d2c94e258dcb 
+ 1563  ls
+ 1564  docker images
+ 1565  docker ps -a
+ 1566  df -h
+ 1567  docker compose up -d
+ 1568  docker ps -a
+ 1569  docker inspect b80b98c899dc
+ 1570  telnet 172.26.0.6 8080
+ 1571  telnet 0.0.0.0 8080
+ 1572  docker ps -a
+ 1573  docker inspect b80b98c899dc
+ 1574  docker ps -a
+ 1575  docker compose down
+ 1576  docker ps -a
+ 1577  docker images
+ 1578  docker rmi 4075a3f8c3f8 66f8bdd3810c b1ca76d46b96 dad28d0405d6
+ 1579  docker compose up -d
+ 1580  docker ps -a
+ 1581  docker status 63589f2fa2ae
+ 1582  docker inspect 63589f2fa2ae
+ 1583  docker compose down 
+ 1584  ls
+ 1585  docker ps -a
+ 1586  df -h
+ 1587  docker images
+ 1588  docker rmi 4075a3f8c3f8 b1ca76d46b96 dad28d0405d6
+ 1589  docker compose up -d
+ 1590  docker ps -a
+ 1591  docker inspect 9f8ff3506a44
+ 1592  telnet 172.26.0.5 8080
+ 1593  telnet 0.0.0.0 8080
+ 1594  docker ps -a
+ 1595  docker-compose down 
+ 1596  docker compose down 
+ 1597  docker-compose up airflow-init
+ 1598  docker compose up airflow-init 
+ 1599  docker compose down 
+ 1600  docker images
+ 1601  docker rmi f37575f80db5 5eac2c73de97
+ 1602  docker images
+ 1603  clear
+ 1604  docker ps -a
+ 1605  docker images
+ 1606  docker compose up -d
+ 1607  docker ps -a
+ 1608  docker compose down
+ 1609  docker compose up airflow-init
+ 1610  ls
+ 1611  docker compose down 
+ 1612  curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.8.0/docker-compose.yaml'
+ 1613  mkdir -p ./dags ./logs ./plugins ./config
+ 1614  docker compose up airflow-init
+ 1615  docker compose up airflow-init -d
+ 1616  docker ps -a
+ 1617  docker start 963fc0cffd76
+ 1618  docker ps -a
+ 1619  docker compose down
+ 1620  docker images
+ 1621  docker rmi 4075a3f8c3f8 b1ca76d46b96 ca82a6620fe8
+ 1622  docker images
+ 1623  ls
+ 1624  rm -rf *
+ 1625  sudo rm -rf *
+ 1626  ls
+ 1627  curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.7.1/docker-compose.yaml'
+ 1628  mkdir -p ./dags ./logs ./plugins ./config
+ 1629  echo -e "AIRFLOW_UID=$(id -u)" > .env
+ 1630  docker compose up airflow-init
+ 1631  docker compose up
+ 1632  docker compose up airflow db upgrade
+ 1633  docker ps -a
+ 1634  docker rm b4aceae9844e 76a6ca4cf1cc 5752a5e96aad 3c334af0cc19 622faf495d0f 9db9d518fd66 58e1359d1394
+ 1635  docker images
+ 1636  docker rmi 4075a3f8c3f8 b1ca76d46b96 f37575f80db5
+ 1637  docker volume rm airflow_postgres_data
+ 1638  clear
+ 1639  docker compose up airflow-init
+ 1640  docker ps -a
+ 1641  docker-compose down
+ 1642  docker compose down
+ 1643  docker-compose up -d --build
+ 1644  docker compose up -d --build
+ 1645  docker ps -a
+ 1646  docker exec -it e82bdac23931  airflow db upgrade
+ 1647  docker compose down 
+ 1648  docker images
+ 1649  docker rmi f37575f80db5 b1ca76d46b96 4075a3f8c3f8 
+ 1650  docker volume 
+ 1651  docker volume ls
+ 1652  docker volume rm $(docker volume ls -q)
+ 1653  docker volume ls
+ 1654  docker ps -a
+ 1655  docker ps -a --filter volume=<438f09e344c3c7a19c8818d1dfc6a4217b33f2f276b02a78f93f2f0bfc5c33b0>
+ 1656  docker ps -a --filter volume=438f09e344c3c7a19c8818d1dfc6a4217b33f2f276b02a78f93f2f0bfc5c33b0
+ 1657  docker ps -a --filter volume=d58b5c9866793026349dd618822aa85ff2391cbfd9f68236d806eecde6581ab9
+ 1658  docker compose up airflow-init
+ 1659  docker compose up
+ 1660  ls
+ 1661  docker ps -a
+ 1662  docker rm 72ccf72408d6 f17beb56d44a 1cbb0936a547 c096d33ef651 1457212df8eb e1e5205910c4 469f3bee02fe 
+ 1663  docker images
+ 1664  docker rm f37575f80db5 4075a3f8c3f8
+ 1665  docker rmi f37575f80db5 4075a3f8c3f8
+ 1666  docker volume ls
+ 1667  docker volume rm $(docker volume ls -q)
+ 1668  ls
+ 1669  clear
+ 1670  mkdir -p ./dags ./logs ./plugins ./config
+ 1671  echo -e "AIRFLOW_UID=$(id -u)" > .env
+ 1672  docker compose up airflow-init
+ 1673  docker compose up -d
+ 1674  docker ps -a
+ 1675  docker exec -it 6a092b203724 /bin/bash
+ 1676  docker compose down 
+ 1677  docker ps -a
+ 1678  docker images
+ 1679  docker compose up -d
+ 1680  docker ps -a
+ 1681  docker exec -it  /bin/bash
+ 1682  docker ps -a
+ 1683  docker compose down
+ 1684  docker compose up airflow-init
+ 1685  docker compose up
+ 1686  docker compose down 
+ 1687  docker compose up
+ 1688  docker compose down 
+ 1689  docker ps -a
+ 1690  df -j
+ 1691  df -h
+ 1692  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1693  code ../etl_proposicoes_legislativa/
+ 1694  history 
+ 1695  clear
+ 1696  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1697  docker compose up airflow-init
+ 1698  ls
+ 1699  docker compose up airflow-init
+ 1700  docker-compose up -d
+ 1701  docker compose up -d
+ 1702  docker compose up airflow-init
+ 1703  docker-compose up -d
+ 1704  docker compose up -d
+ 1705  docker ps -a
+ 1706  docker compose down
+ 1707  docker ps -a
+ 1708  docker compose up -d
+ 1709  docker ps -a
+ 1710  docker start 16c1f9b5c8e9
+ 1711  docker ps -a
+ 1712  docker compose down
+ 1713  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1714  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1715  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1716  history 
+ 1717  clear
+ 1718  ls
+ 1719  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1720  docker compose up airflow-init
+ 1721  docker compose up -d
+ 1722  docker ps -a
+ 1723  docker inspect 0c21d3aa954f
+ 1724  docker ps -a
+ 1725  docker compose down 
+ 1726  ls
+ 1727  mv database/ dadps
+ 1728  mv dadps/ dados
+ 1729  ls
+ 1730  cd dados/
+ 1731  pwd
+ 1732  docker compose up airflow-init
+ 1733  docker compose up -d
+ 1734  docker ps -a
+ 1735  docker compose up -d
+ 1736  docker ps -a
+ 1737  docker compose up -d
+ 1738  docker compose down
+ 1739  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1740  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1741  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1742  docker compose up airflow-init
+ 1743  docker compose up -d
+ 1744  docker ps -a
+ 1745  docker compose up -d
+ 1746  docker ps -a
+ 1747  docker compose down
+ 1748  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1749  python3.10 -m venv venv
+ 1750  cd ..
+ 1751  cd etl_proposicoes_legislativa/
+ 1752  python3.10 -m venv venv
+ 1753  source venv/bin/activate
+ 1754  pip install apache-airflow[postgres, celery, redis]==2.10.4
+ 1755  pip install "apache-airflow[postgres, celery, redis]==2.10.4"
+ 1756  clear 
+ 1757  ls
+ 1758  docler compose up -d
+ 1759  docker compose up -d
+ 1760  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1761  docker compose up -d
+ 1762  docker ps -a
+ 1763  docker compose down 
+ 1764  docker ps -a
+ 1765  history
+ 1766  docker compose up airflow-init 
+ 1767  docker compose up -d
+ 1768  docker ps -a
+ 1769  docker compose up airflow-init 
+ 1770  Docker-compose down
+ 1771  docker compose down
+ 1772  docker compose up airflow-init 
+ 1773  docker compose up -d
+ 1774  docker ps -a
+ 1775  docker start 518acd34ce47
+ 1776  docker ps -a
+ 1777  docker inspect bf41bcbd88f0
+ 1778  docker compose down
+ 1779  docker compose up airflow-init 
+ 1780  docker compose up -d
+ 1781  docker ps -a
+ 1782  docker inspect a8a968ae493d
+ 1783  pip install apache-airflow-providers-microsoft-mssql==3.6
+ 1784  docker ps -a
+ 1785  docker compose down 
+ 1786  docker ps -a
+ 1787  docker compose up airflow-init 
+ 1788  docker compose up -d
+ 1789  docker ps -a
+ 1790  docker compose down 
+ 1791  sudo systemctl stop postgresql.service
+ 1792  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1793  docker compose down 
+ 1794  docker volume ls
+ 1795  docker volume rm etl_proposicoes_legislativa_sqlserver-data
+ 1796  docker compose up -d
+ 1797  docker ps -a
+ 1798  docker compose down 
+ 1799  docker ps -a
+ 1800  docker compose up -d
+ 1801  docker ps -a
+ 1802  docker compose up -d
+ 1803  docker ps -a
+ 1804  docker logs mssql_server_airflow
+ 1805  docker compose down 
+ 1806  docker compose up -d
+ 1807  docker ps -a
+ 1808  cd ..
+ 1809  ls
+ 1810  sudo chmod -R 755 /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/dados
+ 1811  docker compose down 
+ 1812  sudo chmod -R 755 /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/dados
+ 1813  sudo chown -R 10001:10001 /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/dados
+ 1814  sudo chmod -R 755 /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/dados
+ 1815  sudo chown -R 10001:10001 /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/dados
+ 1816  docker compose down 
+ 1817  docker compose up -d
+ 1818  docker ps -a
+ 1819  docker inspect 58640100ec53
+ 1820  docker ps -a
+ 1821  telnet 172.26.0.3 1433
+ 1822  docker ps -a
+ 1823  docker inspect 58640100ec53
+ 1824  ls
+ 1825  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1826  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/diagramas/diagrama.plantuml
+ 1827  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa
+ 1828  source venv/bin/activate
+ 1829  clear
+ 1830  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1831  docker compose up -d
+ 1832  docker compose up airflow-init
+ 1833  docker compose up 
+ 1834  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1835  source venv/bin/activate
+ 1836  df -h
+ 1837  docker ps -a
+ 1838  docker inspect e27acb630c00
+ 1839  pip install apache-airflow-providers-microsoft-mssql
+ 1840  pip freeze > requirements.txt
+ 1841  source venv/bin/activate
+ 1842  docker ps -a
+ 1843  docker inspect e27acb630c00
+ 1844  pip install requests
+ 1845  pip install mypy
+ 1846  clear
+ 1847  mypy src/servico/api_legislacao.py 
+ 1848  mypy --install-types
+ 1849  mypy src/servico/api_legislacao.py 
+ 1850  mypy src/servico/opercacoes_banco.py 
+ 1851  clear
+ 1852  python3.10 teste.py 
+ 1853  mypy src/servico/api_legislacao.py 
+ 1854  mypy dag/src/servico/api_legislacao.py 
+ 1855  mypy dags/src/servico/api_legislacao.py 
+ 1856  mypy dags/src/servico/opercacoes_banco.py 
+ 1857  mypy dags/src/etl.py
+ 1858  clear
+ 1859  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1860  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa
+ 1861  source venv/bin/activate
+ 1862  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1863  docker compose up airflow-init
+ 1864  docker compose up
+ 1865  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1866  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025011501-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1867  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012301-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012301-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1868  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/test copy.txt
+ 1869  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/
+ 1870  source venv/bin/activate
+ 1871  docker compose up airflow-init
+ 1872  docker compose up
+ 1873  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1874  df -h
+ 1875  code
+ 1876  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1877  source venv/bin/activate
+ 1878  docker ps -1
+ 1879  docker ps -a
+ 1880  python3.10 teste.py 
+ 1881  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012301-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012301-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1882  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1883  docker compose up airflow-init
+ 1884  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1885  df -h
+ 1886  cd /opt/containerd/
+ 1887  ls
+ 1888  sudo ls
+ 1889  ls
+ 1890  cd
+ 1891  ls
+ 1892  docker exec -it 28e5981c6a8a /bin/bash
+ 1893  docker ps -a
+ 1894  docker exec -it 28e5981c6a8a /bin/bash
+ 1895  docker ps -a
+ 1896  docker exec -it 7ffefbc3f0a4 /bin/bash
+ 1897  docker exec -it --user root 7ffefbc3f0a4 /bin/bash
+ 1898  docker-compose down && docker-compose up 
+ 1899  docker ps -a
+ 1900  docker inspect 0e5273b6c271
+ 1901  docker ps -a
+ 1902  clear
+ 1903  ls
+ 1904  df-h
+ 1905  df -h
+ 1906  docker ps -a
+ 1907  docler inspect 8cd039930f06
+ 1908  docker inspect 8cd039930f06
+ 1909  docker ps -a
+ 1910  code
+ 1911  docker ps -a
+ 1912  docker inspect 8cd039930f06
+ 1913  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1914  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa/dados
+ 1915  ls
+ 1916  cd log/
+ 1917  ls
+ 1918  rm -rf *
+ 1919  sudo rm -rf *
+ 1920  ls
+ 1921  cd ..
+ 1922  source venv/bin/activate
+ 1923  docker ps -a
+ 1924  docker inspect 8cd039930f06
+ 1925  df -h
+ 1926  docker compose up airflow-init
+ 1927  docker ps -a
+ 1928  docker exec -it c613c225f9df /bin/bash
+ 1929  docker compose down 
+ 1930  docker compose up airflow-init
+ 1931  docker exec -it c613c225f9df /bin/bash
+ 1932  docker ps -a
+ 1933  docker exec -it 28e5981c6a8a /bin/bash
+ 1934  docker compose up
+ 1935  docker compose up airflow-init
+ 1936  docker compose up
+ 1937  clear
+ 1938  docker compose down
+ 1939  docker compose up --build
+ 1940  ls
+ 1941  docker compose up 
+ 1942  docker volume ls
+ 1943  docker volume rm $(docker volume ls -q)
+ 1944  docker ps -a
+ 1945  docker stop $(docker ps -q)
+ 1946  docker stop *
+ 1947  docker compose down 
+ 1948  docker ps -a
+ 1949  docker volume rm $(docker volume ls -q)
+ 1950  docker compose up airflow-init
+ 1951  docker compose up --build
+ 1952  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1953  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1954  docker compose up airflow-init
+ 1955  docker compose up 
+ 1956  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1957  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1958  docker compose up airflow-init
+ 1959  docker compose up airflow-init && docker compose uo
+ 1960  docker compose up airflow-init && docker compose up
+ 1961  docker compose up airflow-init 
+ 1962  docker compose up
+ 1963  docker compose up 
+ 1964  docker ps -a
+ 1965  docker inspect 8cd039930f06
+ 1966  docker ps -a
+ 1967  docker inspect 8cd039930f06
+ 1968  mypy dags/src/etl.py 
+ 1969  source venv/bin/activate
+ 1970  mypy dags/src/etl.py 
+ 1971  docker inspect 8cd039930f06
+ 1972  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1973  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1974  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa
+ 1975  source venv/bin/activate
+ 1976  docker ps -a
+ 1977  docker inspect 8cd039930f06
+ 1978  mypy dags/src/etl.py 
+ 1979  mypy --install-types
+ 1980  mypy dags/src/etl.py 
+ 1981  sudo systemctl start docker && sudo systemctl start docker.socket
+ 1982  docker compose up airflow-init 
+ 1983  docker compose up
+ 1984  docker compose up airflow-init 
+ 1985  sudo systemctl stop docker && sudo systemctl stop docker.socket
+ 1986  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1987  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa
+ 1988  docker ps -a
+ 1989  docker inspect 8cd039930f06
+ 1990  docker ps -a
+ 1991  clear
+ 1992  python3.10 teste.py 
+ 1993  /bin/python3 /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/printEnvVariablesToFile.py /home/rodrigo/.vscode/extensions/ms-python.python-2024.23.2025012401-linux-x64/python_files/deactivate/bash/envVars.txt
+ 1994  docker ps -a
+ 1995  docker inspect 8cd039930f06
+ 1996  cd /home/rodrigo/Documentos/projetos/etl_proposicoes_legislativa
+ 1997  source venv/bin/activate
+ 1998  docker compose up airflow-init 
+ 1999  docker compose up
+ 2000  source venv/bin/activate
+ 2001  docker ps -a
+ 2002  8cd039930f06
+ 2003  docker inspect 8cd039930f06
+ 2004  history >> history.txt
