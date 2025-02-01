@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict
+from typing import Any, Dict
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 from src.servico.i_servico_api import IServicoAPI
 from pymssql.exceptions import IntegrityError, DatabaseError  # type: ignore
@@ -14,6 +14,11 @@ class ETL:
         self.__operacoes_banco = operacoes_banco
 
     def __realizar_tratamento_etl_proposicao(self, proposicao: Dict):
+        """Método para realizar tatamento de proposição
+
+        Args:
+            proposicao (Dict): requisição da API
+        """
         try:
             assunto = re.sub(r'[^\w\s.,;]', '',
                              proposicao['assunto']).strip().replace('\n', '')
@@ -28,7 +33,6 @@ class ETL:
         autor = " ".join(proposicao['autor'].encode(
                 'latin1').decode('utf-8').strip().split())
         data_presentacao = proposicao['dataPublicacao']
-
         regime = proposicao['regime'].encode(
             'latin1').decode('utf-8').strip()
 
@@ -58,14 +62,26 @@ class ETL:
     def __insercao_regisro(
             self,
             sql: str,
-            parametros_sql_consulta: str,
+            parametros_sql_consulta: Dict[str, Any],
             colunas: str,
-            dados: str,
+            dados: Dict[str, Any],
             tabela: str,
-            proposicao: Dict,
+            proposicao: Dict[str, Any],
             url: str,
             flag: bool = True
     ):
+        """_summary_
+
+        Args:
+            sql (str): Consulta sql 
+            parametros_sql_consulta (Dict[str, Any]): parametros da consulta 
+            colunas (str): colunas da tabela
+            dados (Dict[str, Any]): dados que vai ser enviado a tabela
+            tabela (str): nome da tabela
+            proposicao (Dict[str, Any]): requisição da api
+            url (str): url da api
+            flag (bool, optional): flag de inserção . Defaults to True.
+        """
         try:
             if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None or flag:
                 placeholders = ", ".join(
@@ -87,6 +103,7 @@ class ETL:
 
             self.__operacoes_banco.realizar_operacao_banco(
                 consulta=sql_banco, parametros=dados)
+
         except KeyError as msg:
 
             mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
@@ -100,7 +117,7 @@ class ETL:
 
         except IntegrityError as msg:
 
-            mensagem_erro = f'Já existe a chave, {proposicao['numero'].strip()}'
+            mensagem_erro = f'Já existe a chave, {proposicao["numero"].strip()}'
             self.__registrar_log(
                 json_xml=proposicao,
                 mensagem_log=mensagem_erro,
@@ -131,30 +148,23 @@ class ETL:
 
     def realizar_etl_propicao(self):
         for proposicao, url in self.__api_legislacao.obter_proposicoes():
-
-            print(proposicao, url)
-
             self.__registrar_log(
                 json_xml=proposicao,
                 url_api=url,
                 mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO'
             )
-
             sql = """
                     SELECT ID
                     FROM proposicao
                     WHERE NUMERO = %(NUMERO)s;
                 """
-
             parametros_sql_consulta = {
                 'NUMERO': proposicao['numero'].strip()}
             dados = self.__realizar_tratamento_etl_proposicao(
                 proposicao=proposicao
             )
             colunas = ", ".join(dados.keys())
-
             tabela = "proposicao"
-
             self.__insercao_regisro(
                 sql=sql,
                 parametros_sql_consulta=parametros_sql_consulta,
@@ -162,7 +172,8 @@ class ETL:
                 dados=dados,
                 proposicao=proposicao,
                 tabela=tabela,
-                url=url
+                url=url,
+                flag=False
             )
 
     def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict):
@@ -215,7 +226,8 @@ class ETL:
                     dados=dados,
                     proposicao=tramitacao,
                     tabela=tabela,
-                    url=url
+                    url=url,
+                    flag=False
                 )
 
     def realizar_reprocesso_proposicao(self):
@@ -279,11 +291,11 @@ class ETL:
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
         data_registro = datetime.now()
-        data_registro = data_registro.astimezone(
+        data_formatada = data_registro.astimezone(
             brasilia_tz).strftime('%Y-%m-%d %H:%M:%S')
-        return data_registro
+        return data_formatada
 
-    def __registrar_erro(self, json_xml: str, numero: str, data_registro, mensagem_erro: str, url_api: str):
+    def __registrar_erro(self, json_xml: Dict[str, Any], numero: str, data_registro, mensagem_erro: str, url_api: str):
         json_xml = json.dumps(json_xml)
         dados_erro = {
             'NUMERO': numero,

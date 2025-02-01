@@ -65,7 +65,7 @@ where ID_PROPOSICAO = '11063';
 
 DELETE
 FROM tramitacao
-where ID_PROPOSICAO = '11063';
+where ID_PROPOSICAO = '11050';
 
 SELECT *
 FROM proposicao
@@ -73,18 +73,23 @@ where NUMERO = '11063';
 
 DELETE 
 FROM proposicao
-where NUMERO = '11063';
+where NUMERO = '11050';
 
 DELETE 
-FROM dag_error;
+FROM dag_error
+WHERE ID = '';
 
 SELECT * 
 from dag_error;
 
 INSERT INTO
 dag_error  (NUMERO, URL_API, JSON_XML, JSON_ENVIO, MENSAGEM_ERRO, DATA_ATUALIZACAO)
-VALUES('11064', '1', '1','1', '1', GETDATE())
+VALUES('11050', '1', '1','1', '1', GETDATE())
 
 DELETE
 FROM dag_error
-WHERE NUMERO = '11064'
+WHERE NUMERO = '11063'
+
+SELECT DISTINCT pro.NUMERO
+FROM proposicao pro 
+INNER JOIN dag_error dg_error on pro.NUMERO = dg_error.NUMERO
