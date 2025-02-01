@@ -151,7 +151,7 @@ class ETL:
                 proposicao=proposicao
             )
             colunas = ", ".join(dados.keys())
-            # Correção aqui
+
             tabela = "proposicao"
 
             self.__insercao_regisro(
@@ -291,14 +291,22 @@ class ETL:
                     proposicao=proposicao
                 )
                 colunas = ", ".join(dados.keys())
-                # Correção aqui
                 tabela = "proposicao"
-                print(tabela, colunas, parametros_sql_consulta)
+                self.__insercao_regisro(
+                    sql=sql,
+                    parametros_sql_consulta=parametros_sql_consulta,
+                    colunas=colunas,
+                    dados=dados,
+                    proposicao=proposicao,
+                    tabela=tabela,
+                    url=url
+                )
 
-        # dados = self.__api_legislacao.obter_proposicoes()
-        # for dado in dados:
-        #     print(type(dado))
-        #     print(dado)
+    def realizar_reprocesso_tramitacao(self):
+        sql = """
+            SELECT DISTINCT NUMERO
+            FROM [dag_error]
+        """
 
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
