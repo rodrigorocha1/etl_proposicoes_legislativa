@@ -84,7 +84,7 @@ from dag_error;
 
 INSERT INTO
 dag_error  (NUMERO, URL_API, JSON_XML, JSON_ENVIO, MENSAGEM_ERRO, DATA_ATUALIZACAO)
-VALUES('11050', '1', '1','1', '1', GETDATE())
+VALUES('11037', '1', '1','1', '1', GETDATE())
 
 DELETE
 FROM dag_error
@@ -99,10 +99,15 @@ DELETE
 FROM proposicao
 WHERE NUMERO = '11050'
 
+SELECT DISTINCT  dg_error.NUMERO
+FROM proposicao pro 
+INNER JOIN dag_error dg_error ON pro.NUMERO = '11050';
+
+
 
 DECLARE @NUMERO VARCHAR(5);
 
-SELECT @NUMERO = dg_error.NUMERO
+SELECT DISTINCT @NUMERO = dg_error.NUMERO
 FROM proposicao pro 
 INNER JOIN dag_error dg_error ON pro.NUMERO = dg_error.NUMERO;
 
@@ -113,3 +118,33 @@ if @NUMERO <> 0
     PRINT 'A'
 ELSE 
     PRINT 'B'
+
+
+
+
+DECLARE @NUMERO INT;
+
+DECLARE numeros_cursor CURSOR FOR
+SELECT DISTINCT dg_error.NUMERO
+FROM proposicao pro 
+INNER JOIN dag_error dg_error ON pro.NUMERO = dg_error.NUMERO;
+
+
+OPEN numeros_cursor;
+FETCH NEXT FROM numeros_cursor INTO @NUMERO;
+
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+     DELETE 
+     FROM dag_error
+     WHERE ID = @NUMERO;
+
+
+    FETCH NEXT FROM numeros_cursor INTO @NUMERO;
+END
+
+-- Fechar e desalocar o cursor
+CLOSE numeros_cursor;
+DEALLOCATE numeros_cursor;

@@ -101,6 +101,15 @@ with DAG(
 
     )
 
+    etl_reprocesso_tramitacao = PythonOperator(
+        task_id='etl_reprocesso_tramitacao',
+        python_callable=ETL(
+            api_legislacao=APILegislacao(),
+            operacoes_banco=OperacaoBanco()
+        ).realizar_reprocesso_tramitacao,
+
+    )
+
     etl_decisao_tarefa = BranchPythonOperator(
         task_id='etl_decisao_tarefa',
         python_callable=verificar_registros_log_error,
@@ -122,13 +131,57 @@ with DAG(
         trigger_rule='all_done'
     )
 
+    etl_deletar_registro_depara = MsSqlOperator(
+        task_id='etl_deletar_registro_depara',
+        mssql_conn_id='sql_server_airflow',
+        sql="""
+        
+        DECLARE @NUMERO INT;
+
+        DECLARE numeros_cursor CURSOR FOR
+        SELECT DISTINCT dg_error.NUMERO
+        FROM proposicao pro 
+        INNER JOIN dag_error dg_error ON pro.NUMERO = dg_error.NUMERO;
+
+
+        OPEN numeros_cursor;
+        FETCH NEXT FROM numeros_cursor INTO @NUMERO;
+
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+
+            DELETE 
+            FROM dag_error
+            WHERE ID = @NUMERO;
+
+
+            FETCH NEXT FROM numeros_cursor INTO @NUMERO;
+        END
+
+        -- Fechar e desalocar o cursor
+        CLOSE numeros_cursor;
+        DEALLOCATE numeros_cursor;
+
+
+        """,
+
+    )
+
     inicio_dag >> checar_conexao_banco >> [
         checar_conexao_api, verificar_status]
+
     checar_conexao_api >> [etl_registro_proposicao, falha_um]
 
     etl_registro_proposicao >> etl_registro_tramitacao
+
     etl_registro_tramitacao >> etl_decisao_tarefa >> [
         etl_reprocesso_proposicao, sem_dados_reprocessar]
-    [etl_reprocesso_proposicao, sem_dados_reprocessar] >> fim_dag
+
+    sem_dados_reprocessar >> fim_dag
+
+    etl_reprocesso_proposicao >> etl_reprocesso_tramitacao >> etl_deletar_registro_depara >> fim_dag
+
     falha_um >> fim_dag
+
     verificar_status >> fim_dag

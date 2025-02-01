@@ -189,8 +189,6 @@ class ETL:
                         FROM tramitacao
                         WHERE ID_PROPOSICAO = %(ID_PROPOSICAO)s;
                     """
-        if dados is not None:
-            numero = dados['numero'].strip()
 
         parametros_sql_consulta = {
             'ID_PROPOSICAO': numero}
@@ -218,7 +216,7 @@ class ETL:
                 parametros_sql_consulta = {
                     'ID_PROPOSICAO': numero}
                 dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
-                    tramitacao=tramitacao, dados=dados)
+                    tramitacao=tramitacao, dados=dados, numero=numero)
                 colunas = ", ".join(dados_tramitacao.keys())
                 tabela = "tramitacao"
                 self.__insercao_regisro(
