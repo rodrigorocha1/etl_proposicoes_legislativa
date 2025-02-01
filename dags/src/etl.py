@@ -254,13 +254,7 @@ class ETL:
                 )
                 colunas = ", ".join(dados.keys())
                 tabela = "proposicao"
-                print('*' * 100)
-                print(resultado[0])
-                print(parametros_sql_consulta)
-                print(colunas)
-                print(tabela)
-                print(dados)
-                print('*' * 100)
+
                 self.__insercao_regisro(
                     sql=sql,
                     parametros_sql_consulta=parametros_sql_consulta,
@@ -287,6 +281,18 @@ class ETL:
                     mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO REPROCESSO'
                 )
                 dados = self.realizar_etl_propicao()
+                colunas = ", ".join(dados.keys())
+                tabela = "proposicao"
+
+                self.__insercao_regisro(
+                    sql=sql,
+                    parametros_sql_consulta=None,
+                    colunas=colunas,
+                    dados=dados,
+                    proposicao=proposicao,
+                    tabela=tabela,
+                    url=url
+                )
 
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
