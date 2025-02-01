@@ -63,10 +63,11 @@ class ETL:
             dados: str,
             tabela: str,
             proposicao: Dict,
-            url: str
+            url: str,
+            flag: bool = True
     ):
         try:
-            if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None:
+            if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None or flag:
                 placeholders = ", ".join(
                     [f"%({coluna})s" for coluna in dados.keys()])
                 sql_banco = f"""
@@ -248,15 +249,15 @@ class ETL:
                 print(tabela)
                 print(dados)
                 print('*' * 100)
-                # self.__insercao_regisro(
-                #     sql=sql,
-                #     parametros_sql_consulta=parametros_sql_consulta,
-                #     colunas=colunas,
-                #     dados=dados,
-                #     proposicao=proposicao,
-                #     tabela=tabela,
-                #     url=url
-                # )
+                self.__insercao_regisro(
+                    sql=sql,
+                    parametros_sql_consulta=parametros_sql_consulta,
+                    colunas=colunas,
+                    dados=dados,
+                    proposicao=proposicao,
+                    tabela=tabela,
+                    url=url
+                )
 
     def realizar_reprocesso_tramitacao(self):
         sql = """
