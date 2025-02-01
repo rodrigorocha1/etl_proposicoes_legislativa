@@ -55,95 +55,114 @@ class ETL:
         }
         return dados
 
+    def __insercao_regisro(
+            self,
+            sql: str,
+            parametros_sql_consulta: str,
+            colunas: str,
+            dados: str,
+            tabela: str,
+            proposicao: Dict,
+            url: str
+    ):
+        try:
+            if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None:
+                placeholders = ", ".join(
+                    [f"%({coluna})s" for coluna in dados.keys()])
+                sql_banco = f"""
+                            INSERT INTO {tabela} ({colunas})
+                            VALUES ({placeholders})
+                        """
+
+            else:
+                campos = ', '.join(
+                    [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
+
+                sql_banco = f"""
+                            UPDATE {tabela}
+                            SET {campos}
+                            WHERE NUMERO = {proposicao['numero'].strip()}
+                        """
+
+            self.__operacoes_banco.realizar_operacao_banco(
+                consulta=sql_banco, parametros=dados)
+        except KeyError as msg:
+
+            mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
+            self.__registrar_erro(
+                json_xml=proposicao,
+                numero=proposicao['numero'].strip(),
+                data_registro=self.__obter_data_registro(),
+                mensagem_erro=mensagem_erro,
+                url_api=url
+            )
+
+        except IntegrityError as msg:
+
+            mensagem_erro = f'Já existe a chave, {proposicao['numero'].strip()}'
+            self.__registrar_log(
+                json_xml=proposicao,
+                mensagem_log=mensagem_erro,
+                url_api=url
+            )
+
+        except DatabaseError as msg:
+
+            # mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
+            mensagem_erro = f'Erro ao executar operação: {msg}'
+            self.__registrar_erro(
+                json_xml=proposicao,
+                numero=proposicao['numero'].strip(),
+                data_registro=self.__obter_data_registro(),
+                mensagem_erro=mensagem_erro,
+                url_api=url)
+
+        except Exception as msg:
+
+            mensagem_erro = f'Erro fatal: {msg}'
+            self.__registrar_erro(
+                json_xml=proposicao,
+                numero=proposicao['numero'].strip(),
+                data_registro=self.__obter_data_registro(),
+                mensagem_erro=mensagem_erro,
+                url_api=url
+            )
+
     def realizar_etl_propicao(self):
         for proposicao, url in self.__api_legislacao.obter_proposicoes():
 
-            try:
-                print(proposicao, url)
+            print(proposicao, url)
 
-                self.__registrar_log(
-                    json_xml=proposicao,
-                    url_api=url,
-                    mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO'
-                )
+            self.__registrar_log(
+                json_xml=proposicao,
+                url_api=url,
+                mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO'
+            )
 
-                sql = """
+            sql = """
                     SELECT ID
                     FROM proposicao
                     WHERE NUMERO = %(NUMERO)s;
                 """
 
-                parametros_sql_consulta = {
-                    'NUMERO': proposicao['numero'].strip()}
-                dados = self.__realizar_tratamento_etl_proposicao(
-                    proposicao=proposicao
-                )
-                colunas = ", ".join(dados.keys())
-                # Correção aqui
-                tabela = "proposicao"
+            parametros_sql_consulta = {
+                'NUMERO': proposicao['numero'].strip()}
+            dados = self.__realizar_tratamento_etl_proposicao(
+                proposicao=proposicao
+            )
+            colunas = ", ".join(dados.keys())
+            # Correção aqui
+            tabela = "proposicao"
 
-                if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None:
-                    placeholders = ", ".join(
-                        [f"%({coluna})s" for coluna in dados.keys()])
-                    sql_banco = f"""
-                        INSERT INTO {tabela} ({colunas})
-                        VALUES ({placeholders})
-                    """
-
-                else:
-
-                    campos = ', '.join(
-                        [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
-
-                    sql_banco = f"""
-                        UPDATE {tabela}
-                        SET {campos}
-                        WHERE NUMERO = {proposicao['numero'].strip()}
-                    """
-
-                self.__operacoes_banco.realizar_operacao_banco(
-                    consulta=sql_banco, parametros=dados)
-            except KeyError as msg:
-
-                mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
-                self.__registrar_erro(
-                    json_xml=proposicao,
-                    numero=proposicao['numero'].strip(),
-                    data_registro=self.__obter_data_registro(),
-                    mensagem_erro=mensagem_erro,
-                    url_api=url
-                )
-
-            except IntegrityError as msg:
-
-                mensagem_erro = f'Já existe a chave, {proposicao['numero'].strip()}'
-                self.__registrar_log(
-                    json_xml=proposicao,
-                    mensagem_log=mensagem_erro,
-                    url_api=url
-                )
-
-            except DatabaseError as msg:
-
-                # mensagem_erro = f'Dados invalidos em {str(msg.args[1]).split(', ')[1]}'
-                mensagem_erro = f'Erro ao executar operação: {msg}'
-                self.__registrar_erro(
-                    json_xml=proposicao,
-                    numero=proposicao['numero'].strip(),
-                    data_registro=self.__obter_data_registro(),
-                    mensagem_erro=mensagem_erro,
-                    url_api=url)
-
-            except Exception as msg:
-
-                mensagem_erro = f'Erro fatal: {msg}'
-                self.__registrar_erro(
-                    json_xml=proposicao,
-                    numero=proposicao['numero'].strip(),
-                    data_registro=self.__obter_data_registro(),
-                    mensagem_erro=mensagem_erro,
-                    url_api=url
-                )
+            self.__insercao_regisro(
+                sql=sql,
+                parametros_sql_consulta=parametros_sql_consulta,
+                colunas=colunas,
+                dados=dados,
+                proposicao=proposicao,
+                tabela=tabela,
+                url=url
+            )
 
     def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict):
         data = tramitacao['data'].encode(
@@ -259,7 +278,22 @@ class ETL:
         resultados = self.__operacoes_banco.consultar_todos_registros(
             sql=sql, parametros=None)
         for resultado in resultados:
-            print(resultado)
+            for proposicao, url in self.__api_legislacao.obter_proposicoes(numero=resultado[0]):
+                print(proposicao, url)
+                self.__registrar_log(
+                    json_xml=proposicao,
+                    url_api=url,
+                    mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO REPROCESSO'
+                )
+                parametros_sql_consulta = {
+                    'NUMERO': proposicao['numero'].strip()}
+                dados = self.__realizar_tratamento_etl_proposicao(
+                    proposicao=proposicao
+                )
+                colunas = ", ".join(dados.keys())
+                # Correção aqui
+                tabela = "proposicao"
+                print(tabela, colunas, parametros_sql_consulta)
 
         # dados = self.__api_legislacao.obter_proposicoes()
         # for dado in dados:
