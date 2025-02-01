@@ -45,7 +45,7 @@ class APILegislacao(IServicoAPI):
                     params = {
                         'formato': 'json',
                         'ano': '2024',
-                        'numero': numero
+                        'num': numero
                     }
                     flag = False
                 req = requests.get(url=url, params=params)
