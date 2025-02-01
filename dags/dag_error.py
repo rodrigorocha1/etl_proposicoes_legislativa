@@ -34,22 +34,12 @@ with DAG(
         trigger_rule='dummy'
 
     )
-
-    # etl_reprocesso_proposicao = PythonOperator(
-    #     task_id='etl_reprocesso_proposicao',
-    #     python_callable=ETL(
-    #         api_legislacao=APILegislacao(),
-    #         operacoes_banco=OperacaoBanco()
-    #     ).realizar_reprocesso_proposicao,
-
-    # )
-    etl_reprocesso_tramitacao = PythonOperator(
-        task_id='etl_reprocesso_tramitacao',
+    etl_registro_tramitacao = PythonOperator(
+        task_id='etl_registro_tramitacao',
         python_callable=ETL(
-            api_legislacao=APILegislacao(),
-            operacoes_banco=OperacaoBanco()
-        ).realizar_reprocesso_tramitacao,
-
+                api_legislacao=APILegislacao(),
+                operacoes_banco=OperacaoBanco()
+        ).realizar_etl_tramitacao
     )
 
     fim_dag = EmptyOperator(
@@ -57,4 +47,4 @@ with DAG(
         trigger_rule='all_done'
     )
 
-    inicio_dag >> etl_reprocesso_tramitacao >> fim_dag
+    inicio_dag >> etl_registro_tramitacao >> fim_dag

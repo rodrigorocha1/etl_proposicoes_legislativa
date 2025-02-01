@@ -69,7 +69,7 @@ class ETL:
             proposicao: Dict[str, Any],
             url: str,
             numero: str,
-            flag: bool = True,
+            flag: bool = True
 
     ):
         """_summary_
@@ -225,26 +225,22 @@ class ETL:
                 colunas = ", ".join(dados_tramitacao.keys())
                 tabela = "tramitacao"
                 print('*' * 2000)
-                print('dados_tramitacao')
-                print(dados_tramitacao)
                 print('sql_tramitacao')
                 print(sql_tramitacao)
-                print('parametros_sql_consulta')
-                print(parametros_sql_consulta)
-                print('colunas')
-                print(colunas)
+
                 print('*' * 2000)
-                # self.__insercao_regisro(
-                #     sql=sql,
-                #     parametros_sql_consulta=parametros_sql_consulta,
-                #     colunas=colunas,
-                #     dados=dados_tramitacao,
-                #     proposicao=tramitacao,
-                #     tabela=tabela,
-                #     url=url,
-                #     flag=False,
-                #     numero=numero
-                # )
+                self.__insercao_regisro(
+                    sql=sql_tramitacao,
+                    parametros_sql_consulta=parametros_sql_consulta,
+                    colunas=colunas,
+                    dados=dados_tramitacao,
+                    proposicao=dados,
+                    tabela=tabela,
+                    url=url,
+                    flag=True,
+                    numero=numero,
+
+                )
 
     def realizar_reprocesso_proposicao(self):
         sql = """
