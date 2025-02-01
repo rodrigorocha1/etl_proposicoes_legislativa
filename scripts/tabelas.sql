@@ -92,7 +92,11 @@ WHERE NUMERO = '11050'
 
 SELECT *
 FROM dag_error
-WHERE NUMERO = '11050'
+WHERE NUMERO = '11037'
+
+SELECT ID
+FROM tramitacao
+WHERE ID_PROPOSICAO = '11037';
 
 
 DELETE
@@ -136,10 +140,11 @@ FETCH NEXT FROM numeros_cursor INTO @NUMERO;
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
+    
 
-     DELETE 
-     FROM dag_error
-     WHERE ID = @NUMERO;
+    DELETE 
+    FROM dag_error
+    WHERE NUMERO = @NUMERO;
 
 
     FETCH NEXT FROM numeros_cursor INTO @NUMERO;
