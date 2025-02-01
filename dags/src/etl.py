@@ -225,6 +225,7 @@ class ETL:
 
         resultados = self.__operacoes_banco.consultar_todos_registros(
             sql=sql, parametros=None)
+        print(f'Resultados: {resultados}')
         for resultado in resultados:
             for proposicao, url in self.__api_legislacao.obter_proposicoes(numero=resultado[0]):
 
