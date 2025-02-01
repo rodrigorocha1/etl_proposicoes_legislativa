@@ -69,7 +69,8 @@ class ETL:
             proposicao: Dict[str, Any],
             url: str,
             numero: str,
-            flag: bool = True
+            flag: bool = True,
+            valores_atualizacao: Dict[str, Any] = None
 
     ):
         """_summary_
@@ -84,6 +85,7 @@ class ETL:
             url (str): url da api
             numero (str): numero da proposicao
             flag (bool, optional): flag de inserção . Defaults to True.
+
         """
         try:
             if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None or flag:
@@ -98,10 +100,15 @@ class ETL:
                 campos = ', '.join(
                     [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
 
+                valores = ', '.join(
+                    [f'{campo_atualizacao} = %({campo_atualizacao})s' for campo_atualizacao in valores_atualizacao.keys(
+                    )]
+                )
+
                 sql_banco = f"""
                             UPDATE {tabela}
                             SET {campos}
-                            WHERE NUMERO = {numero}
+                            WHERE {valores}
                         """
 
             self.__operacoes_banco.realizar_operacao_banco(
@@ -169,6 +176,9 @@ class ETL:
             )
             colunas = ", ".join(dados.keys())
             tabela = "proposicao"
+            chave_atualizacao = {
+                'NUMERO': numero
+            }
             self.__insercao_regisro(
                 sql=sql,
                 parametros_sql_consulta=parametros_sql_consulta,
@@ -178,7 +188,9 @@ class ETL:
                 tabela=tabela,
                 url=url,
                 flag=False,
-                numero=numero
+                numero=numero,
+                valores_atualizacao=chave_atualizacao
+
             )
 
     def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict = None, numero: str = None):
@@ -224,11 +236,10 @@ class ETL:
                     tramitacao=tramitacao, dados=dados, numero=numero)
                 colunas = ", ".join(dados_tramitacao.keys())
                 tabela = "tramitacao"
-                print('*' * 2000)
-                print('sql_tramitacao')
-                print(sql_tramitacao)
+                chave_atualizacao = {
+                    'ID_PROPOSICAO': numero
+                }
 
-                print('*' * 2000)
                 self.__insercao_regisro(
                     sql=sql_tramitacao,
                     parametros_sql_consulta=parametros_sql_consulta,
@@ -239,6 +250,7 @@ class ETL:
                     url=url,
                     flag=True,
                     numero=numero,
+                    valores_atualizacao=chave_atualizacao
 
                 )
 

@@ -113,7 +113,7 @@ with DAG(
     etl_decisao_tarefa = BranchPythonOperator(
         task_id='etl_decisao_tarefa',
         python_callable=verificar_registros_log_error,
-        op_args=('etl_reprocesso_proposicao', 'sem_dados_reprocessar')
+        op_args=('etl_reprocesso_proposicao', 'sem_dados_reprocessameto')
 
     )
 
