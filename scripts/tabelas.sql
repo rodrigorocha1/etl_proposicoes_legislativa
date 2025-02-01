@@ -69,7 +69,7 @@ where ID_PROPOSICAO = '11050';
 
 SELECT *
 FROM proposicao
-where NUMERO = '11063';
+where NUMERO = '11050';
 
 DELETE 
 FROM proposicao
@@ -88,8 +88,28 @@ VALUES('11050', '1', '1','1', '1', GETDATE())
 
 DELETE
 FROM dag_error
-WHERE NUMERO = '11063'
+WHERE NUMERO = '11050'
 
-SELECT DISTINCT pro.NUMERO
+SELECT *
+FROM dag_error
+WHERE NUMERO = '11050'
+
+
+DELETE
+FROM proposicao
+WHERE NUMERO = '11050'
+
+
+DECLARE @NUMERO VARCHAR(5);
+
+SELECT @NUMERO = dg_error.NUMERO
 FROM proposicao pro 
-INNER JOIN dag_error dg_error on pro.NUMERO = dg_error.NUMERO
+INNER JOIN dag_error dg_error ON pro.NUMERO = dg_error.NUMERO;
+
+-- Se @NUMERO for NULL, atribui '0'
+SET @NUMERO = ISNULL(@NUMERO, '0');
+PRINT 'Numero ' + @NUMERO;
+if @NUMERO = 0
+    PRINT 'A'
+ELSE 
+    PRINT 'B'
