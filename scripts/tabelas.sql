@@ -109,7 +109,7 @@ INNER JOIN dag_error dg_error ON pro.NUMERO = dg_error.NUMERO;
 -- Se @NUMERO for NULL, atribui '0'
 SET @NUMERO = ISNULL(@NUMERO, '0');
 PRINT 'Numero ' + @NUMERO;
-if @NUMERO = 0
+if @NUMERO <> 0
     PRINT 'A'
 ELSE 
     PRINT 'B'
