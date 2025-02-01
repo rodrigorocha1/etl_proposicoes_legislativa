@@ -54,7 +54,7 @@ class APILegislacao(IServicoAPI):
 
                 req.encoding = 'latin-1'
                 dados = req.json()
-                print(dados, req.url)
+
                 if dados['resultado']['noOcorrencias'] == 0:
                     break
 

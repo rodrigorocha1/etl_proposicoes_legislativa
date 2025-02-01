@@ -176,7 +176,7 @@ class ETL:
                 flag=False
             )
 
-    def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict):
+    def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict = None, numero: str = None):
         data = tramitacao['data'].encode(
             'latin1').decode('utf-8').strip()
         historico = tramitacao['historico'].encode(
@@ -189,7 +189,9 @@ class ETL:
                         FROM tramitacao
                         WHERE ID_PROPOSICAO = %(ID_PROPOSICAO)s;
                     """
-        numero = dados['numero'].strip()
+        if dados is not None:
+            numero = dados['numero'].strip()
+
         parametros_sql_consulta = {
             'ID_PROPOSICAO': numero}
         data_registro = self.__obter_data_registro()
@@ -273,26 +275,32 @@ class ETL:
         resultados = self.__operacoes_banco.consultar_todos_registros(
             sql=sql, parametros=None)
         for resultado in resultados:
-            for proposicao, url in self.__api_legislacao.obter_proposicoes(numero=resultado[0]):
-                print(proposicao, url)
-                self.__registrar_log(
-                    json_xml=proposicao,
-                    url_api=url,
-                    mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO REPROCESSO'
-                )
-                dados = self.realizar_etl_propicao()
-                colunas = ", ".join(dados.keys())
-                tabela = "proposicao"
 
-                self.__insercao_regisro(
-                    sql=sql,
-                    parametros_sql_consulta=None,
-                    colunas=colunas,
-                    dados=dados,
-                    proposicao=proposicao,
-                    tabela=tabela,
-                    url=url
-                )
+            for proposicao, url in self.__api_legislacao.obter_proposicoes(numero=resultado[0]):
+                for tramitacao in proposicao['listaHistoricoTramitacoes']:
+
+                    self.__registrar_log(
+                        json_xml=proposicao,
+                        url_api=url,
+                        mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO REPROCESSO'
+                    )
+
+                    dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
+                        dados=proposicao, tramitacao=tramitacao, numero=resultado[0])
+
+                    colunas = ", ".join(dados_tramitacao.keys())
+                    tabela = "tramitacao"
+
+                    self.__insercao_regisro(
+                        sql=sql,
+                        parametros_sql_consulta=parametros_sql_consulta,
+                        colunas=colunas,
+                        dados=dados_tramitacao,
+                        proposicao=proposicao,
+                        tabela=tabela,
+                        url=url,
+                        flag=True
+                    )
 
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
