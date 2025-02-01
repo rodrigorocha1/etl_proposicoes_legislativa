@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from src.servico.i_opecacoes_banco import IOperacoesBanco
 from src.servico.i_servico_api import IServicoAPI
 from pymssql.exceptions import IntegrityError, DatabaseError  # type: ignore
@@ -20,29 +20,23 @@ class ETL:
             proposicao (Dict): requisição da API
         """
         try:
-            assunto = re.sub(r'[^\w\s.,;]', '',
-                             proposicao['assunto']).strip().replace('\n', '')
-            assunto = proposicao['assunto']
-            assunto = " ".join(assunto.splitlines())
-            assunto = assunto.encode('latin1').decode('utf-8')
+            assunto = proposicao.get('assunto', '').strip()
+            assunto = re.sub(r'[^\w\s.,;]', '', assunto)
+            assunto = " ".join(assunto.splitlines())  # Remove quebras de linha
+            assunto = assunto.encode(
+                'latin1', 'ignore').decode('utf-8', 'ignore')
 
-        except:
-            assunto = " ".join(assunto.split())
+        except Exception:
+            assunto = proposicao.get('assunto', '').strip()
+
         data_registro = self.__obter_data_registro()
-        numero = proposicao['numero'].strip()
-        autor = " ".join(proposicao['autor'].encode(
-                'latin1').decode('utf-8').strip().split())
-        data_presentacao = proposicao['dataPublicacao']
-        regime = proposicao['regime'].encode(
-            'latin1').decode('utf-8').strip()
-
-        situacao = proposicao['situacao'].encode(
-            'latin1').decode('utf-8').strip()
-
-        tipo_proposicao = proposicao['siglaTipoProjeto'].encode(
-            'latin1').decode('utf-8').strip()
-
-        ano = proposicao['ano']
+        data_presentacao = proposicao.get('dataPublicacao', '').strip()
+        numero = proposicao.get('numero', '').strip()
+        autor = proposicao.get('autor', '').strip()
+        regime = proposicao.get('regime', '').strip()
+        situacao = proposicao.get('situacao', '').strip()
+        tipo_proposicao = proposicao.get('siglaTipoProjeto', '').strip()
+        ano = proposicao.get('ano', '')
 
         dados = {
             'AUTOR': autor,
@@ -70,7 +64,7 @@ class ETL:
             url: str,
             numero: str,
             flag: bool = True,
-            valores_atualizacao: Dict[str, Any] = None
+            valores_atualizacao: Optional[Dict[str, Any]] = None
 
     ):
         """_summary_
@@ -100,10 +94,14 @@ class ETL:
                 campos = ', '.join(
                     [f'{coluna} = %({coluna})s' for coluna in dados.keys()])
 
-                valores = ', '.join(
-                    [f'{campo_atualizacao} = %({campo_atualizacao})s' for campo_atualizacao in valores_atualizacao.keys(
-                    )]
-                )
+                if valores_atualizacao:
+                    valores = ', '.join(
+                        [f'{campo_atualizacao} = %({campo_atualizacao})s' for campo_atualizacao in valores_atualizacao.keys(
+                        )]
+                    )
+
+                else:
+                    valores = ''
 
                 sql_banco = f"""
                             UPDATE {tabela}
@@ -193,7 +191,7 @@ class ETL:
 
             )
 
-    def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict = None, numero: str = None):
+    def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Optional[Dict] = None, numero: Optional[str] = None):
         data = tramitacao['data'].encode(
             'latin1').decode('utf-8').strip()
         historico = tramitacao['historico'].encode(
@@ -335,7 +333,7 @@ class ETL:
         return data_formatada
 
     def __registrar_erro(self, json_xml: Dict[str, Any], numero: str, data_registro, mensagem_erro: str, url_api: str):
-        json_xml = json.dumps(json_xml)
+
         dados_erro = {
             'NUMERO': numero,
             'URL_API': url_api,
