@@ -68,7 +68,9 @@ class ETL:
             tabela: str,
             proposicao: Dict[str, Any],
             url: str,
-            flag: bool = True
+            numero: str,
+            flag: bool = True,
+
     ):
         """_summary_
 
@@ -80,6 +82,7 @@ class ETL:
             tabela (str): nome da tabela
             proposicao (Dict[str, Any]): requisição da api
             url (str): url da api
+            numero (str): numero da proposicao
             flag (bool, optional): flag de inserção . Defaults to True.
         """
         try:
@@ -98,7 +101,7 @@ class ETL:
                 sql_banco = f"""
                             UPDATE {tabela}
                             SET {campos}
-                            WHERE NUMERO = {proposicao['numero'].strip()}
+                            WHERE NUMERO = {numero}
                         """
 
             self.__operacoes_banco.realizar_operacao_banco(
@@ -109,7 +112,7 @@ class ETL:
             mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
             self.__registrar_erro(
                 json_xml=proposicao,
-                numero=proposicao['numero'].strip(),
+                numero=numero,
                 data_registro=self.__obter_data_registro(),
                 mensagem_erro=mensagem_erro,
                 url_api=url
@@ -117,7 +120,7 @@ class ETL:
 
         except IntegrityError as msg:
 
-            mensagem_erro = f'Já existe a chave, {proposicao["numero"].strip()}'
+            mensagem_erro = f'Já existe a chave, {numero}'
             self.__registrar_log(
                 json_xml=proposicao,
                 mensagem_log=mensagem_erro,
@@ -130,7 +133,7 @@ class ETL:
             mensagem_erro = f'Erro ao executar operação: {msg}'
             self.__registrar_erro(
                 json_xml=proposicao,
-                numero=proposicao['numero'].strip(),
+                numero=numero,
                 data_registro=self.__obter_data_registro(),
                 mensagem_erro=mensagem_erro,
                 url_api=url)
@@ -140,7 +143,7 @@ class ETL:
             mensagem_erro = f'Erro fatal: {msg}'
             self.__registrar_erro(
                 json_xml=proposicao,
-                numero=proposicao['numero'].strip(),
+                numero=numero,
                 data_registro=self.__obter_data_registro(),
                 mensagem_erro=mensagem_erro,
                 url_api=url
@@ -158,8 +161,9 @@ class ETL:
                     FROM proposicao
                     WHERE NUMERO = %(NUMERO)s;
                 """
+            numero = proposicao['numero'].strip()
             parametros_sql_consulta = {
-                'NUMERO': proposicao['numero'].strip()}
+                'NUMERO': numero}
             dados = self.__realizar_tratamento_etl_proposicao(
                 proposicao=proposicao
             )
@@ -173,7 +177,8 @@ class ETL:
                 proposicao=proposicao,
                 tabela=tabela,
                 url=url,
-                flag=False
+                flag=False,
+                numero=numero
             )
 
     def __realizar_tatamento_etl_tramitacao(self, tramitacao: Dict, dados: Dict = None, numero: str = None):
@@ -215,20 +220,31 @@ class ETL:
                 numero = dados['numero'].strip()
                 parametros_sql_consulta = {
                     'ID_PROPOSICAO': numero}
-                dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
+                dados_tramitacao, sql_tramitacao, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
                     tramitacao=tramitacao, dados=dados, numero=numero)
                 colunas = ", ".join(dados_tramitacao.keys())
                 tabela = "tramitacao"
-                self.__insercao_regisro(
-                    sql=sql,
-                    parametros_sql_consulta=parametros_sql_consulta,
-                    colunas=colunas,
-                    dados=dados,
-                    proposicao=tramitacao,
-                    tabela=tabela,
-                    url=url,
-                    flag=False
-                )
+                print('*' * 2000)
+                print('dados_tramitacao')
+                print(dados_tramitacao)
+                print('sql_tramitacao')
+                print(sql_tramitacao)
+                print('parametros_sql_consulta')
+                print(parametros_sql_consulta)
+                print('colunas')
+                print(colunas)
+                print('*' * 2000)
+                # self.__insercao_regisro(
+                #     sql=sql,
+                #     parametros_sql_consulta=parametros_sql_consulta,
+                #     colunas=colunas,
+                #     dados=dados_tramitacao,
+                #     proposicao=tramitacao,
+                #     tabela=tabela,
+                #     url=url,
+                #     flag=False,
+                #     numero=numero
+                # )
 
     def realizar_reprocesso_proposicao(self):
         sql = """
@@ -247,8 +263,9 @@ class ETL:
                     url_api=url,
                     mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO REPROCESSO'
                 )
+                numero = proposicao['numero'].strip()
                 parametros_sql_consulta = {
-                    'NUMERO': proposicao['numero'].strip()}
+                    'NUMERO': numero}
                 dados = self.__realizar_tratamento_etl_proposicao(
                     proposicao=proposicao
                 )
@@ -262,7 +279,8 @@ class ETL:
                     dados=dados,
                     proposicao=proposicao,
                     tabela=tabela,
-                    url=url
+                    url=url,
+                    numero=numero
                 )
 
     def realizar_reprocesso_tramitacao(self):
@@ -297,7 +315,8 @@ class ETL:
                         proposicao=proposicao,
                         tabela=tabela,
                         url=url,
-                        flag=True
+                        flag=True,
+                        numero=None
                     )
 
     def __obter_data_registro(self) -> str:
