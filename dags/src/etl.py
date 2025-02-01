@@ -194,80 +194,28 @@ class ETL:
     def realizar_etl_tramitacao(self):
         for dados, url in self.__api_legislacao.obter_proposicoes():
             for tramitacao in dados['listaHistoricoTramitacoes']:
-                try:
 
-                    sql = """
+                sql = """
                         SELECT ID
                         FROM tramitacao
                         WHERE ID_PROPOSICAO = %(ID_PROPOSICAO)s;
                     """
-                    numero = dados['numero'].strip()
-                    parametros_sql_consulta = {
-                        'ID_PROPOSICAO': numero}
-                    data_registro = self.__obter_data_registro()
-                    dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
-                        tramitacao=tramitacao, dados=dados)
-                    colunas = ", ".join(dados_tramitacao.keys())
-                    tabela = "tramitacao"
-                    if self.__operacoes_banco.consultar_banco_id(sql=sql, parametros=parametros_sql_consulta) is None:
-                        placeholders = ", ".join(
-                            [f"%({coluna})s" for coluna in dados_tramitacao.keys()])
-                        sql_banco = f"""
-                            INSERT INTO {tabela} ({colunas})
-                            VALUES ({placeholders})
-                        """
-                    else:
-                        campos = ', '.join(
-                            [f'{coluna} = %({coluna})s' for coluna in dados_tramitacao.keys()])
-
-                        sql_banco = f"""
-                            UPDATE {tabela}
-                            SET {campos}
-                            WHERE ID_PROPOSICAO = {numero}
-                        """
-
-                    self.__operacoes_banco.realizar_operacao_banco(
-                        consulta=sql_banco, parametros=dados_tramitacao)
-                except KeyError as msg:
-
-                    mensagem_erro = f'Não encontrou a chave KeyError: {msg}'
-                    self.__registrar_erro(
-                        json_xml=dados,
-                        numero=numero,
-                        data_registro=data_registro,
-                        mensagem_erro=mensagem_erro,
-                        url_api=url
-                    )
-
-                except IntegrityError as msg:
-
-                    mensagem_erro = f'Já existe a chave, {numero}'
-                    self.__registrar_log(
-                        json_xml=dados,
-                        mensagem_log=mensagem_erro,
-                        url_api=url
-                    )
-
-                except DatabaseError as msg:
-
-                    mensagem_erro = f'Erro ao executar operação: {msg}'
-                    self.__registrar_erro(
-                        json_xml=dados,
-                        numero=numero,
-                        data_registro=data_registro,
-                        mensagem_erro=mensagem_erro,
-                        url_api=url)
-
-                except Exception as msg:
-
-                    mensagem_erro = f'Erro fatal: {msg}'
-                    self.__registrar_erro(
-                        json_xml=dados,
-                        numero=numero,
-                        data_registro=data_registro,
-                        mensagem_erro=mensagem_erro,
-                        url_api=url
-                    )
+                numero = dados['numero'].strip()
+                parametros_sql_consulta = {
+                    'ID_PROPOSICAO': numero}
+                dados_tramitacao, sql, parametros_sql_consulta = self.__realizar_tatamento_etl_tramitacao(
+                    tramitacao=tramitacao, dados=dados)
+                colunas = ", ".join(dados_tramitacao.keys())
+                tabela = "tramitacao"
+                self.__insercao_regisro(
+                    sql=sql,
+                    parametros_sql_consulta=parametros_sql_consulta,
+                    colunas=colunas,
+                    dados=dados,
+                    proposicao=tramitacao,
+                    tabela=tabela,
+                    url=url
+                )
 
     def realizar_reprocesso_proposicao(self):
         sql = """
@@ -279,7 +227,7 @@ class ETL:
             sql=sql, parametros=None)
         for resultado in resultados:
             for proposicao, url in self.__api_legislacao.obter_proposicoes(numero=resultado[0]):
-                print(proposicao, url)
+
                 self.__registrar_log(
                     json_xml=proposicao,
                     url_api=url,
@@ -292,21 +240,39 @@ class ETL:
                 )
                 colunas = ", ".join(dados.keys())
                 tabela = "proposicao"
-                self.__insercao_regisro(
-                    sql=sql,
-                    parametros_sql_consulta=parametros_sql_consulta,
-                    colunas=colunas,
-                    dados=dados,
-                    proposicao=proposicao,
-                    tabela=tabela,
-                    url=url
-                )
+                print('*' * 100)
+                print(resultado[0])
+                print(parametros_sql_consulta)
+                print(colunas)
+                print(tabela)
+                print(dados)
+                print('*' * 100)
+                # self.__insercao_regisro(
+                #     sql=sql,
+                #     parametros_sql_consulta=parametros_sql_consulta,
+                #     colunas=colunas,
+                #     dados=dados,
+                #     proposicao=proposicao,
+                #     tabela=tabela,
+                #     url=url
+                # )
 
     def realizar_reprocesso_tramitacao(self):
         sql = """
             SELECT DISTINCT NUMERO
             FROM [dag_error]
         """
+        resultados = self.__operacoes_banco.consultar_todos_registros(
+            sql=sql, parametros=None)
+        for resultado in resultados:
+            for proposicao, url in self.__api_legislacao.obter_proposicoes(numero=resultado[0]):
+                print(proposicao, url)
+                self.__registrar_log(
+                    json_xml=proposicao,
+                    url_api=url,
+                    mensagem_log='REALIZANDO CONSULTA PROPOSIÇÂO REPROCESSO'
+                )
+                dados = self.realizar_etl_propicao()
 
     def __obter_data_registro(self) -> str:
         brasilia_tz = pytz.timezone('America/Sao_Paulo')
