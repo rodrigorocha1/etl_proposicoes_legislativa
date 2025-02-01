@@ -14,37 +14,6 @@ CREATE TABLE proposicao (
     DATA_ATUALIZACAO_REGISTRO DATETIME
 );
 
-DELETE 
-FROM tramitacao
-where ID_PROPOSICAO = '11063'
-
-
-DELETE
-FROM proposicao
-WHERE NUMERO = '11063'
-
-SELECT *
-FROM tramitacao
-where ID_PROPOSICAO = '11063'
-
-SELECT * 
-FROM proposicao
-
-order by DATA_INSERSAO_REGISTRO desc;
-SELECT *
-FROM tramitacao
-
-SELECT ID as ID
-                    FROM proposicao
-                    where numero = '1111'
-
-TRUNCATE table proposicao
-
-
-DROP TABLE proposicao CASCADE;
-
-DELETE 
-FROM proposicao CASCADE;
 
 CREATE TABLE tramitacao(
     ID INTEGER IDENTITY(1,1) PRIMARY KEY,
@@ -58,27 +27,7 @@ CREATE TABLE tramitacao(
  
 );
 
-UPDATE tramitacao
-SET DESCRICAO = 'Proposição recebida na Comissão. Publicado no DL em 23 1 2025, pág 1. Aprovado o requerimento. Decisão publicada no DL em 23 1 2025, pág 1.',
- LOCAL_PROPOSICAO = 'Comissão de Segurança Pública',
-  ID_PROPOSICAO = '11063',
-   DATA_CRIACAO_TRAMITACAO = '2024-10-30', 
-   DATA_ATUALIZACAO_REGISTRO = '2025-01-26 22:30:43'
-WHERE NUMERO = 11063
 
-DROP TABLE tramitacao;
-
-===== LOGS =======================
-
-DROP TABLE log_dag;
-
-
-SELECT *
-FROM log_dag
-
-
-ALTER TABLE log_dag
-DROP COLUMN TIPO_ERROR
 
 -- Info de log ERRO, SUCESS, INFO
 CREATE TABLE log_dag(
@@ -90,18 +39,8 @@ CREATE TABLE log_dag(
     JSON_XML VARCHAR(MAX),
     JSON_ENVIO VARCHAR(MAX),
     DATA_REGISTRO DATETIME DEFAULT GETDATE()
-
-
 );
 
--- Registo de erro
-
-DELETE
-FROM dag_error;
-
-
-ALTER TABLE dag_error
-DROP COLUMN TIPO_ERROR
 
 CREATE TABLE dag_error (
     ID INTEGER IDENTITY(1, 1) PRIMARY KEY ,
@@ -115,48 +54,34 @@ CREATE TABLE dag_error (
     DATA_ATUALIZACAO DATETIME
 )
 
-DROP TABLE dag_error;
+-----------------------------------------------
 
-SELECT Numero
-FROM dag_error
+select *
+FROM log_dag;
 
 SELECT *
-FROM dag_error
-order by DATA_REGISTRO DESC;
+FROM tramitacao
+where ID_PROPOSICAO = '11063';
 
+DELETE
+FROM tramitacao
+where ID_PROPOSICAO = '11063';
 
-DROP TABLE dag_error;
-INSERT INTO dag_error (NUMERO, JSON_XML, MENSAGEM_ERRO, DATA_ATUALIZACAO)
-VALUES('11063', 'TESTE', 'TESTE', GETDATE())
+SELECT *
+FROM proposicao
+where NUMERO = '11063';
 
-BEGIN
-    DECLARE @NUMERO VARCHAR(10), @NUMERO_ERROR VARCHAR(10);
+DELETE 
+FROM proposicao
+where NUMERO = '11063';
 
-    SET @NUMERO = '1';
-
-  
-    SELECT @NUMERO_ERROR = NUMERO
-    FROM dag_error
-    WHERE NUMERO = @NUMERO;
-
-    
-    IF @NUMERO_ERROR IS NULL
-        PRINT 1 + @NUMERO_ERROR;
-    else
-
-        PRINT '2 '+ @NUMERO_ERROR;
-END;
-
+DELETE 
+FROM dag_error;
 
 SELECT * 
-FROM  DAG_ERRO
+from dag_error;
 
-order by DATA_REGISTRO desc;
+INSERT INTO
+dag_error  (NUMERO, URL_API, JSON_XML, JSON_ENVIO, MENSAGEM_ERRO, DATA_ATUALIZACAO)
+VALUES('11064', '1', '1','1', '1', GETDATE())
 
-INSERT INTO dag_error (NUMERO, URL_API, JSON_XML, JSON_ENVIO, MENSAGEM_ERRO, DATA_ATUALIZACAO)
-VALUES('11063', 'a', 'a', 'a', 'a', GETDATE())
-
-
--- Select rows from a Table or View '[dag_error]' in schema '[dbo]'
-DELETE FROM 
-DAG_ERROR
