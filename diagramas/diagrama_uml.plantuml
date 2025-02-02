@@ -1,0 +1,53 @@
+@startuml
+
+package dags {
+
+    package src {
+
+        package servico {
+
+            interface i_servico_api {
+                {abstringact} obter_proposicoes(numero: Optional<string>) : Generator<Tuple<Dict, string>, None, None>
+            }
+
+            interface i_operacoes_banco {
+                {abstringact} realizar_operacao_banco(consulta: string, parametros: Dict[string, Any])
+                {abstringact} consultar_banco_id(sql: string, parametros: Dict[string, Any]): Optional[string]
+                {abstringact} consultar_todos_registringos(sql: string, parametros: Dict[string, Any])
+            }
+
+            class OperacaoBanco implements i_operacoes_banco {
+                - id_conexao_banco: string
+                - mssql_hook: MsSqlHook
+            }
+
+            class APILegislacao implements i_servico_api {
+                - URL_BASE: string
+                - data_final: datetime
+                - intervalo_dias: int
+                - data_inicial: datetime
+            }
+
+        }
+
+        class ETL {
+            - realizar_tratamento_etl_proposicao(proposicao: Dict)
+            - __insercao_regisro(sql: string,parametros_sql_consulta: Dict[string, Any],colunas: string,dados: Dict[string, Any],tabela: string,proposicao: Dict[string, Any],url: string,numero: string,flag: bool = True,valores_atualizacao: Optional[Dict[string, Any]] = None
+            )
+            + realizar_etl_propicao()
+            - ealizar_tatamento_etl_tramitacao(tramitacao: Dict, dados: Optional[Dict] = None, numero: Optional[string] = None)
+            + realizar_etl_tramitacao()
+            + realizar_reprocesso_proposicao()
+            + realizar_reprocesso_tramitacao()
+            - obter_data_registro(): string
+            - registrar_erro(json_xml: Dict[string, Any], numero: string, data_registro, mensagem_erro: string, url_api: str)
+            - registrar_log(json_xml: Dict, mensagem_log: string, url_api: string)
+        }
+        ETL ..|> i_servico_api : "usa"
+        ETL ..|> i_operacoes_banco : "usa"
+
+    }
+
+}
+
+@enduml

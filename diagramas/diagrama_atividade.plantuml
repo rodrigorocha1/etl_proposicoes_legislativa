@@ -1,0 +1,27 @@
+@startuml
+
+start
+:Checar Conexão Banco;
+if (Conexão Banco Feita?) then (Sucesso)
+    :Checar Conexão API;
+    if (Conexão API Feita?) then (Sucesso)
+        :ETL Registro Proposição;
+        :ETL Registro Tramitação;
+        :ETL Decisão Tarefa;
+        if (Existe dados com erro?) then (Reprocesso) 
+            :ETL Reprocesso Proposição;
+            :ETL Reprocesso Tramitação;
+            :ETL Deletar Registo Reprocessamento;
+        else (Sem Reprocesso)
+            :Sem dados Reprocessamento;
+        endif
+    else (Falha)
+        :Enviar mensagem de erro para log;
+    endif
+else (Falha)
+    :Enviar mensagem de erro para log;
+endif
+
+stop
+
+@enduml
