@@ -136,3 +136,7 @@ A figura abaixo, mostra uma proposta de diagrama de classe, com destaque para a 
 
 ---
 
+## 7 - Vídeo
+[ETL com apache aiflow usando a api de dados abertos da Assembleia Legislativa de Minas Gerais](https://youtu.be/ZSlhMPwnRPY)
+
+
