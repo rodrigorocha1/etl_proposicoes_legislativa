@@ -9,8 +9,8 @@ Este projeto tem como objetivo propor uma estrutura de ETL usando Python e Apach
 ### Coleta de dados
 O sistema vai coletar dados do endpoint:
 
-- [Proposições por filtro](https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?tp=100&formato=json&ano=2024&ord=3&p=50000&ini=20250123&fim=20250126), utilizando os filtros de paginação, data de início e data de fim.
-- [Proposições com erro de processamento](https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?formato=json&ano=2024&num=11063).
+- https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?tp=100&formato=json&ano=2024&ord=3&p=50000&ini=20250123&fim=20250126, utilizando os filtros de paginação, data de início e data de fim.
+- https://dadosabertos.almg.gov.br/ws/proposicoes/pesquisa/direcionada?formato=json&ano=2024&num=11063: URL de exemplo para fazer o reprocessamento.
 
 ### Processamento de dados
 O sistema deverá realizar o tratamento de caracteres, como:
