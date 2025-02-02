@@ -10,6 +10,12 @@ import pytz
 
 class ETL:
     def __init__(self, api_legislacao: IServicoAPI, operacoes_banco: IOperacoesBanco):
+        """init
+
+        Args:
+            api_legislacao (IServicoAPI): servicço api
+            operacoes_banco (IOperacoesBanco): serviço operações banco
+        """
         self.__api_legislacao = api_legislacao
         self.__operacoes_banco = operacoes_banco
 

@@ -17,12 +17,14 @@ class APILegislacao(IServicoAPI):
             datetime.now() - timedelta(days=self.__intervalo_dias)).strftime('%Y%m%d')
 
     def obter_proposicoes(self, numero: Optional[str] = None) -> Generator[Tuple[Dict, str], None, None]:
-        """_summary_
+        """Métodos para obter proposições da API
+
+        Args:
+            numero (Optional[str], optional): número da proposta. Defaults to None.
 
         Yields:
-            Generator[tuple[Dict, str], None, None]: _description_
+            Generator[Tuple[Dict, str], None, None]: gerador com json
         """
-
         url = f'{self.__URL_BASE}/ws/proposicoes/pesquisa/direcionada'
         p = 1
 
